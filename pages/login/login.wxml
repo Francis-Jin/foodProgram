@@ -1,0 +1,14 @@
+<!--pages/login/login.wxml-->
+<view class="container relative">
+    <view class="login_box width_90 text_center">
+        <view class="padding_top_20 padding_bottom_5 color_333 font_size_16 font_weight">
+            <text>微信授权登入</text>
+        </view>
+        <view class="color_333 font_size_14">
+            <text>日权食将获取您的基本信息：电话、头像、昵称</text>
+        </view>
+        <view class="margin_top_10">
+            <button open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 确认授权 </button>
+        </view>
+    </view>
+</view>

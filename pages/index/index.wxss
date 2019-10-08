@@ -1,0 +1,67 @@
+/**index.wxss**/
+
+.cs_item{
+    background: linear-gradient(to bottom, #EEF6FA 80%,#484747)
+}
+
+.absolute {
+    left: 50%;
+    top: 50%;
+    margin-left: -70rpx;
+    margin-top: -116rpx;
+}
+
+.line {
+    position: absolute;
+}
+
+.h {
+    width: 8rpx;
+    height: 50rpx;
+    background-color: #fff;
+    left: 88rpx;
+    top: 42rpx;
+    border-radius: 10rpx;
+    transform-origin: bottom;
+}
+
+.m {
+    width: 6rpx;
+    height: 60rpx;
+    background-color: #fff;
+    left: 88rpx;
+    top: 30rpx;
+    border-radius: 10rpx;
+    transform-origin: bottom;
+}
+
+.s {
+    width: 4rpx;
+    height: 80rpx;
+    background-color: #f00;
+    left: 90rpx;
+    top: 10rpx;
+    border-radius: 10rpx;
+    transform-origin:bottom;
+}
+
+.dot {
+    left: 80rpx;
+    top: 80rpx;
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: 50%;
+    background: #fff;
+    z-index: 2;
+}
+.item{
+    margin-bottom: 40rpx;
+}
+
+.item_foods_one{
+}
+.item_foods_one .tip{
+    background: #f9f9f9;
+    padding: 0 20rpx;
+    border-radius: 30rpx;
+}

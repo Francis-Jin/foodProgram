@@ -1,0 +1,19 @@
+<!--pages/author/author.wxml-->
+
+<view class="margin_bottom_100 padding_left_right_10">
+    <van-cell-group>
+        <van-field value="{{ address }}" required clearable label="家乡" size="large" placeholder="请输入" bind:change="onChange" />
+        <view data-type="1" bindtap="modalClickFn">
+            <van-field value="{{ sexValue }}" required disabled clearable label="性别" icon="arrow" size="large" placeholder="选填" />
+        </view>
+        <view data-type="2" bindtap="modalClickFn">
+            <van-field value="{{ constellationValue }}" border="{{ false }}" disabled clearable label="星座" icon="arrow" size="large" placeholder="选填" />
+        </view>
+    </van-cell-group>
+</view>
+
+<view class="bg_theme width_60 margin_auto text_center color_fff line_height_50" bindtap="nextFn">
+    <text>下一步</text>
+</view>
+
+<van-action-sheet loading="{{ true }}" show="{{ modalShow }}" title="{{ modalTitle }}" actions="{{ actions }}" bind:close="onClose" bind:select="onSelect" />

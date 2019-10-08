@@ -1,0 +1,3 @@
+<!--pages/my/my.wxml-->
+<text>我的</text>
+<vant-button type="danger">我的</vant-button>

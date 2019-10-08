@@ -1,0 +1,3 @@
+<!--pages/cart/cart.wxml-->
+<text>购物车</text>
+<vant-button type="danger">购物车</vant-button>

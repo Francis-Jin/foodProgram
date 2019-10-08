@@ -1,0 +1,51 @@
+{
+    "pages": [
+        "pages/index/index",
+        "pages/start/start",
+        "pages/solar_terms/solar_terms",
+        "pages/author/author",
+        "pages/login/login",
+        "pages/cart/cart",
+        "pages/my/my"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "",
+        "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "color": "#bfbfbf",
+        "selectedColor": "#1296db",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "推荐",
+                "iconPath": "images/icon/recommend.png",
+                "selectedIconPath": "images/icon/recommend_active.png"
+            },
+            {
+                "pagePath": "pages/cart/cart",
+                "text": "购物车",
+                "iconPath": "images/icon/cart.png",
+                "selectedIconPath": "images/icon/cart_active.png"
+            },
+            {
+                "pagePath": "pages/my/my",
+                "text": "我的",
+                "iconPath": "images/icon/me.png",
+                "selectedIconPath": "images/icon/me_active.png"
+            }
+        ]
+    },
+    "usingComponents": {
+        "vant-button": "./miniprogram_npm/vant-weapp/button/index",
+        "van-cell-group": "./miniprogram_npm/vant-weapp/cell-group/index",
+        "van-cell": "./miniprogram_npm/vant-weapp/cell/index",
+        "van-action-sheet": "./miniprogram_npm/vant-weapp/action-sheet/index",
+        "van-popup": "./miniprogram_npm/vant-weapp/popup/index",
+        "van-rate": "./miniprogram_npm/vant-weapp/rate/index",
+        "van-field": "./miniprogram_npm/vant-weapp/field/index"
+    },
+    "sitemapLocation": "sitemap.json"
+}

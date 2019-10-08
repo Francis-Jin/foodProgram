@@ -1,0 +1,11 @@
+/* pages/start/start.wxss */
+page {
+	height: 100%; 
+}
+.start-img {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-image: url(https://zyhy.zhiyanginfo.top/upload/applet/pageImg/bg.png);
+}

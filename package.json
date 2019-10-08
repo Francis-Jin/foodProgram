@@ -1,0 +1,15 @@
+{
+  "name": "foodprogram",
+  "version": "1.0.0",
+  "description": "日权食",
+  "main": "app.js",
+  "dependencies": {
+    "vant-weapp": "^1.0.0-beta.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jinanshuang",
+  "license": "ISC"
+}

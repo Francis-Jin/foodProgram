@@ -1,0 +1,20 @@
+<!--pages/solar_terms/solar_terms.wxml-->
+<view class="container text_center">
+
+    <view class="padding_top_50 padding_bottom_5">
+        <text>2019年09月26日</text>
+    </view>
+    <view class="font_size_18 font_weight">
+        <text>霜降</text>
+    </view>
+    <view class="margin_top_20 padding_bottom_5">
+        <text>天时令：润肺、滋阴</text>
+    </view>
+    <view class='padb' style='font-size:16px; font-weight:bold;'>{{weather.city}}贵阳实况天气预报</view>
+    <view>气象台 16:30{{weather.update_time}} 更新</view>
+    <view class='padb'>{{weather.tem}}24℃ {{weather.wea}} 晴</view>
+    
+    <view>
+        <van-action-sheet show="{{ modalShow }}" title="{{ modalTitle }}" overlay="{{ false }}" actions="{{ actions }}" bind:close="onClose" bind:select="onSelect" />
+    </view>
+</view>

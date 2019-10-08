@@ -1,0 +1,6 @@
+/* pages/login/login.wxss */
+.login_box{
+    margin: 100rpx auto 0;
+    border-radius: 20rpx;
+    /* box-shadow: 0 0 10rpx 10rpx #ededed; */
+}

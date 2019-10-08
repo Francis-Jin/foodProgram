@@ -1,0 +1,161 @@
+<!--index.wxml-->
+<!-- 轮播 -->
+<!-- <view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+</view> -->
+
+<view class="container">
+
+    <view class="width_100 height_fixed_160 relative">
+        <view class="absolute_100">
+            <image class="width_height_100" src="/images/imgs/index_top_img.png" mode="aspectFit"></image>
+        </view>
+        <view class="absolute_100 z_index_1 flex">
+            <view class="width_40 relative">
+                <view class="width_fixed_90 height_fixed_90 absolute">
+                    <view class="h line" style="transform: rotate({{hourDeg}}deg);"></view>
+                    <view class="m line" style="transform: rotate({{minuteDeg}}deg);"></view>
+                    <view class="s line" style="transform: rotate({{secondDeg}}deg);"></view>
+                    <view class="dot line"></view>
+                </view>
+            </view>
+            <view class="width_60">
+                <view class="color_fff font_size_26 box_sizing padding_top_20 padding_right_20 font_weight custom_family">
+                    <text>辰时</text>
+                    <text class="margin_left_10 margin_right_10">·</text>
+                    <text>胃经当令</text>
+                </view>
+                <view class="color_fff font_size_14 box_sizing padding_right_20 custom_family">
+                    <text>太阳升起，阳气初生，吃早餐</text>
+                </view>
+                <view class="margin_top_30 text_right flex font_weight_300 color_39 flex_space_between bottom_0">
+                    <view class="line_height_40 font_size_18 margin_right_10">
+                        <text>7:00-9:00</text>
+                    </view>
+                    <view class="margin_right_30 color_39 font_size_14">
+                        <view>午后餐</view>
+                        <view>Afternoon meal</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="lists margin_top_20">
+        <view class="lists_wrap flex flex_space_between box_sizing padding_left_right_20">
+
+            <view class="left_content box_sizing width_50 padding_right_10">
+
+                <view class=" item cs_item border_radius_right_left box_shadow overflow_hidden height_fixed_200 relative">
+                    <view class="font_size_0 box_sizing padding_left_right_10">
+                        <image class="max_width_100" src="/images/imgs/cs.png" mode="aspectFit"></image>
+                    </view>
+                    <view class="width_100 text_right" style="position:absolute; right:10rpx; bottom:20rpx;">
+                        <van-rate value="{{ value }}" size="{{ 20 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
+                    </view>
+                </view>
+
+                <view class="item item_foods_one border_radius_right_left box_shadow overflow_hidden">
+                    <view class="font_size_0 box_sizing padding_10 height_fixed_160 bg_fbf" >
+                        <image class="width_100 height_100" src="/images/imgs/dj.png" mode="aspectFit"></image>
+                    </view>
+                    <view class="width_100 box_sizing padding_left_right_10">
+                        <view class="font_size_16 font_weight_600 line_height_30">
+                            <text>豆浆</text>
+                        </view>
+                        <view class="font_size_12 color_999 overflow1 line_height_30">
+                            <text>富含钾、锌、铁，以及维生素A,富含钾、锌、铁，以及维生素A</text>
+                        </view>
+                        <view class="flex flex_space_between padding_bottom_10 relative">
+                            <view class="font_size_12 line_height_30">
+                                <text class="tip color_999">早餐</text>
+                            </view>
+                            <view class="price">
+                                <text class="del_line color_999 margin_right_10 font_size_12">￥2</text>
+                                <text class="color_ff6 font_size_12">￥</text>
+                                <text class="color_ff6 font_size_18">2</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+
+                <view class="item item_foods_one border_radius_right_left box_shadow overflow_hidden">
+                    <view class="font_size_0 box_sizing padding_10 bg_fbf" >
+                        <image class="max_width_100 " src="/images/imgs/dj.png"></image>
+                    </view>
+                    <view class="width_100 box_sizing padding_left_right_10">
+                        <view class="font_size_16 font_weight_600 line_height_30">
+                            <text>豆浆</text>
+                        </view>
+                        <view class="font_size_12 color_999 overflow1 line_height_30">
+                            <text>富含钾、锌、铁，以及维生素A,富含钾、锌、铁，以及维生素A</text>
+                        </view>
+                        <view class="flex flex_space_between padding_bottom_10 relative">
+                            <view class="font_size_12 line_height_30">
+                                <text class="tip color_999">早餐</text>
+                            </view>
+                            <view class="price">
+                                <text class="del_line color_999 margin_right_10 font_size_12">￥2</text>
+                                <text class="color_ff6 font_size_12">￥</text>
+                                <text class="color_ff6 font_size_18">2</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+
+                <view class=" item border_radius_right_left box_shadow">
+                    <view class="font_size_0">
+                        <image class="max_width_100" src="/images/imgs/cs.png" mode="aspectFit"></image>
+                    </view>
+                </view>
+
+            </view>
+            <view class="right_content box_sizing width_50 padding_left_10">
+
+
+                <view class=" item bg_fff border_radius_right_left box_shadow overflow_hidden relative">
+                    <view class="font_size_0">
+                        <image class="max_width_100" src="/images/imgs/cs.png" mode="aspectFit"></image>
+                    </view>
+                    <view class="width_100 text_right" style="position:absolute; right:10rpx; bottom:20rpx;">
+                        <van-rate value="{{ value }}" size="{{ 20 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
+                    </view>
+                </view>
+
+                <view class=" item  bg_theme border_radius_right_left box_shadow">
+                    <view class="font_size_0">
+                        <image class="max_width_100" src="/images/imgs/cs.png" mode="aspectFit"></image>
+                    </view>
+                </view>
+
+                <view class=" item  bg_theme border_radius_right_left box_shadow">
+                    <view class="font_size_0">
+                        <image class="max_width_100" src="/images/imgs/cs.png" mode="aspectFit"></image>
+                    </view>
+                </view>
+                <view class=" item  bg_theme  border_radius_right_left box_shadow">
+                    <view class="font_size_0">
+                        <image class="max_width_100" src="/images/imgs/cs.png" mode="aspectFit"></image>
+                    </view>
+                </view>
+
+            </view>
+
+        </view>
+
+    </view>
+
+
+
+
+
+</view>

@@ -1,4 +1,5 @@
 // pages/cart/cart.js
+var app = getApp()
 Page({
 
     /**
@@ -8,7 +9,59 @@ Page({
         allPrice: 0, //结算总价
         administrationType: 1, //点击管理type,
         checkedAll: false,
-        buyNumber:1, //购买数量
+        buyNumber: 1, //购买数量
+        cartLists: [{
+            id: 1,
+            checked: false,
+            name: "菜品1"
+        }, {
+            id: 2,
+            checked: true,
+            name: "菜品2"
+        }, {
+            id: 3,
+            checked: true,
+            name: "菜品3"
+        }, {
+            id: 4,
+            checked: true,
+            name: "菜品4"
+        }, {
+            id: 5,
+            checked: true,
+            name: "菜品5"
+        }]
+    },
+
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad: function(options) {
+
+    },
+
+    /** 获取购物车列表 */
+    getCartListsFn() {
+
+    },
+
+    /** 选择商品时. */
+    checkGoodsChange(e) {
+        let that = this
+        let itemId = e.currentTarget.dataset.itemid
+        let cartLists = that.data.cartLists
+        let checkedAll
+        cartLists.forEach(item => {
+            if (item.id == itemId) item.checked = !item.checked
+        })
+        let arr = cartLists.filter(item => item.checked == true)
+        arr.length == that.data.cartLists.length ? checkedAll = true : checkedAll = false
+        that.setData({
+            checkedAll: checkedAll,
+            cartLists: cartLists
+        })
+        
     },
 
     /** 点击管理切换状态. */
@@ -26,19 +79,24 @@ Page({
     },
 
     /** 点击全选按钮改变时. */
-    checkboxChange(){
+    checkboxChange() {
+        let that = this
         let checkedAll = this.data.checkedAll
-        if (checkedAll){
+        let cartLists = that.data.cartLists
+        if (checkedAll) {
+            cartLists.forEach(item => item.checked = false)
             this.setData({
+                cartLists: cartLists,
                 checkedAll: false
             })
-        }else{
+        } else {
+            cartLists.forEach(item => item.checked = true)
             this.setData({
+                cartLists: cartLists,
                 checkedAll: true
             })
         }
     },
-
 
     /** 数量加减. */
     addReduceFn(e) {
@@ -69,7 +127,7 @@ Page({
     },
 
     /** 跳转到商品详情页面. */
-    toDetailsFn(e){
+    toDetailsFn(e) {
         console.log(e)
         wx.navigateTo({
             url: '/pages/food_details/food_details',
@@ -77,18 +135,12 @@ Page({
     },
 
     /** 跳转结算页面 */
-    toPageFn(){
+    toPageFn() {
         wx.navigateTo({
             url: '/pages/settlement/settlement',
         })
     },
 
-    /**
-     * 生命周期函数--监听页面加载
-     */
-    onLoad: function(options) {
-
-    },
 
     /**
      * 生命周期函数--监听页面初次渲染完成

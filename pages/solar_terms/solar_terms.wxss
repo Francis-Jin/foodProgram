@@ -1,1 +1,12 @@
 /* pages/solar_terms/solar_terms.wxss */
+
+.next{
+    position: fixed;
+    left:50%;
+    bottom: 50rpx;
+    width: 300rpx;
+    margin-left: -150rpx;
+    height: 100rpx;
+    text-align: center;
+    line-height: 100rpx;
+}

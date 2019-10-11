@@ -1,12 +1,23 @@
 {
     "pages": [
-        "pages/index/index",
         "pages/start/start",
-        "pages/solar_terms/solar_terms",
-        "pages/author/author",
         "pages/login/login",
+        
+        "pages/cook_details/cook_details",
+        "pages/author/author",
+        
+        "pages/my/my",
         "pages/cart/cart",
-        "pages/my/my"
+        "pages/order_details/order_details",
+        "pages/settlement/settlement",
+        "pages/food_details/food_details",
+        "pages/account/account",
+        "pages/index/index",
+        "pages/recharge/recharge",
+        "pages/make_up_list/make_up_list",
+        "pages/play_video/play_video",
+        "pages/solar_terms/solar_terms",
+        "pages/order/order"
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -15,8 +26,8 @@
         "navigationBarTextStyle": "black"
     },
     "tabBar": {
-        "color": "#bfbfbf",
-        "selectedColor": "#1296db",
+        "color": "#cdcdcd",
+        "selectedColor": "#5bcbc8",
         "list": [
             {
                 "pagePath": "pages/index/index",
@@ -45,7 +56,8 @@
         "van-action-sheet": "./miniprogram_npm/vant-weapp/action-sheet/index",
         "van-popup": "./miniprogram_npm/vant-weapp/popup/index",
         "van-rate": "./miniprogram_npm/vant-weapp/rate/index",
-        "van-field": "./miniprogram_npm/vant-weapp/field/index"
+        "van-field": "./miniprogram_npm/vant-weapp/field/index",
+        "pay-success": "./miniprogram_npm/common/pay_success/pay_success"
     },
     "sitemapLocation": "sitemap.json"
 }

@@ -1,0 +1,176 @@
+<!--pages/food_details/food_details.wxml-->
+<view class="container">
+
+    <view class="padding_left_right_10 padding_bottom_30">
+
+        <view class="border_radius_right_left height_fixed_180 overflow1 relative">
+            <image class="width_100 height_100" src="{{urlBefore + info.cover}}"></image>
+            <view class="food_name font_size_16 font_weight_600">
+                <text>{{info.name}}</text>
+            </view>
+        </view>
+
+        <view class="box_shadow flex flex_space_between line_height_50 border_radius_30 overflow1 margin_top_20">
+            <view class="flex">
+                <view class="del_line margin_right_20 margin_left_20 color_bab9">
+                    <text>原价</text>
+                    <text class="font_size_12">￥</text>
+                    <text>{{info.marketPrice}}</text>
+                </view>
+                <view class="color_ff6">
+                    <text class="font_size_12">￥</text>
+                    <text class="font_size_18">{{info.price}}</text>
+                </view>
+            </view>
+            <view class="width_50 background_liner text_center color_fff border_radius_30" bindtap="addCart">
+                <text>加入购物车</text>
+            </view>
+        </view>
+
+        <!-- 推荐理由 -->
+        <view class="box_shadow flex flex_space_between line_height_70 border_radius_20 overflow1 margin_top_20" data-type="1" bindtap="toPageFn">
+            <view class="flex">
+                <view class="margin_right_10 margin_left_20">
+                    <text class="background_liner iconfont icon-shou color_fff border_radius__100 padding_5"></text>
+                </view>
+                <view class="color_5151">
+                    <text>推荐理由</text>
+                </view>
+            </view>
+            <view class="width_50 text_right box_sizing padding_right_20 color_bab9">
+                <text class="iconfont icon-Right_Double"></text>
+            </view>
+        </view>
+
+        <!-- 发起拼单 -->
+        <view class="box_shadow flex flex_space_between height_fixed_70 border_radius_20 overflow1 margin_top_20" data-type="2" bindtap="toPageFn">
+            <view class="box_sizing padding_top_10">
+                <view class="margin_right_10 margin_left_20">
+                    <text class="background_liner iconfont icon-fenxiang2 color_fff border_radius__100 padding_5"></text>
+                    <text class="margin_left_10 color_5151">发起拼单</text>
+                </view>
+                <view class="color_bab9 margin_top_10 margin_left_20">
+                    <text>2人7折，3人以上5折</text>
+                </view>
+            </view>
+            <view class="width_20 text_center background_liner line_height_70 box_sizing color_fff">
+                <text class="">去拼单</text>
+            </view>
+        </view>
+
+        <!-- VIP -->
+        <view class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20" data-type="3" bindtap="toPageFn">
+            <view class="flex box_sizing padding_top_10 padding_bottom_10">
+                <view class="color_5fc text_center ">
+                    <view class="font_weight_600 font_size_20">
+                        <text class="margin_left_10">VIP</text>
+                    </view>
+                    <view class="margin_top_5">
+                        <text class="margin_left_10">铂金会员</text>
+                    </view>
+                </view>
+                <view class="margin_left_30">
+                    <view class="color_333">
+                        <text>余额：￥35</text>
+                    </view>
+                    <view class="margin_top_10 color_666">
+                        <text>时间：3天</text>
+                    </view>
+                </view>
+            </view>
+            <view class="width_20 text_center line_height_70 box_sizing color_bab9">
+                <text class="">充值</text>
+            </view>
+        </view>
+
+        <!-- 代金池 -->
+        <view class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
+            <view class="flex box_sizing padding_top_10 padding_bottom_10">
+                <view class="color_5fc text_center ">
+                    <view class="font_weight_600 font_size_20">
+                        <text class="margin_left_10">代金池</text>
+                    </view>
+                    <view class="margin_top_5">
+                        <text class="margin_left_10">余额￥586</text>
+                    </view>
+                </view>
+                <view class="margin_left_30">
+                    <view class="color_333">
+                        <text>本餐品可使用代金池额度</text>
+                    </view>
+                    <view class="margin_top_10 color_666">
+                        <text>￥3</text>
+                    </view>
+                </view>
+            </view>
+            <view class="width_20 text_center box_sizing color_bab9 relative">
+                <view class="absolute selected">
+                    <image class="width_fixed_30 height_fixed_30" src="/images/icon/queding@2x.png"></image>
+                </view>
+            </view>
+        </view>
+
+        <!-- 折扣卡 -->
+        <view hidden="true" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
+            <view class="flex box_sizing padding_top_10 padding_bottom_10">
+                <view class="color_5fc text_center ">
+                    <view class="font_weight_600 font_size_20">
+                        <text class="margin_left_10">折扣卡</text>
+                    </view>
+                    <view class="margin_top_5">
+                        <text class="margin_left_10">剩余张数</text>
+                    </view>
+                    <view class="margin_top_10">
+                        <text class="margin_left_10">7折卡  5张</text>
+                    </view>
+                    <view class="margin_top_5">
+                        <text class="margin_left_10">5折卡  6张</text>
+                    </view>
+                </view>
+                <view class="margin_left_30">
+                    <view class="margin_top_10 color_666">
+                        <text>一份对应一张</text>
+                    </view>
+                    <view class="margin_top_5 color_333">
+                        <text>本次使用张数：</text>
+                    </view>
+                    <view class="flex margin_top_20">
+                        <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
+                            <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
+                        </view>
+                        <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
+                            <text>{{discountNumber}}</text>
+                        </view>
+                        <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
+                            <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            <view class="width_20 text_center box_sizing color_bab9 relative">
+                <view class="absolute selected">
+                    <image class="width_fixed_30 height_fixed_30" src="/images/icon/queding@2x.png"></image>
+                </view>
+            </view>
+        </view>
+
+
+
+    </view>
+
+    <view class="height_fixed_100"></view>
+
+    <!-- 购物车 -->
+    <view class="cart">
+        <view data-type="4" bindtap="toPageFn" wx:if="{{isPopping}}" animation="{{animationCart}}" class="width_fixed_120 background_liner box_sizing padding_left_20 line_height_50 color_fff border_radius_50">
+            <text>去结算</text>
+        </view>
+        <view class="cart_icon {{ isPopping ? '' : 'box_shadow'}}" bindtap="plus">
+            <image class="width_fixed_50 height_fixed_50" src="/images/icon/cart_1.png "></image>
+            <view class="buy_number" wx:if="{{buyNumber != 0}}">
+                <text class="#fff;">{{buyNumber}}</text>
+            </view>
+        </view>
+    </view>
+
+</view>

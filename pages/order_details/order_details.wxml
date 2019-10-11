@@ -1,0 +1,153 @@
+<!--pages/order_details/order_details.wxml-->
+<view class="container">
+
+    <view class="padding_left_right_10 padding_bottom_30">
+
+        <view class="flex box_shadow line_height_80 border_radius_10 margin_top_20 color_4dc">
+            <view class="width_30 text_center font_size_16 font_weight_600">
+                <text>取餐号</text>
+            </view>
+            <view class="width_40 text_center font_size_22 font_weight_600">
+                <text>55362</text>
+            </view>
+        </view>
+
+        <view class="box_shadow border_radius_10 overflow_hidden margin_top_20 box_sizing padding_left_right_20 relative">
+            <view class="flex flex_space_between line_height_50 border_bottom">
+                <view class="font_size_16 font_weight_600 color_4dc">
+                    <text>订单号：120190927ZM512401</text>
+                </view>
+                <view>
+                    <!-- <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-4rpx;" src="/images/icon/right@2x.png"></image> -->
+                </view>
+            </view>
+            <view class="margin_top_10 padding_bottom_20">
+
+                <view class="item border_bottom border_radius_10 flex padding_top_10 padding_bottom_10 relative ">
+                    <view class="flex">
+                        <view class="width_fixed_80 height_fixed_80">
+                            <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
+                        </view>
+                        <view class="margin_left_10">
+                            <view class="color_5151">
+                                <text>皮蛋瘦肉粥</text>
+                            </view>
+                            <view class="margin_top_40">
+                                <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
+                                <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
+                            </view>
+                        </view>
+                        <view class="color_666" style="position:absolute;right:10rpx;bottom:20rpx;">
+                            <text>x</text>
+                            <text>1</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="item border_bottom border_radius_10 flex padding_top_10 padding_bottom_10 relative ">
+                    <view class="flex">
+                        <view class="width_fixed_80 height_fixed_80">
+                            <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
+                        </view>
+                        <view class="margin_left_10">
+                            <view class="color_5151">
+                                <text>皮蛋瘦肉粥</text>
+                            </view>
+                            <view class="margin_top_40">
+                                <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
+                                <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
+                            </view>
+                        </view>
+                        <view class="color_666" style="position:absolute;right:10rpx;bottom:20rpx;">
+                            <text>x</text>
+                            <text>1</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="item border_bottom border_radius_10 flex padding_top_10 padding_bottom_10 relative ">
+                    <view class="flex">
+                        <view class="width_fixed_80 height_fixed_80">
+                            <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
+                        </view>
+                        <view class="margin_left_10">
+                            <view class="color_5151">
+                                <text>皮蛋瘦肉粥</text>
+                            </view>
+                            <view class="margin_top_40">
+                                <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
+                                <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
+                            </view>
+                        </view>
+                        <view class="color_666" style="position:absolute;right:10rpx;bottom:20rpx;">
+                            <text>x</text>
+                            <text>1</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="item border_bottom border_radius_10 flex padding_top_10 padding_bottom_10 relative ">
+                    <view class="flex">
+                        <view class="width_fixed_80 height_fixed_80">
+                            <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
+                        </view>
+                        <view class="margin_left_10">
+                            <view class="color_5151">
+                                <text>皮蛋瘦肉粥</text>
+                            </view>
+                            <view class="margin_top_40">
+                                <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
+                                <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
+                            </view>
+                        </view>
+                        <view class="color_666" style="position:absolute;right:10rpx;bottom:20rpx;">
+                            <text>x</text>
+                            <text>1</text>
+                        </view>
+                    </view>
+                </view>
+
+                <!-- 订单信息 -->
+                <view class="margin_top_10 line_height_30 font_size_12">
+                    <view class="flex flex_space_between">
+                        <view class="color_bab9">
+                            <text>下单时间</text>
+                        </view>
+                        <view class="text_right color_bab9">
+                            <text>2019年9月27日  12:09:11</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_space_between">
+                        <view class="color_bab9">
+                            <text>订单号码</text>
+                        </view>
+                        <view class="text_right color_bab9">
+                            <text>120190927ZM512401</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_space_between">
+                        <view class="color_bab9">
+                            <text>下单数量</text>
+                        </view>
+                        <view class="text_right color_bab9">
+                            <text>x 3</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_space_between">
+                        <view class="color_bab9">
+                            <text>地址</text>
+                        </view>
+                        <view class="text_right color_bab9">
+                            <text>M区7号楼2911</text>
+                        </view>
+                    </view>
+                    <view class="height_fixed_40"></view>
+                </view>
+                
+            </view>
+            <view class="line_height_50 text_center color_fff background_liner" style="position:absolute;left:0;bottom:0;width:100%;height:100rpx;">
+                <text>制作中</text>
+            </view>
+        </view>
+
+    </view>
+
+
+</view>

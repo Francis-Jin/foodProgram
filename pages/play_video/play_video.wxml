@@ -1,0 +1,6 @@
+<!--pages/play_video/play_video.wxml-->
+<view class="play_wrap">
+    <view class="video_content">
+        <video class="width_height_100" autoplay="{{ true }}" object-fit="fill" src="https://zyhy.zhiyanginfo.top/upload/upload_video/23827e67-c60e-4c6d-a74c-cbe38ff1b6c5.mp4"></video>
+    </view>
+</view>

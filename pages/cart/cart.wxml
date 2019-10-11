@@ -1,3 +1,151 @@
 <!--pages/cart/cart.wxml-->
-<text>购物车</text>
-<vant-button type="danger">购物车</vant-button>
+<view class="container">
+
+    <!-- 顶部 -->
+    <view class="flex bg_fff flex_space_between box_sizing padding_left_right_20 line_height_50 box_shadow border_top topAdmin">
+        <view class="color_5353">
+            <checkbox-group bindtap="checkboxChange">
+                <label class="checkbox">
+                    <checkbox checked="{{checkedAll}}" />
+                    <text class="margin_left_5">全选</text>
+                </label>
+            </checkbox-group>
+        </view>
+        <view class="" bindtap="tapStatusFn">
+            <text wx:if="{{administrationType == 1}}" class="padding_left_10 background_liner padding_right_10 padding_top_5 padding_bottom_5 color_fff font_size_12 border_radius_10">管理</text>
+            <text wx:if="{{administrationType == 2}}" class="padding_left_10 background_red_liner padding_right_10 padding_top_5 padding_bottom_5 color_fff font_size_12 border_radius_10">完成</text>
+        </view>
+    </view>
+
+    <!-- 主要内容部分 -->
+    <view class="container">
+        <!-- 顶部占位 -->
+        <view class="height_fixed_50"></view>
+
+        <!-- 内容 -->
+        <view>
+            <!-- 有数据 -->
+            <view class="margin_top_20 box_sizing padding_left_right_20">
+
+                <view class="data_lists">
+                    <view class="item box_shadow border_radius_10 flex padding_top_10 padding_bottom_10 relative margin_bottom_20">
+                        <view class="width_fixed_50">
+                            <checkbox-group bindtap="checkboxChange" class="text_center line_height_80">
+                                <label class="checkbox">
+                                    <checkbox/>
+                                </label>
+                            </checkbox-group>
+                        </view>
+                        <view class="flex">
+                            <view class="width_fixed_80 height_fixed_80" data-goodsId="1" bindtap="toDetailsFn">
+                                <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
+                            </view>
+                            <view class="margin_left_10">
+                                <view class="margin_top_10 color_5151">
+                                    <text>皮蛋瘦肉粥</text>
+                                </view>
+                                <view class="margin_top_30">
+                                    <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
+                                    <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
+                                </view>
+                            </view>
+                            <view style="position:absolute;right:20rpx;bottom:20rpx;">
+
+                                <view class="flex margin_top_20">
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
+                                        <text>{{buyNumber}}</text>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                     <view class="item box_shadow border_radius_10 flex padding_top_10 padding_bottom_10 relative margin_bottom_20">
+                        <view class="width_fixed_50">
+                            <checkbox-group bindtap="checkboxChange" class="text_center line_height_80">
+                                <label class="checkbox">
+                                    <checkbox/>
+                                </label>
+                            </checkbox-group>
+                        </view>
+                        <view class="flex">
+                            <view class="width_fixed_80 height_fixed_80" data-goodsId="1" bindtap="toDetailsFn">
+                                <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
+                            </view>
+                            <view class="margin_left_10">
+                                <view class="margin_top_10 color_5151">
+                                    <text>皮蛋瘦肉粥</text>
+                                </view>
+                                <view class="margin_top_30">
+                                    <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
+                                    <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
+                                </view>
+                            </view>
+                            <view style="position:absolute;right:20rpx;bottom:20rpx;">
+
+                                <view class="flex margin_top_20">
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
+                                        <text>{{buyNumber}}</text>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+
+            </view>
+
+            <!-- 无数据 -->
+            <view hidden="true" class="">
+                <view class="text_center margin_top_50 color_999 padding_top_50 line_height_100">
+                    <text>购物车空空如也</text>
+                </view>
+            </view>
+        </view>
+        <!-- 底部占位 -->
+        <view class="height_fixed_50"></view>
+    </view>
+
+
+    <!-- 底部 -->
+    <view class="footer_buy_del bg_fff box_shadow padding_left_20">
+        <view class="slelected line_height_50 color_5353">
+            <checkbox-group bindtap="checkboxChange">
+                <label class="checkbox">
+                    <checkbox checked="{{checkedAll}}" />
+                    <text class="margin_left_5">全选</text>
+                </label>
+            </checkbox-group>
+        </view>
+        <view class="operation">
+            <view class="flex flex_space_between">
+                <view wx:if="{{administrationType == 1}}" class="margin_right_10">
+                    <!-- <view></view> -->
+                    <view class="line_height_50">
+                        <text class="color_5454">总计：</text>
+                        <text class="font_size_12 color_ff6">￥</text>
+                        <text class="font_size_16 font_weight color_ff6">{{allPrice}}</text>
+                    </view>
+                </view>
+                <view wx:if="{{administrationType == 1}}"  bindtap="toPageFn" class="line_height_50 width_fixed_120 background_liner text_center color_fff">
+                    <text>去结算</text>
+                </view>
+                <view wx:if="{{administrationType == 2}}" class="line_height_50 width_fixed_120 background_red_liner text_center color_fff">
+                    <text>删除</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+</view>

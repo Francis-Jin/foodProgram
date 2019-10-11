@@ -1,0 +1,160 @@
+<!--pages/account/account.wxml-->
+<view class="container box_sizing padding_left_right_20 padding_top_20 padding_bottom_20">
+
+    <view class="flex flex_space_between box_shadow border_radius_10 box_sizing padding_left_right_20 margin_bottom_20" data-type="1" bindtap="showContentFn">
+        <view class="line_height_50">
+            <image class="width_fixed_30 height_fixed_30 vertical_middle" src="/images/icon/chengfen@2x.png"></image>
+            <text class="margin_left_10 color_5151">所含营养成分</text>
+        </view>
+        <view class="line_height_50">
+            <image class="width_fixed_20 height_fixed_20 vertical_middle" src="/images/icon/more@2x.png"></image>
+        </view>
+    </view>
+
+    <view class="flex flex_space_between box_shadow border_radius_10 box_sizing padding_left_right_20 margin_bottom_20" data-type="2" bindtap="showContentFn">
+        <view class="line_height_50">
+            <image class="width_fixed_30 height_fixed_30 vertical_middle" src="/images/icon/hanliang@2x.png"></image>
+            <text class="margin_left_10 color_5151">最高含量的主治功能</text>
+        </view>
+        <view class="line_height_50">
+            <image class="width_fixed_20 height_fixed_20 vertical_middle" src="/images/icon/more@2x.png"></image>
+        </view>
+    </view>
+
+    <view class="flex flex_space_between box_shadow border_radius_10 box_sizing padding_left_right_20 margin_bottom_20" data-type="3" bindtap="showContentFn">
+        <view class="line_height_50">
+            <image class="width_fixed_30 height_fixed_30 vertical_middle" src="/images/icon/chengfen@2x.png"></image>
+            <text class="margin_left_10 color_5151">该菜品的主治功能</text>
+        </view>
+        <view class="line_height_50">
+            <image class="width_fixed_20 height_fixed_20 vertical_middle" src="/images/icon/more@2x.png"></image>
+        </view>
+    </view>
+
+    <view class="box_shadow border_radius_10 overflow_hidden">
+        <view class="flex flex_space_between box_shadow border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="line_height_50">
+                <image class="width_fixed_30 height_fixed_30 vertical_middle" src="/images/icon/bianji@2x.png "></image>
+                <text class="margin_left_10 color_5151">编辑</text>
+            </view>
+            <view class="line_height_50">
+                <image class="width_fixed_20 height_fixed_20 vertical_middle" src="/images/icon/more@2x.png"></image>
+            </view>
+        </view>
+        <view class="box_sizing padding_left_right_20 margin_bottom_20">
+            <textarea wx:if="{{!isShowContent}}" cursor-spacing="20" class="width_height_100" maxlength="1000" auto-height placeholder="请输入您想要编辑的内容" />
+        </view>
+        <view class="box_sizing padding_left_right_20 margin_bottom_20 clear_float">
+            <view class="width_fixed_70 height_fixed_70 float_left margin_right_10 margin_bottom_10" wx:for="{{uploadImgLists}}" wx:key="index">
+                <image class="width_height_100" mode="aspectFill" src="{{item}}"></image>
+            </view>
+            <view class="width_fixed_70 height_fixed_70 float_left" bindtap="uploadImgFn">
+                <image class="width_height_100" mode="aspectFill" src="/images/icon/uploadImg.png"></image>
+            </view>
+        </view>
+        <view class="line_height_50 text_center background_liner color_fff">
+            <text>审核</text>
+        </view>
+    </view>
+
+
+    <!-- 弹出展示的内容 -->
+    <view wx:if="{{isShowContent}}" class="showContent box_sizing padding_left_right_20 padding_top_50" bindtap="hideContentFn">
+        <view class="bg_fff import_content padding_bottom_20">
+            <view class="flex flex_space_between box_shadow border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+                <view class="line_height_50">
+                    <image class="width_fixed_30 height_fixed_30 vertical_middle" src="{{showIcon}}"></image>
+                    <text class="margin_left_10 color_5151">{{showTitle}}</text>
+                </view>
+                <view class="line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle" src="/images/icon/more@2x.png"></image>
+                </view>
+            </view>
+
+            <view wx:if="{{showTitle != '所含营养成分'}}" class="box_sizing padding_left_right_10 color_5353 text_indent_28 font_size_14">
+                <text>{{showContent}}</text>
+            </view>
+
+            <view wx:if="{{showTitle == '所含营养成分'}}" class="box_sizing padding_left_right_10">
+
+                <view class="border_radius_right_left overflow_hidden bg_f6f flex flex_space_between margin_bottom_20">
+                    <view class="width_fixed_50 background_bottom_liner padding_top_20 padding_bottom_20">
+                        <view class="width_fixed_30 margin_auto white_pre text_center font_size_18 color_fff">
+                            <text>人体必需的营养元素</text>
+                        </view>
+                    </view>
+                    <view class="padding_top_10 padding_bottom_10" style="width:90%">
+                        <view class="flex flex_end box_sizing padding_right_10">
+                            <view class="padding_top_10 padding_bottom_10 flex flex_end" style="width:75%;border-right: 1rpx solid #ccc;">
+                                <view class="background_liner" style="width:100%;height:40rpx;"></view>
+                            </view>
+                            <view class="width_fixed_50 padding_top_10 padding_bottom_10 color_5353 margin_left_10 font_size_12 line_height_20">
+                                <text>316千卡</text>
+                            </view>
+                        </view>
+                        <view class="flex flex_end box_sizing padding_right_10">
+                            <view class="padding_top_10 padding_bottom_10 flex flex_end" style="width:75%;border-right: 1rpx solid #ccc;">
+                                <view class="background_liner" style="width:100%;height:40rpx;"></view>
+                            </view>
+                            <view class="width_fixed_50 padding_top_10 padding_bottom_10 color_5353 margin_left_10 font_size_12 line_height_20">
+                                <text>316千卡</text>
+                            </view>
+                        </view>
+                        <view class="flex flex_end box_sizing padding_right_10">
+                            <view class="padding_top_10 padding_bottom_10 flex flex_end" style="width:75%;border-right: 1rpx solid #ccc;">
+                                <view class="background_liner" style="width:100%;height:40rpx;"></view>
+                            </view>
+                            <view class="width_fixed_50 padding_top_10 padding_bottom_10 color_5353 margin_left_10 font_size_12 line_height_20">
+                                <text>316千卡</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+
+                <view class="border_radius_right_left overflow_hidden bg_f6f flex flex_space_between margin_bottom_20">
+                    <view class="width_fixed_50 background_bottom_liner padding_top_20 padding_bottom_20">
+                        <view class="width_fixed_30 margin_auto white_pre text_center font_size_18 color_fff">
+                            <text>人体必需的营养元素</text>
+                        </view>
+                    </view>
+                    <view class="padding_top_10 padding_bottom_10" style="width:90%">
+                        <view class="flex flex_end box_sizing padding_right_10">
+                            <view class="padding_top_10 padding_bottom_10 flex flex_end" style="width:75%;border-right: 1rpx solid #ccc;">
+                                <view class="background_liner" style="width:{{value}};height:40rpx;"></view>
+                            </view>
+                            <view class="width_fixed_50 padding_top_10 padding_bottom_10 color_5353 margin_left_10 font_size_12 line_height_20">
+                                <text>316千卡</text>
+                            </view>
+                        </view>
+                        <view class="flex flex_end box_sizing padding_right_10">
+                            <view class="padding_top_10 padding_bottom_10 flex flex_end" style="width:75%;border-right: 1rpx solid #ccc;">
+                                <view class="background_liner" style="width:100%;height:40rpx;"></view>
+                            </view>
+                            <view class="width_fixed_50 padding_top_10 padding_bottom_10 color_5353 margin_left_10 font_size_12 line_height_20">
+                                <text>316千卡</text>
+                            </view>
+                        </view>
+                        <view class="flex flex_end box_sizing padding_right_10">
+                            <view class="padding_top_10 padding_bottom_10 flex flex_end" style="width:75%;border-right: 1rpx solid #ccc;">
+                                <view class="background_liner" style="width:100%;height:40rpx;"></view>
+                            </view>
+                            <view class="width_fixed_50 padding_top_10 padding_bottom_10 color_5353 margin_left_10 font_size_12 line_height_20">
+                                <text>316千卡</text>
+                            </view>
+                        </view>
+                        <view class="flex flex_end box_sizing padding_right_10">
+                            <view class="padding_top_10 padding_bottom_10 flex flex_end" style="width:75%;border-right: 1rpx solid #ccc;">
+                                <view class="background_liner" style="width:100%;height:40rpx;"></view>
+                            </view>
+                            <view class="width_fixed_50 padding_top_10 padding_bottom_10 color_5353 margin_left_10 font_size_12 line_height_20">
+                                <text>316千卡</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                
+            </view>
+
+        </view>
+    </view>
+</view>

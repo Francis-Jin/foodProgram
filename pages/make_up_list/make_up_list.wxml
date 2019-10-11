@@ -1,0 +1,89 @@
+<!--pages/make_up_list/make_up_list.wxml-->
+<view class="container">
+
+    <view class="padding_left_right_10 padding_bottom_30">
+
+        <view class="border_radius_right_left height_fixed_180 overflow1 relative">
+            <image class="width_100 height_100" src="/images/imgs/cp1.png"></image>
+            <view class="food_name font_size_16 font_weight_600">
+                <text>绿豆粥</text>
+            </view>
+        </view>
+
+        <view class="box_shadow border_radius_20 margin_top_20 box_sizing padding_left_right_20 padding_top_20">
+            <view class="dot box_sizing margin_bottom_10 padding_left_20 color_5454">
+                <text>拼单规则：</text>
+                <text>2人7折，3人以上5折</text>
+            </view>
+            <view class="dot box_sizing padding_left_20 color_5454">
+                <text>10分钟拼单时间的倒计时：</text>
+            </view>
+            <view class="text_center line_height_60 font_size_24 color_4dc">
+                <text>09:59</text>
+            </view>
+        </view>
+
+        <view class="box_shadow border_radius_30 margin_top_20 box_sizing line_height_50 text_center color_bab9">
+            <text>放弃拼单</text>
+        </view>
+
+        <view class="box_shadow flex flex_space_between line_height_50 border_radius_30 overflow1 margin_top_20">
+            <view class="flex">
+                <view class="del_line margin_right_20 margin_left_20 color_bab9">
+                    <text>原价</text>
+                    <text class="font_size_12">￥</text>
+                    <text>18</text>
+                </view>
+                <view class="color_ff6">
+                    <text class="font_size_12">￥</text>
+                    <text class="font_size_18">12</text>
+                </view>
+            </view>
+            <view class="width_50 background_liner text_center color_fff border_radius_30">
+                <text>支付</text>
+            </view>
+        </view>
+
+    </view>
+
+    <view class="height_fixed_100"></view>
+
+    <!-- 购物车 -->
+    <view class="cart">
+        <view data-type="3" bindtap="toPageFn" wx:if="{{isPopping}}" animation="{{animationCart}}" class="width_fixed_120 background_liner box_sizing padding_left_20 line_height_50 color_fff border_radius_50">
+            <text>去结算</text>
+        </view>
+        <view class="cart_icon {{ isPopping ? '' : 'box_shadow'}}" bindtap="plus">
+            <image class="width_fixed_50 height_fixed_50" src="/images/icon/cart_1.png "></image>
+            <view class="buy_number" wx:if="{{buyNumber != 0}}">
+                <text class="#fff;">{{buyNumber}}</text>
+            </view>
+        </view>
+    </view>
+
+    <!-- 拼单超时弹出 -->
+    <view wx:if="{{isShowOverTime}}" class="overtime">
+        <view class="overTime_content">
+            <view class="text_center line_height_40 color_5454 font_size_18">
+                <text>拼单超时</text>
+            </view>
+            <view class="text_center line_height_40 font_size_24 color_4dc">
+                <text>00 : 00</text>
+            </view>
+            <view class="line_height_30 font_size_14 color_bab9 box_sizing padding_left_20">
+                <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top: -4rpx;" src="/images/icon/gift.png "></image>
+                <text class="margin_left_5 margin_right_20">赠送</text>
+                <text>折扣卡，7折获得优惠</text>
+            </view>
+            <view class="flex flex_space_between padding_top_10 padding_bottom_10">
+                <view class="color_bab9 width_50 text_center" bindtap="hideOverTime">
+                    <text>放弃领卡付款</text>
+                </view>
+                <view class="color_4dc width_50 text_center border_left">
+                    <text>立即领取</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+</view>

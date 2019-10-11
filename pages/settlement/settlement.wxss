@@ -1,0 +1,12 @@
+/* pages/settlement/settlement.wxss */
+
+.food_name {
+    position: absolute;
+    text-align: center;
+    white-space:pre-wrap;
+    left: 10%;
+    top: 60rpx;
+    width: 50rpx;
+    font-weight: 400;
+    color: #fff;
+}

@@ -1,11 +1,12 @@
 // pages/start/start.js
+var app = getApp()
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-
+        userInfo: app.globalData.userInfo
     },
 
     /**
@@ -27,12 +28,12 @@ Page({
     onReady: function() {
 
     },
-
+    /** 获取用户信息. */
+    
     /**
      * 生命周期函数--监听页面显示
      */
     onShow: function() {
-
     },
 
     /**
@@ -80,9 +81,21 @@ Page({
                 url: '/pages/index/index'
             })
         } else {
-            wx.redirectTo({
-                url: '/pages/login/login',
-            })
+            if (app.globalData.userInfo){
+                if (!app.globalData.userInfo.homeplace){
+                   wx.redirectTo({
+                       url: '/pages/author/author',
+                   })
+               }else{
+                   wx.redirectTo({
+                       url: '/pages/solar_terms/solar_terms',
+                   })
+               }
+            }else{
+                wx.redirectTo({
+                    url: '/pages/login/login',
+                })
+            }
         }
 
     }

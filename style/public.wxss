@@ -19,8 +19,19 @@
     font-family: "gloryFontFamilySmall";
 }
 
-.del_line{
-    text-decoration: line-through;
+.del_line {
+    /* text-decoration: line-through; */
+    position: relative;
+}
+
+.del_line::after {
+    content: " ";
+    display: block;
+    width: 120%;
+    position: absolute;
+    left: -10%;
+    top: 50%;
+    border: 1rpx solid #e3e3e3;
 }
 
 .container {
@@ -32,8 +43,8 @@
 /** 颜色变量. */
 
 page {
-    --border_color: #ededed;
-    --shadow_color: #ededed;
+    --border_color: #cdcdcd;
+    --shadow_color: #e3e3e3;
 }
 
 .absolute_100 {
@@ -46,6 +57,178 @@ page {
 
 .absolute {
     position: absolute;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.left_0 {
+    left: 0;
+}
+
+.top_0 {
+    top: 0;
+}
+
+.right_0 {
+    right: 0;
+}
+
+.bottom_0 {
+    bottom: 0;
+}
+
+/** 字体颜色. */
+
+.color_fff {
+    color: #fff;
+}
+
+.color_333 {
+    color: #333;
+}
+
+.color_666 {
+    color: #666;
+}
+
+.color_999 {
+    color: #999;
+}
+
+.color_theme {
+    color: #1296db;
+}
+
+.color_ff6 {
+    color: #ff6100;
+}
+
+.color_39 {
+    color: #393939;
+}
+
+.color_4dc {
+    color: #4dcac7;
+}
+
+.color_5fc {
+    color: #5fc5e0;
+}
+
+.color_5bc {
+    color: #5bcbc8;
+}
+
+.color_5454 {
+    color: #545454;
+}
+
+.color_5353 {
+    color: #535353;
+}
+
+.color_f7c {
+    color: #f7c248;
+}
+
+.color_8ae {
+    color: #8ae7fd;
+}
+
+.color_69c {
+    color: #69c2fb;
+}
+
+.color_fc6 {
+    color: #fc6c75;
+}
+
+.color_5151 {
+    color: #515151;
+}
+
+.color_e3 {
+    color: #e3e3e3;
+}
+
+.color_bab9 {
+    color: #bab9b9;
+}
+
+.color_8484 {
+    color: #848484;
+}
+
+.vertical_middle {
+    vertical-align: middle;
+}
+
+.white_pre {
+    white-space: pre-wrap;
+}
+
+.inline_block {
+    display: inline-block;
+}
+
+.max_width_100 {
+    max-width: 100%;
+}
+
+.overflow_hidden {
+    overflow: hidden;
+}
+
+/** 页面背景色. */
+
+.bg_f5 {
+    background-color: #f5f5f5;
+}
+
+.bg_fff {
+    background-color: #fff;
+}
+
+.bg_e3 {
+    background-color: #e3e3e3;
+}
+
+.bg_theme {
+    background-color: #1296db;
+}
+
+.bg_red {
+    background-color: red;
+}
+
+.bg_f9f {
+    background: #f9fafb;
+}
+
+.bg_fbf {
+    background: #fbfaf2;
+}
+
+.bg_f6f {
+    background-color: #f6fbff;
+}
+
+.background_red_liner {
+    background: linear-gradient(60deg, #fc6c75, #d11f1f);
+}
+
+.background_yellow_liner {
+    background: linear-gradient(60deg, #FD8828, #FA6D35);
+}
+
+.background_liner {
+    background: linear-gradient(60deg, #50cdaf, #64c8de);
+}
+
+.background_bottom_liner {
+    background: linear-gradient(to bottom, #50cdaf, #64c8de);
 }
 
 /** 层级关系. */
@@ -88,60 +271,6 @@ page {
 
 .z_index_10 {
     z-index: 10;
-}
-
-/** 字体颜色. */
-
-.color_fff {
-    color: #fff;
-}
-
-.color_333 {
-    color: #333;
-}
-
-.color_666 {
-    color: #666;
-}
-
-.color_999 {
-    color: #999;
-}
-
-.color_theme {
-    color: #1296db;
-}
-.color_ff6{
-    color: #FF6100;
-}
-
-.color_39 {
-    color: #393939;
-}
-
-.max_width_100 {
-    max-width: 100%;
-}
-
-.overflow_hidden {
-    overflow: hidden;
-}
-
-/** 页面背景色. */
-
-.bg_f5 {
-    background-color: #f5f5f5;
-}
-
-.bg_fff {
-    background-color: #fff;
-}
-
-.bg_theme {
-    background-color: #1296db;
-}
-.bg_fbf{
-    background: #FBFAF2;
 }
 
 /** flex布局. */
@@ -202,6 +331,7 @@ page {
 }
 
 /** 字体加粗. */
+
 .font_weight {
     font-weight: bold;
 }
@@ -232,8 +362,40 @@ page {
     border-radius: 0 40rpx 0 40rpx;
 }
 
+.border_radius__100 {
+    border-radius: 100%;
+}
+
+.border_radius_5 {
+    border-radius: 10rpx;
+}
+
+.border_radius_10 {
+    border-radius: 20rpx;
+}
+
+.border_radius_20 {
+    border-radius: 40rpx;
+}
+
+.border_radius_30 {
+    border-radius: 60rpx;
+}
+
+.border_radius_40 {
+    border-radius: 80rpx;
+}
+
+.border_radius_50 {
+    border-radius: 100rpx;
+}
+
+.border_radius_60 {
+    border-radius: 120rpx;
+}
+
 .box_shadow {
-    box-shadow: 0 0 30rpx var(--shadow_color);
+    box-shadow: 0 0 20rpx 2rpx var(--shadow_color);
 }
 
 /** 字体大小. */
@@ -632,6 +794,14 @@ page {
 }
 
 /** 行高. */
+
+.line_height_10 {
+    line-height: 20rpx;
+}
+
+.line_height_20 {
+    line-height: 40rpx;
+}
 
 .line_height_30 {
     line-height: 60rpx;

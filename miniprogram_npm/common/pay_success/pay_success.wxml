@@ -1,0 +1,11 @@
+<!--miniprogram_npm/common/pay_success/pay_success.wxml-->
+<view wx:if="{{isShowPaySuccess}}" class="pay_content">
+    <view class="pay_success">
+        <view class="text">
+            <text>支付成功</text>
+        </view>
+        <view class="icon">
+            <image src="/images/icon/queding@2x.png"></image>
+        </view>
+    </view>
+</view>

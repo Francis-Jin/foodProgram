@@ -1,4 +1,5 @@
 // pages/login/login.js
+var app = getApp()
 Page({
 
     /**
@@ -16,13 +17,16 @@ Page({
     },
 
     getUserInfo: function (e) {
+        let that = this
+        console.log(e)
         if (e.detail.errMsg == 'getUserInfo:ok'){
-            console.log('允许了')
             wx.redirectTo({
                 url: '/pages/author/author',
             })
         }
     },
+
+    
 
     /**
      * 生命周期函数--监听页面初次渲染完成

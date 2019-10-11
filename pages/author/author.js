@@ -1,19 +1,32 @@
 // pages/author/author.js
+var app = getApp()
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-        address: '',        //家乡
-        constellationValue: '',     //星座value
-        constellationId: '',     //星座ID
-        sexValue: '',     //性别value
-        sexId: '',     //性别ID
-        modalShow: false,     //是否显示上拉选择
+        address: '', //家乡
+        constellationValue: '', //星座value
+        constellationId: '', //星座ID
+        sexValue: '', //性别value
+        sexId: '', //性别ID
+        ageValue: '', //年龄
+        modalShow: false, //是否显示上拉选择
         modalType: '',
         modalTitle: '',
-        actions: []
+        array: ['男', '女'],
+        actions1: [{
+                code: 1,
+                name: '男'
+            },
+            {
+                code: 2,
+                name: '女'
+            }
+        ], // 性别
+        array2: [], //星座
+        constellationLists: null,
     },
 
     /**
@@ -24,169 +37,151 @@ Page({
             address: e.detail
         })
     },
-
-    /** 显示弹框. */
-    modalClickFn(e){
-        let modalType = e.currentTarget.dataset.type
-        console.log(modalType)
-        if(modalType === '1'){
-            let arr = [
-                {
-                    id: 1,
-                    name: '男'
-                },
-                {
-                    id: 2,
-                    name: '女'
-                }
-            ]
-            this.setData({
-                modalTitle: '选择性别',
-                actions: arr
-            })
-        }else{
-            let arr = [
-                {
-                    id: 1,
-                    name: '白羊座'
-                },
-                {
-                    id: 2,
-                    name: '金牛座'
-                },
-                {
-                    id: 3,
-                    name: '双子座'
-                },
-                {
-                    id: 4,
-                    name: '巨蟹座'
-                },
-                {
-                    id: 5,
-                    name: '狮子座'
-                },
-                {
-                    id: 6,
-                    name: '处女座'
-                },
-                {
-                    id: 7,
-                    name: '天秤座'
-                },
-                {
-                    id: 8,
-                    name: '天蝎座'
-                },
-                {
-                    id: 9,
-                    name: '射手座'
-                },
-                {
-                    id: 10,
-                    name: '摩羯座'
-                },
-                {
-                    id: 11,
-                    name: '水瓶座'
-                },
-                {
-                    id: 12,
-                    name: '双鱼座'
-                }
-            ]
-            this.setData({
-                modalTitle: '选择星座',
-                actions: arr
-            })
-        }
+    /**
+     * 输入年龄变化时
+     */
+    ageChange(e) {
         this.setData({
-            modalType:modalType,
-            modalShow: true
+            ageValue: e.detail
         })
     },
-
-    /** 取消选择. */
-    onClose() {
-        this.setData({ modalShow: false });
+    /** 性别选择. */
+    bindPickerChange: function(e) {
+        this.setData({
+            sexValue: this.data.array[e.detail.value]
+        })
     },
-
-    /** 选择. */
-    onSelect(e) {
-        if (this.data.modalType === '1'){
-            this.setData({
-                sexValue:e.detail.name,
-                sexId: e.detail.id
-            })
-        }else{
-            this.setData({
-                constellationValue: e.detail.name,
-                constellationId: e.detail.id
-            })
-        }
-        console.log(e.detail);
+    /** 星座选择. */
+    bindPickerConstellationChange(e) {
+       this.setData({
+           constellationValue: this.data.array2[e.detail.value]
+       })
     },
-
+    
     /** 下一步 */
-    nextFn(){
-        wx.redirectTo({
-            url: '/pages/solar_terms/solar_terms',
+    nextFn() {
+        let that = this
+        if (that.data.address == '') {
+            wx.showToast({
+                title: '请输入家乡地址',
+                icon: 'none'
+            })
+            return false
+        }
+        if (that.data.ageValue == '') {
+            wx.showToast({
+                title: '请输入年龄',
+                icon: 'none'
+            })
+            return false
+        }
+        if (that.data.sexValue == '') {
+            wx.showToast({
+                title: '请选择性别',
+                icon: 'none'
+            })
+            return false
+        }
+
+        let sexCode = that.data.actions1.filter(item => item.name == that.data.sexValue)[0].code
+        let constellationCode = that.data.constellationLists.filter(item => item.name == that.data.constellationValue)[0].code
+        app.appRequest({
+            url: "/app/userInfo/updateUserInfo.action",
+            method: 'post',
+            getParams:{ 
+                "homeplace": that.data.address,
+                "constellation": constellationCode,
+                "sex": sexCode,
+                "age": that.data.ageValue,
+                "unionId": app.globalData.userInfo.unionId
+            },
+            success(res){
+                if(res.code == 200){
+                    wx.redirectTo({
+                        url: '/pages/solar_terms/solar_terms',
+                    })
+                }else{
+                    wx.showToast({
+                        title: '服务器出错了,稍后再试',
+                        icon: 'none'
+                    })
+                }
+            }
         })
     },
 
+    /** 获取星座. */
+    getConstellationFn(){
+        let that = this
+        app.appRequest({
+            url: "/app/sysConf/getConstellation.action",
+            method: 'get',
+            success(res){
+                console.log(res)
+                let lists = []
+                res.data.forEach(item=>{
+                    lists.push(item.name)
+                })
+                that.setData({
+                    array2: lists,
+                    constellationLists: res.data
+                })
+            }
+        })
+    },
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad: function (options) {
-
+    onLoad: function(options) {
+        this.getConstellationFn()
     },
 
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
-    onReady: function () {
+    onReady: function() {
 
     },
 
     /**
      * 生命周期函数--监听页面显示
      */
-    onShow: function () {
+    onShow: function() {
 
     },
 
     /**
      * 生命周期函数--监听页面隐藏
      */
-    onHide: function () {
+    onHide: function() {
 
     },
 
     /**
      * 生命周期函数--监听页面卸载
      */
-    onUnload: function () {
+    onUnload: function() {
 
     },
 
     /**
      * 页面相关事件处理函数--监听用户下拉动作
      */
-    onPullDownRefresh: function () {
+    onPullDownRefresh: function() {
 
     },
 
     /**
      * 页面上拉触底事件的处理函数
      */
-    onReachBottom: function () {
+    onReachBottom: function() {
 
     },
 
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage: function () {
+    onShareAppMessage: function() {
 
     }
 })

@@ -1,4 +1,5 @@
 // pages/solar_terms/solar_terms.js
+var app = getApp()
 Page({
 
     /**
@@ -6,41 +7,91 @@ Page({
      */
     data: {
         modalShow:true,
-        actions: [
-            {
-                id: 1,
-                name: '护肝'
-            },
-            {
-                id: 2,
-                name: '减肥'
-            },
-            {
-                id: 3,
-                name: '美容'
-            }
-        ],
+        array:[],
+        dietOrientationLists: null,
         modalTitle: '您的膳食方向',
         directionValue: '',
-        directionId: ''
-    },
-    /** 取消选择. */
-    onClose() {
-        this.setData({ modalShow: false });
+        directionId: '',
+        thisDate: '',
     },
 
-    /** 选择. */
-    onSelect(e) {
-        this.setData({
-            directionValue: e.detail.name,
-            directionId: e.detail.id
+    /** 获取膳食方向. */
+    getDietOrientationFn() {
+        let that = this
+        app.appRequest({
+            url: "/app/sysConf/getDietOrientation.action",
+            method: 'get',
+            success(res) {
+                let lists = []
+                res.data.forEach(item => {
+                    lists.push(item.name)
+                })
+                if (app.globalData.userInfo.dietOrientation != 0){
+                    let directionValue = res.data.filter(item => item.code == app.globalData.userInfo.dietOrientation)[0].name
+                    that.setData({
+                        directionValue: directionValue 
+                    })
+                }
+                that.setData({
+                    array: lists,
+                    dietOrientationLists: res.data
+                })
+            }
         })
+    },
+
+    /** 更新膳食方向. */
+    bindPickerChange: function (e) {
+        let that = this
+        this.setData({
+            directionValue: this.data.array[e.detail.value]
+        })
+        let directionCode = that.data.dietOrientationLists.filter(item => item.name == that.data.directionValue)[0].code
+        app.appRequest({
+            url: '/app/userInfo/updateUserDietOrientation.action',
+            method: 'post',
+            getParams:{
+                dietOrientation: directionCode,
+                unionId: app.globalData.userInfo.unionId 
+            },
+            success(res){
+                console.log(res)
+            }
+        })
+    },
+
+    /** 获取当前日期，时间 */
+    getDateFn(){
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + ' 年 ' + month + ' 月 ' + strDate + ' 日 '
+        this.setData({
+            thisDate: currentdate
+        })
+    },
+
+    /** 点击下一步跳转页面. */
+    nextFn(){
         wx.redirectTo({
             url: '/pages/start/start?index=true',
         })
     },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
     onLoad: function () {
-        
+        this.getDateFn()
+        this.getDietOrientationFn()
     },
 
 

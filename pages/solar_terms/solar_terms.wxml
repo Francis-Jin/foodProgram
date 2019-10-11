@@ -1,20 +1,28 @@
 <!--pages/solar_terms/solar_terms.wxml-->
 <view class="container text_center">
 
-    <view class="padding_top_50 padding_bottom_5">
-        <text>2019年09月26日</text>
+    <view class="padding_top_50 padding_bottom_5 color_666 margin_bottom_10 font_size_16">
+        <text>{{thisDate}}</text>
     </view>
-    <view class="font_size_18 font_weight">
-        <text>霜降</text>
+    <view class="width_fixed_200 height_fixed_200 margin_auto bg_f5">
+        <image class="width_height_100" src=""></image>
     </view>
-    <view class="margin_top_20 padding_bottom_5">
-        <text>天时令：润肺、滋阴</text>
+    <view class="flex flex_space_between box_sizing color_8484 padding_left_right_20 line_height_50 margin_top_30">
+        <view class="width_60">
+            <text>您的膳食方向 : </text>
+            <text>{{directionValue ? directionValue : '无'}}</text>
+        </view>
+        <view class="width_40">
+            <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+                <text>修改</text>
+            </picker>
+        </view>
     </view>
-    <view class='padb' style='font-size:16px; font-weight:bold;'>{{weather.city}}贵阳实况天气预报</view>
-    <view>气象台 16:30{{weather.update_time}} 更新</view>
-    <view class='padb'>{{weather.tem}}24℃ {{weather.wea}} 晴</view>
-    
-    <view>
-        <van-action-sheet show="{{ modalShow }}" title="{{ modalTitle }}" overlay="{{ false }}" actions="{{ actions }}" bind:close="onClose" bind:select="onSelect" />
+
+    <view class="next background_yellow_liner border_radius_10 color_fff" bindtap="nextFn">
+        <text>下一页</text>
     </view>
+
+
+
 </view>

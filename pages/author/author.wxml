@@ -1,19 +1,31 @@
 <!--pages/author/author.wxml-->
 
-<view class="margin_bottom_100 padding_left_right_10">
-    <van-cell-group>
-        <van-field value="{{ address }}" required clearable label="家乡" size="large" placeholder="请输入" bind:change="onChange" />
-        <view data-type="1" bindtap="modalClickFn">
-            <van-field value="{{ sexValue }}" required disabled clearable label="性别" icon="arrow" size="large" placeholder="选填" />
-        </view>
-        <view data-type="2" bindtap="modalClickFn">
-            <van-field value="{{ constellationValue }}" border="{{ false }}" disabled clearable label="星座" icon="arrow" size="large" placeholder="选填" />
-        </view>
-    </van-cell-group>
+<view class="padding_20">
+
+    <view class="margin_bottom_100 padding_left_right_10 box_shadow border_radius_10 padding_top_20 padding_bottom_20">
+        <van-cell-group>
+            <van-field value="{{ address }}" required clearable label="家乡" size="large" placeholder="请输入" bind:change="onChange" />
+
+            <van-field value="{{ ageValue }}" required clearable label="年龄" size="large" placeholder="请输入" bind:change="ageChange" />
+            
+            <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+                <van-field value="{{ sexValue }}" required disabled clearable label="性别" icon="arrow" size="large" placeholder="选填" />
+            </picker>
+
+            <picker bindchange="bindPickerConstellationChange" value="{{index}}" range="{{array2}}">
+                <van-field value="{{ constellationValue }}" border="{{ false }}" disabled clearable label="星座" icon="arrow" size="large" placeholder="选填" />
+            </picker>
+            
+        </van-cell-group>
+    </view>
+
 </view>
 
-<view class="bg_theme width_60 margin_auto text_center color_fff line_height_50" bindtap="nextFn">
+<view class="background_liner border_radius_10 width_60 margin_auto text_center color_fff line_height_50" bindtap="nextFn">
     <text>下一步</text>
 </view>
 
-<van-action-sheet loading="{{ true }}" show="{{ modalShow }}" title="{{ modalTitle }}" actions="{{ actions }}" bind:close="onClose" bind:select="onSelect" />
+
+<view class="sectionPicker">
+
+</view>

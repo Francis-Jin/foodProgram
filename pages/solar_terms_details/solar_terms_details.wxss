@@ -1,0 +1,6 @@
+/* pages/solar_terms_details/solar_terms_details.wxss */
+.food_name{
+    position: absolute;
+    right: 40rpx;
+    top: 60rpx;
+}

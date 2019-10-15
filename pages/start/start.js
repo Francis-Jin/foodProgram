@@ -6,7 +6,8 @@ Page({
      * 页面的初始数据
      */
     data: {
-        userInfo: app.globalData.userInfo
+        userInfo: wx.getStorageSync("userInfo"),
+        text:''
     },
 
     /**
@@ -17,9 +18,25 @@ Page({
         this.setData({
             index:options.index
         })
-        setTimeout(function(){
-            that.bindload();
-        },100)
+        this.getMessageFn()
+    },
+
+    /** 获取信息 */
+    getMessageFn(){
+        let that = this
+        app.appRequest({
+            url: '/app/sysConf/getSysConf.action',
+            method: 'get',
+            success(res){
+                console.log(res.data.welcome.split(',')[0])
+                that.setData({
+                    text: res.data.welcome.split(',')
+                })
+                setTimeout(function () {
+                    that.bindload();
+                }, 100)
+            }
+        })
     },
 
     /**
@@ -81,8 +98,8 @@ Page({
                 url: '/pages/index/index'
             })
         } else {
-            if (app.globalData.userInfo){
-                if (!app.globalData.userInfo.homeplace){
+            if (wx.getStorageSync("userInfo")){
+                if (!wx.getStorageSync("userInfo").homeplace){
                    wx.redirectTo({
                        url: '/pages/author/author',
                    })

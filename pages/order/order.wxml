@@ -1,2 +1,50 @@
 <!--pages/order/order.wxml-->
-<text>pages/order/order.wxml</text>
+<view class="container box_sizing padding_10">
+
+    <view wx:if="{{orderLists.length != 0}}" class="content_wrap">
+        <view wx:for="{{orderLists}}" wx:key="index" class="box_shadow border_radius_20 overflow_hidden margin_bottom_20">
+            <view class="border_radius_10 box_shadow line_height_50 flex flex_space_between box_sizing padding_left_right_20" data-id="{{item.id}}" bindtap="toDeailsFn">
+                <view class="color_4dc font_size_18 font_weight">
+                    <text class="margin_right_10">取餐号:</text>
+                    <text>{{item.takeMealCode}}</text>
+                </view>
+                <view class="color_666">
+                    <text>{{item.statusName}}</text>
+                </view>
+            </view>
+            <view class="line_height_30 box_sizing padding_top_20 padding_left_right_20" data-id="{{item.id}}" bindtap="toDeailsFn">
+                <view class="color_8484">
+                    <text>购买类型：</text>
+                    <text>{{item.category == 1 ? '个人购买' : '拼单购买'}}</text>
+                </view>
+                <view class="color_8484">
+                    <text>下单时间：</text>
+                    <text>{{item.createTime}}</text>
+                </view>
+                <view class="color_8484">
+                    <text>门店名称：</text>
+                    <text>日权食（Q区1号楼）</text>
+                </view>
+                <view class="color_8484">
+                    <text>订单类型：</text>
+                    <text>{{item.deliveryMode ==1 ? '自取' : '配送'}}</text>
+                </view>
+                <view class="color_8484">
+                    <text>总计：</text>
+                    <text class="color_ff6 font_size_20">￥{{item.orderAmount}}</text>
+                </view>
+            </view>
+            <view wx:if="{{item.status != 1}}" class="line_height_50 text_center background_liner color_fff margin_top_10" data-id="{{item.id}}" bindtap="toDeailsFn">
+                <text>查看详情</text>
+            </view>
+            <view wx:if="{{item.status == 1}}" class="line_height_50 text_center background_yellow_liner color_fff margin_top_10" data-id="{{item.id}}" bindtap="payOrder">
+                <text>{{item.statusName}}</text>
+            </view>
+        </view>
+    </view>
+
+    <view wx:else class="text_center line_height_100 color_999">
+        <text>暂无订单</text>
+    </view>
+
+</view>

@@ -4,7 +4,7 @@
 
     <view class="width_100 height_fixed_160 relative">
         <view class="absolute_100">
-            <image class="width_height_100" src="/images/imgs/index_top_img.png" mode="aspectFit"></image>
+            <image class="width_height_100" src="{{urlBefore + hourByNow.cover}}"></image>
         </view>
         <view class="absolute_100 z_index_1 flex">
             <view class="width_40 relative">
@@ -15,7 +15,7 @@
                     <view class="dot line"></view>
                 </view>
             </view>
-            <view class="width_60">
+            <view hidden="true" class="width_60">
                 <view class="color_fff font_size_26 box_sizing padding_top_20 padding_right_20 font_weight custom_family">
                     <text>辰时</text>
                     <text class="margin_left_10 margin_right_10">·</text>
@@ -43,47 +43,59 @@
 
                 <block wx:for="{{listsLeft}}" wx:key="index">
 
-                    <view wx:if="{{item.category == 2}}" class="item cs_item border_radius_right_left box_shadow overflow_hidden height_fixed_200 relative" data-itemId="{{item.id}}" data-type="1" bindtap="topPageDetails">
-                        <view class="font_size_0 box_sizing padding_left_right_10">
-                            <image class="max_width_100" src="{{urlBefore + item.cover}}" mode="aspectFit"></image>
+                    <view wx:if="{{item.category == 2}}" class="item cs_item border_radius_20 box_shadow overflow_hidden height_fixed_160 relative" data-itemId="{{item.id}}" data-type="1" bindtap="topPageDetails">
+                        <view class="font_size_0">
+                            <image class="max_width_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
-                        <view class="width_100 text_right" style="position:absolute; right:10rpx; bottom:20rpx;">
-                            <van-rate value="{{ item.star }}" size="{{ 20 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
+                        <view class="width_100 text_right flex flex_space_between" style="position:absolute; right:10rpx; bottom:20rpx;">
+                            <view class="text_indent_8 color_fff">
+                                <text>{{item.name}}</text>
+                            </view>
+                            <view>
+                                <van-rate value="{{ item.star }}" size="{{ 14 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
+                            </view>
                         </view>
                     </view>
 
-                    <view wx:if="{{item.category == 1}}" class="item item_foods_one border_radius_right_left box_shadow overflow_hidden" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
-                        <view class="font_size_0 box_sizing padding_10 height_fixed_160 bg_fbf">
-                            <image class="width_100 height_100" src="{{urlBefore + item.cover}}" mode="aspectFit"></image>
+                    <view wx:if="{{item.category == 1}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden">
+                        <view class="font_size_0 height_fixed_120" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                            <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
                         <view class="width_100 box_sizing padding_left_right_10">
-                            <view class="font_size_16 font_weight_600 line_height_30">
+                            <view class="font_size_16 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
                                 <text>{{item.name}}</text>
                             </view>
-                            <view class="font_size_12 color_999 overflow1 line_height_30">
-                                <text>{{item.intro}}</text>
+                            <view class="font_size_12 color_999 overflow1 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                                <text>{{item.description}}</text>
                             </view>
                             <view class="flex flex_space_between padding_bottom_10 relative">
                                 <view class="font_size_12 line_height_30 overflow1">
-                                    <text class="tip color_999" wx:for="{{item.dimCommons}}" wx:for-item="tipsItem" wx:for-index="index2" wx:key="index2">{{tipsItem.name}}</text>
-                                </view>
-                                <view class="price">
-                                    <text class="del_line color_999 margin_right_10 font_size_12">￥{{item.marketPrice}}</text>
+                                    <text class="del_line color_999 margin_right_10 font_size_14">￥{{item.marketPrice}}</text>
                                     <text class="color_ff6 font_size_12">￥</text>
                                     <text class="color_ff6 font_size_18">{{item.price}}</text>
+                                </view>
+                                <view class="price" data-itemId="{{item.id}}" bindtap="addCart">
+                                    <view class="width_fixed_20 height_fixed_20 border_radius__100 line_height_30 margin_right_5">
+                                        <!-- <image class="width_height_100" src="/images/icon/tianchongxing-@2x.png"></image> -->
+                                        <text class="iconfont icon-add color_4dc" style="font-size:50rpx;"></text>
+                                    </view>
                                 </view>
                             </view>
                         </view>
                     </view>
 
-                    <view wx:if="{{item.category == 3}}" class="item item_foods_one border_radius_right_left box_shadow overflow_hidden" data-itemId="{{item.id}}" data-type="3" bindtap="topPageDetails">
-                        <view class="font_size_0 box_sizing padding_10 height_fixed_140 bg_fbf">
-                            <image class="width_100 height_100" src="{{item.imgUrl}}" mode="aspectFit"></image>
+                    <view wx:if="{{item.category == 3}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden" data-itemId="{{item.id}}" data-type="3" bindtap="topPageDetails">
+                        <view class="font_size_0 height_fixed_200">
+                            <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
-                        <view class="width_100 box_sizing padding_left_right_10">
-                            <view class="font_size_16 font_weight_600 line_height_30">
-                                <text>{{item.name}}</text>
-                            </view>
+                    </view>
+
+                    <view wx:if="{{item.category == 4}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden" data-itemId="{{item.id}}" data-type="4" bindtap="topPageDetails">
+                        <view class="font_size_0 height_fixed_180">
+                            <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
+                        </view>
+                        <view class="box_sizing padding_10 color_5353 overflow2 font_size_12 color_5151">
+                            <text>{{item.name}}</text>
                         </view>
                     </view>
 
@@ -95,49 +107,62 @@
 
                 <block wx:for="{{listsRight}}" wx:key="index">
 
-                    <view wx:if="{{item.category == 2}}" class="item cs_item border_radius_right_left box_shadow overflow_hidden height_fixed_200 relative" data-itemId="{{item.id}}" data-type="1" bindtap="topPageDetails">
-                        <view class="font_size_0 box_sizing padding_left_right_10">
-                            <image class="max_width_100" src="{{urlBefore + item.cover}}" mode="aspectFit"></image>
+                    <view wx:if="{{item.category == 2}}" class="item cs_item border_radius_20 box_shadow overflow_hidden height_fixed_160 relative" data-itemId="{{item.id}}" data-type="1" bindtap="topPageDetails">
+                        <view class="font_size_0">
+                            <image class="max_width_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
-                        <view class="width_100 text_right" style="position:absolute; right:10rpx; bottom:20rpx;">
-                            <van-rate value="{{ item.star }}" size="{{ 20 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
+                        <view class="width_100 text_right flex flex_space_between" style="position:absolute; right:10rpx; bottom:20rpx;">
+                            <view class="text_indent_8 color_fff">
+                                <text>{{item.name}}</text>
+                            </view>
+                            <view>
+                                <van-rate value="{{ item.star }}" size="{{ 14 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
+                            </view>
                         </view>
                     </view>
 
-                    <view wx:if="{{item.category == 1}}" class="item item_foods_one border_radius_right_left box_shadow overflow_hidden" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
-                        <view class="font_size_0 box_sizing padding_10 height_fixed_160 bg_fbf">
-                            <image class="width_100 height_100" src="{{urlBefore + item.cover}}" mode="aspectFit"></image>
+                    <view wx:if="{{item.category == 1}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden">
+                        <view class="font_size_0 height_fixed_120" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                            <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
                         <view class="width_100 box_sizing padding_left_right_10">
-                            <view class="font_size_16 font_weight_600 line_height_30">
+                            <view class="font_size_16 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
                                 <text>{{item.name}}</text>
                             </view>
-                            <view class="font_size_12 color_999 overflow1 line_height_30">
-                                <text>{{item.intro}}</text>
+                            <view class="font_size_12 color_999 overflow1 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                                <text>{{item.description}}</text>
                             </view>
                             <view class="flex flex_space_between padding_bottom_10 relative">
                                 <view class="font_size_12 line_height_30 overflow1">
-                                    <text class="tip color_999" wx:for="{{item.dimCommons}}" wx:for-item="tipsItem" wx:for-index="index2" wx:key="index2">{{tipsItem.name}}</text>
-                                </view>
-                                <view class="price">
-                                    <text class="del_line color_999 margin_right_10 font_size_12">￥{{item.marketPrice}}</text>
+                                    <text class="del_line color_999 margin_right_10 font_size_14">￥{{item.marketPrice}}</text>
                                     <text class="color_ff6 font_size_12">￥</text>
                                     <text class="color_ff6 font_size_18">{{item.price}}</text>
+                                </view>
+                                <view class="price" data-itemId="{{item.id}}" bindtap="addCart">
+                                    <view class="width_fixed_20 height_fixed_20 border_radius__100 line_height_30 margin_right_5">
+                                        <!-- <image class="width_height_100" src="/images/icon/tianchongxing-@2x.png"></image> -->
+                                        <text class="iconfont icon-add color_4dc" style="font-size:50rpx;"></text>
+                                    </view>
                                 </view>
                             </view>
                         </view>
                     </view>
 
-                    <view wx:if="{{item.category == 3}}" class="item item_foods_one border_radius_right_left box_shadow overflow_hidden" data-itemId="{{item.id}}" data-type="3" bindtap="topPageDetails">
-                        <view class="font_size_0 box_sizing padding_10 height_fixed_140 bg_fbf">
-                            <image class="width_100 height_100" src="{{item.imgUrl}}" mode="aspectFit"></image>
-                        </view>
-                        <view class="width_100 box_sizing padding_left_right_10">
-                            <view class="font_size_16 font_weight_600 line_height_30">
-                                <text>{{item.name}}</text>
-                            </view>
+                    <view wx:if="{{item.category == 3}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden" data-itemId="{{item.id}}" data-type="3" bindtap="topPageDetails">
+                        <view class="font_size_0 height_fixed_200">
+                            <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
                     </view>
+
+                    <view wx:if="{{item.category == 4}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden" data-itemId="{{item.id}}" data-type="4" bindtap="topPageDetails">
+                        <view class="font_size_0 height_fixed_180">
+                            <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
+                        </view>
+                        <view class="box_sizing padding_10 color_5353 overflow2 font_size_12 color_5151">
+                            <text>{{item.name}}</text>
+                        </view>
+                    </view>
+
 
 
                 </block>
@@ -148,6 +173,15 @@
 
     </view>
 
+
+    <view class="cart">
+        <view class="cart_icon box_shadow" data-type="pay" bindtap="topPageDetails">
+            <image class="width_fixed_50 height_fixed_50" src="/images/icon/cart_1.png "></image>
+            <view class="buy_number" wx:if="{{buyNumber != 0}}">
+                <text class="#fff;">{{buyNumber}}</text>
+            </view>
+        </view>
+    </view>
 
 
 

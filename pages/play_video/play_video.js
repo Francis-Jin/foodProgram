@@ -5,14 +5,20 @@ Page({
      * 页面的初始数据
      */
     data: {
-
+        url: '',
+        cookName: ''
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-
+        let url = options.url
+        let cookName = options.cookName
+        this.setData({
+            url: url,
+            cookName: cookName
+        })
     },
 
     /**

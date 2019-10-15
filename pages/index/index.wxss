@@ -7,8 +7,9 @@
 .absolute {
     left: 50%;
     top: 50%;
-    margin-left: -70rpx;
-    margin-top: -116rpx;
+    /* background: red; */
+    margin-left: -76rpx;
+    margin-top: -118rpx;
 }
 
 .line {
@@ -16,38 +17,38 @@
 }
 
 .h {
-    width: 8rpx;
+    width: 4rpx;
     height: 50rpx;
     background-color: #fff;
-    left: 88rpx;
-    top: 42rpx;
+    left: 84rpx;
+    top: 36rpx;
     border-radius: 10rpx;
     transform-origin: bottom;
 }
 
 .m {
-    width: 6rpx;
+    width: 2rpx;
     height: 60rpx;
     background-color: #fff;
-    left: 88rpx;
-    top: 30rpx;
+    left: 84rpx;
+    top: 26rpx;
     border-radius: 10rpx;
     transform-origin: bottom;
 }
 
 .s {
-    width: 4rpx;
+    width: 1rpx;
     height: 80rpx;
     background-color: #f00;
-    left: 90rpx;
-    top: 10rpx;
+    left: 86rpx;
+    top: 6rpx;
     border-radius: 10rpx;
     transform-origin:bottom;
 }
 
 .dot {
-    left: 80rpx;
-    top: 80rpx;
+    left: 76rpx;
+    top: 76rpx;
     width: 20rpx;
     height: 20rpx;
     border-radius: 50%;
@@ -58,10 +59,48 @@
     margin-bottom: 40rpx;
 }
 
-.item_foods_one{
-}
+
 .item_foods_one .tip{
     background: #f9f9f9;
     padding: 0 20rpx;
     border-radius: 30rpx;
+}
+
+/** 购物车按钮. */
+
+.cart{
+    position: fixed;
+    right: 10rpx;
+    bottom: 100rpx;
+    height: 100rpx;
+    z-index: 2;
+    border-radius: 50rpx;
+}
+.cart_icon{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100rpx;
+    height: 100rpx;
+    background: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 100rpx;
+}
+.cart_icon image{
+    width: 60%;
+    height: 60%;
+    vertical-align: middle;
+}
+.buy_number{
+    position: absolute;
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    background: red;
+    right: -6rpx;
+    top: -6rpx;
+    line-height: 40rpx;
+    text-align: center;
+    color: #fff;
 }

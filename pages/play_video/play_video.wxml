@@ -1,6 +1,14 @@
 <!--pages/play_video/play_video.wxml-->
 <view class="play_wrap">
     <view class="video_content">
-        <video class="width_height_100" autoplay="{{ true }}" object-fit="fill" src="https://zyhy.zhiyanginfo.top/upload/upload_video/23827e67-c60e-4c6d-a74c-cbe38ff1b6c5.mp4"></video>
+        <view class="line_height_50 text_center color_fff font_size_16">
+            <text>{{cookName}}厨师的故事视频</text>
+        </view>
+        <view class="video_box bg_fff">
+            <video class="width_height_100" autoplay="{{ true }}" object-fit="fill" src="{{url}}"></video>
+        </view>
+        <view class="height_fixed_50">
+            <!-- 分享、点赞、 -->
+        </view>
     </view>
 </view>

@@ -5,7 +5,7 @@ App({
         sessionKey: '',
         userInfo: null,
         baseApi: 'http://dongk.4kb.cn/food',
-        urlBefore: 'http://dongk.4kb.cn/upload',
+        urlBefore: 'http://dongk.4kb.cn/food/upload',
         //获取数据列表，默认获取10条数据
         dataLimit: 10,
     },
@@ -47,17 +47,31 @@ App({
         let that = this
         wx.login({
             success: function (res) {
-                that.appRequest({
-                    url: '/app/userInfo/login.action',
-                    method: "post",
-                    getParams: {
-                        "code": res.code
-                    },
-                    success(res) {
-                        console.log(res)
-                        that.globalData.userInfo = res.data
-                    }
-                })
+                let code = res.code
+               wx.getUserInfo({
+                   withCredentials: true,
+                   lang: '',
+                   success: function(res) {
+                       console.log(res)
+                       let encryptedData = res.encryptedData
+                       let iv = res.iv
+                       that.appRequest({
+                           url: '/app/userInfo/login.action',
+                           method: "post",
+                           postData: {
+                               "code": code,
+                               "encryptedData": encryptedData,
+                               "iv": iv
+                           },
+                           success(res) {
+                               that.globalData.userInfo = res.data
+                               wx.setStorageSync('userInfo', res.data)
+                           }
+                       })
+                   },
+                   fail: function(res) {},
+                   complete: function(res) {},
+               })
             },
             fail: function (res) { },
             complete: function (res) { },

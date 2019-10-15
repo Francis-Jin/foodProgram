@@ -1,0 +1,40 @@
+<!--pages/add_address/add_address.wxml-->
+<view class="container box_sizing padding_left_right_20 padding_top_10">
+    <!-- <view class="box_sizing padding_10 box_shadow border_radius_10">
+        <van-panel title="标题" status="状态" use-footer-slot>
+            <view class="box_sizing padding_left_right_10">内容</view>
+            <view slot="footer" class="text_right">
+                <van-button size="small" class="margin_right_20">按钮</van-button>
+                <van-button size="small" type="danger">按钮</van-button>
+            </view>
+        </van-panel>
+    </view> -->
+    <view class="box_sizing padding_10 box_shadow border_radius_10 margin_bottom_50">
+        <van-cell-group>
+            <van-field value="{{ userName }}" required clearable label="姓名" size="large" placeholder="请输入" bind:change="onChange" />
+
+            <van-field value="{{ userPhone }}" required clearable label="电话" size="large" placeholder="请输入" bind:change="ageChange" />
+
+            <picker mode="multiSelector" bindchange="bindMultiPickerChange" range-key="name" value="{{multiIndex}}" range="{{objectMultiArray}}">
+                <van-field value="{{ addressSelectedText }}" required disabled clearable label="选择地址" icon="arrow" size="large" placeholder="选择花果园M区地址" />
+            </picker>
+
+            <van-field value="{{ doorpValue }}" required clearable label="门牌号" size="large" placeholder="例：1号门" bind:change="addressChange" />
+
+        </van-cell-group>
+    </view>
+
+    <view class="text_center width_70 margin_auto color_999">
+        <text>本服务只针对花果园M区，请填写范围内地址</text>
+    </view>
+
+    <view class="confirm">
+        <view class=" height_fixed_50 text_center line_height_50 color_fff background_yellow_liner" bindtap="addAddressFn">
+            <text>确定</text>
+        </view>
+        <view wx:if="{{isAddAndEdit}}" class=" deleteAddress margin_top_10 height_fixed_50 text_center line_height_50 color_fff" bindtap="deleteAddressFn">
+            <text>删除</text>
+        </view>
+    </view>
+
+</view>

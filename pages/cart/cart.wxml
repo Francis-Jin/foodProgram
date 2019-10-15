@@ -25,40 +25,40 @@
         <!-- 内容 -->
         <view>
             <!-- 有数据 -->
-            <view class="margin_top_20 box_sizing padding_left_right_20">
+            <view wx:if="{{cartLists.length != 0}}" class="margin_top_20 box_sizing padding_left_right_20">
 
                 <view class="data_lists">
                     <view wx:for="{{cartLists}}" wx:key="index" class="item box_shadow border_radius_10 flex padding_top_10 padding_bottom_10 relative margin_bottom_20">
                         <view class="width_fixed_50">
                             <checkbox-group data-itemId="{{item.id}}" bindtap="checkGoodsChange" class="text_center line_height_80">
                                 <label class="checkbox">
-                                    <checkbox class="width_height_100" checked="{{item.checked}}"/>
+                                    <checkbox class="width_height_100" checked="{{item.checked}}" />
                                 </label>
                             </checkbox-group>
                         </view>
                         <view class="flex">
-                            <view class="width_fixed_80 height_fixed_80" data-goodsId="1" bindtap="toDetailsFn">
-                                <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
+                            <view class="width_fixed_80 height_fixed_80" data-itemId="{{item.id}}" bindtap="toDetailsFn">
+                                <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
                             </view>
                             <view class="margin_left_10">
                                 <view class="margin_top_10 color_5151">
-                                    <text>{{item.name}}</text>
+                                    <text>{{item.productName}}</text>
                                 </view>
                                 <view class="margin_top_30">
-                                    <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
-                                    <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
+                                    <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>{{item.marketPrice}}</text>
+                                    <text class="color_ff6"><text class="font_size_12">￥</text>{{item.price}}</text>
                                 </view>
                             </view>
                             <view style="position:absolute;right:20rpx;bottom:20rpx;">
 
                                 <view class="flex margin_top_20">
-                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="1" bindtap="addReduceFn">
                                         <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
                                     </view>
                                     <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
-                                        <text>{{buyNumber}}</text>
+                                        <text>{{item.quantity}}</text>
                                     </view>
-                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="2" bindtap="addReduceFn">
                                         <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
                                     </view>
                                 </view>
@@ -70,7 +70,7 @@
             </view>
 
             <!-- 无数据 -->
-            <view hidden="true" class="">
+            <view wx:if="{{cartLists.length == 0}}" class="">
                 <view class="text_center margin_top_50 color_999 padding_top_50 line_height_100">
                     <text>购物车空空如也</text>
                 </view>
@@ -98,13 +98,13 @@
                     <view class="line_height_50">
                         <text class="color_5454">总计：</text>
                         <text class="font_size_12 color_ff6">￥</text>
-                        <text class="font_size_16 font_weight color_ff6">{{allPrice}}</text>
+                        <text class="font_size_16 font_weight color_ff6">{{totalPrice}}</text>
                     </view>
                 </view>
-                <view wx:if="{{administrationType == 1}}"  bindtap="toPageFn" class="line_height_50 width_fixed_120 background_liner text_center color_fff">
+                <view wx:if="{{administrationType == 1}}" bindtap="toPageFn" class="line_height_50 width_fixed_120 background_liner text_center color_fff">
                     <text>去结算</text>
                 </view>
-                <view wx:if="{{administrationType == 2}}" class="line_height_50 width_fixed_120 background_red_liner text_center color_fff">
+                <view wx:if="{{administrationType == 2}}" bindtap="delCartListsFn" class="line_height_50 width_fixed_120 background_red_liner text_center color_fff">
                     <text>删除</text>
                 </view>
             </view>

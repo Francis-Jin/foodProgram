@@ -1,0 +1,33 @@
+<!--pages/my_address/my_address.wxml-->
+<view class="container">
+
+    <view class="box_sizing padding_left_right_20 padding_top_10 padding_bottom_10 relative">
+        <!-- 有地址列表 -->
+        <view wx:if="{{addressLists.length > 0}}">
+            <view wx:for="{{addressLists}}" wx:key="index" class="address_item flex flex_space_between margin_bottom_10 border_bottom">
+                <view class="width_90 padding_bottom_10">
+                    <view class="color_333 margin_bottom_5">
+                        <text class="margin_right_30">{{item.name}}</text>
+                        <text>{{item.phone}}</text>
+                    </view>
+                    <view class="color_999">
+                        <text>{{item.address + item.doorplate}}</text>
+                    </view>
+                </view>
+                <view class="width_10 text_right line_height_40" data-item='{{item}}' data-type="edit" bindtap="addAddressFn">
+                    <text class="iconfont icon-ue60ewrite3 color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                </view>
+            </view>
+        </view>
+
+        <!-- 无地址列表 -->
+        <view wx:else class="text_center line_height_100 color_999">
+            <text>暂无地址，前去添加</text>
+        </view>
+
+        <view class="height_fixed_50"></view>
+    </view>
+    <view data-type="add" bindtap="addAddressFn" class="background_yellow_liner text_center color_fff" style="position:fixed;left:0;bottom:0;width:100%;height:100rpx;line-height:100rpx;">
+        <text>添加地址</text>
+    </view>
+</view>

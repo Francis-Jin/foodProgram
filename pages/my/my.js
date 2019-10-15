@@ -1,4 +1,5 @@
 // pages/my/my.js
+var app = getApp()
 Page({
 
     /**
@@ -12,7 +13,34 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        console.log(wx.getStorageSync("userInfo"))
+    },
 
+    /** 页面跳转. */
+    toPageFn(e){
+        let that = this
+        let _type = e.currentTarget.dataset.type
+        if(_type == 1){
+            // 历史记录
+            wx.navigateTo({
+                url: '/pages/history/history',
+            })
+        }else if(_type == 2) {
+            // 身份认证
+            wx.navigateTo({
+                url: '/pages/identity_authentication/identity_authentication',
+            })
+        }else if(_type == 3){
+            // 我的地址
+            wx.navigateTo({
+                url: '/pages/my_address/my_address',
+            })
+        }else if(_type == 4){
+            // 会员充值
+            wx.navigateTo({
+                url: '/pages/recharge/recharge',
+            })
+        }
     },
 
     /**

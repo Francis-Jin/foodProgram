@@ -18,6 +18,7 @@ Page({
      */
     onLoad: function (options) {
         let itemId = options.itemId
+
         this.getDetails(itemId)
         this.setData({
             foodId:itemId
@@ -32,7 +33,7 @@ Page({
             method: "get",
             getParams: {
                 dishId:id,
-                userId: app.globalData.userInfo.id
+                userId: wx.getStorageSync("userInfo").id
             },
             success(res){
                 that.setData({
@@ -53,7 +54,7 @@ Page({
             getParams:{
                 productId: itemId,
                 quantity: 1,
-                createUser: app.globalData.userInfo.id
+                createUser: wx.getStorageSync("userInfo").id
             },
             success(res){
                 wx.showToast({
@@ -123,22 +124,22 @@ Page({
 
     /** 弹出收回. */
     plus() {
-        if (!this.data.isPopping) {
-            //弹出
-            this.setData({
-                isPopping: true
-            })
-        }
-        else {
+        // if (!this.data.isPopping) {
+        //     //弹出
+        //     this.setData({
+        //         isPopping: true
+        //     })
+        // }
+        // else {
             //缩回
             // this.setData({
             //     isPopping: false
             // });
             // console.log("弹出")
-            wx.switchTab({
+            wx.navigateTo({
                 url: '/pages/cart/cart',
             })
-        }
+        // }
     },
 
     /**
@@ -152,7 +153,8 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
-
+        let itemId = this.data.foodId
+        this.getDetails(itemId)
     },
 
     /**

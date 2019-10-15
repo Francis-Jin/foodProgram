@@ -1,1 +1,28 @@
-<view class="start-img"></view>
+<view class="start-img">
+
+    <view class="width_fixed_160 height_fixed_160 relative" style="margin: 350rpx auto 80rpx;">
+        <view class="start width_height_100">
+            <image class="width_height_100" src="/images/icon/startText.png"></image>
+        </view>
+        <view class="start startIcon width_height_100">
+            <image class="width_height_100" src="/images/icon/startIcon.png"></image>
+        </view>
+    </view>
+
+    <view wx:if="{{index != 'true'}}" class="flex flex_space_between width_fixed_60 margin_auto font_size_20 text_center color_333 paddingJ_bottom_30 white_pre">
+        <view class="white_pre width_fixed_30">
+            <text>{{text[0]}}</text>
+        </view>
+        <view class="white_pre width_fixed_30">
+            <text>{{text[1]}}</text>
+        </view>
+    </view>
+    <view wx:if="{{index == 'true'}}" class="width_fixed_30 margin_auto font_size_20 text_center color_333 paddingJ_bottom_30 white_pre">
+        <text>菜品生成中</text>
+    </view>
+
+    <view class="fixed_footer width_fixed_160 height_fixed_10 margin_auto padding_top_10">
+        <image class="width_height_100" src="https://dongk.4kb.cn/food/static/miniapp/weight.gif"></image>
+    </view>
+
+</view>

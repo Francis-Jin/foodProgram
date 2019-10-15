@@ -93,7 +93,7 @@ Page({
                 "constellation": constellationCode,
                 "sex": sexCode,
                 "age": that.data.ageValue,
-                "unionId": app.globalData.userInfo.unionId
+                "unionId": wx.getStorageSync("userInfo").unionId
             },
             success(res){
                 if(res.code == 200){

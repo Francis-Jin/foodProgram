@@ -1,0 +1,12 @@
+/* pages/add_address/add_address.wxss */
+.confirm{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+.deleteAddress{
+    box-sizing: border-box;
+    border: 1rpx solid #ff6100;
+    color: #ff6100;
+}

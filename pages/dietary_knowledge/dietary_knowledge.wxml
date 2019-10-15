@@ -1,0 +1,14 @@
+<!--pages/dietary_knowledge/dietary_knowledge.wxml-->
+<view class="container box_sizing padding_left_right_20 padding_top_20">
+
+    <view class="border_radius_10 background_liner padding_10 color_fff font_size_16">
+        <text>{{info.title}}</text>
+    </view>
+
+    <view class="margin_top_20">
+        <view>
+            <rich-text nodes="{{info.content}}"></rich-text>
+        </view>
+    </view>
+
+</view>

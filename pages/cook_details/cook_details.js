@@ -11,9 +11,12 @@ Page({
     },
 
     /** 跳转视频播放. */
-    toPlayVideo(){
+    toPlayVideo(e){
+        let url = e.currentTarget.dataset.url
+        let cookName = this.data.detailInfo.name
+        console.log(cookName)
         wx.navigateTo({
-            url: '/pages/play_video/play_video'
+            url: '/pages/play_video/play_video?url=' + url + "&cookName=" + cookName
         })
     },
     /**

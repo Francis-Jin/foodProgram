@@ -8,7 +8,6 @@
     top: 60rpx;
     width: 50rpx;
     font-weight: 400;
-    color: #fff;
 }
 .selected{
     width: 60rpx;

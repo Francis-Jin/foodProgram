@@ -1,0 +1,50 @@
+<!--pages/history/history.wxml-->
+<view class="container box_sizing padding_top_10 padding_left_right_20">
+
+
+    <view class="history_lists">
+
+
+        <view wx:for="{{orderLists}}" wx:key="index" class="item box_shadow box_sizing padding_left_right_20 border_radius_10 margin_bottom_20">
+            <view class="flex flex_space_between line_height_50 border_bottom" data-id="{{item.id}}" bindtap="toDeailsFn">
+                <view class="font_size_14 color_5bc">
+                    <text>单号：{{item.id}}</text>
+                </view>
+                <view>
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/right@2x.png"></image>
+                </view>
+            </view>
+            <view class="shop_lists">
+                <view wx:for="{{item.orderDetailList}}" wx:for-item="subitem" wx:for-index="subindex" wx:key="subindex" class="shop_item flex relative padding_top_20 padding_bottom_20 border_bottom" data-itemId="{{subitem.productId}}" bindtap="topPageDetails">
+                    <view class="width_fixed_70 height_fixed_70">
+                        <image class="width_height_100 border_radius_5" src="{{urlBefore + subitem.cover}}" mode="aspectFill"></image>
+                    </view>
+                    <view class="margin_left_10">
+                        <view class="color_5151">
+                            <text>{{subitem.productName}}</text>
+                        </view>
+                        <view class="margin_top_20">
+                            <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>{{subitem.marketPrice}}</text>
+                            <text class="color_ff6"><text class="font_size_12">￥</text>{{subitem.buyPrice}}</text>
+                        </view>
+                    </view>
+                    <view class="color_666" style="position:absolute;right:10rpx;bottom:50rpx;">
+                        <text>{{subitem.quantity}}</text>
+                    </view>
+                </view>
+            </view>
+            <view class="line_height_60 flex flex_space_between">
+                <view class="font_size_14 color_8484">
+                    <text>X</text>
+                    <text>{{item.quantity}}</text>
+                </view>
+                <view class="font_size_14 color_5151">
+                    <text>总计：</text>
+                    <text class="color_ff6 font_size_18 font_weight">￥{{item.orderAmount}}</text>
+                </view>
+            </view>
+        </view>
+
+    </view>
+
+</view>

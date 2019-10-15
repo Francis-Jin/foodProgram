@@ -3,29 +3,29 @@
 
     <view class="width_100 height_fixed_160 relative">
         <view class="absolute_100">
-            <image class="width_height_100" src="/images/imgs/top_img_1.png"></image>
+            <image class="width_height_100" src="/images/imgs/my.png"></image>
         </view>
         <view class="absolute_100 z_index_1 flex">
             <view class="width_40 relative">
-                <view class="width_fixed_90 height_fixed_90 absolute">
+                <view class="width_fixed_90 height_fixed_90 absolute" style="border:6rpx solid #fff">
                     <image class="width_height_100" src="/images/imgs/cook.png" mode="aspectFit"></image>
                 </view>
             </view>
             <view class="width_60">
-                <view class="color_fff font_size_26 box_sizing padding_top_20 padding_right_20 font_weight custom_family">
+                <view class="color_fff font_size_20 box_sizing padding_top_30 padding_right_20 custom_family">
                     <text>尽天哲</text>
                 </view>
-                <view class="font_size_14 box_sizing padding_right_20 custom_family" style="color:#F3FDF8">
+                <view class="font_size_12 box_sizing padding_right_20 margin_top_10 custom_family" style="color:#F3FDF8">
                     <text>水瓶座</text>
                 </view>
-                <view class="margin_top_50 flex font_weight_300 color_5353 flex_center bottom_0">
-                    <view class="width_40 text_center">
-                        <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/message.png"></image>
-                        <text class="margin_left_10">403</text>
+                <view class="margin_top_10 flex font_weight_300 color_5353">
+                    <view class="width_40">
+                        <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/icon_comment@2x.png"></image>
+                        <text class="margin_left_10 color_fff">403</text>
                     </view>
-                    <view class="width_40 text_center">
-                        <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/fabulous.png"></image>
-                        <text class="margin_left_10">2641</text>
+                    <view class="width_40">
+                        <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/zan@2x.png"></image>
+                        <text class="margin_left_10 color_fff">2641</text>
                     </view>
                 </view>
             </view>
@@ -37,20 +37,126 @@
     <view class="1">
 
         <view class="flex flex_space_between text_center box_sizing padding_left_right_20 margin_top_10">
-            <view class="color_fff border_radius_10 box_shadow background_liner box_sizing padding_top_20 padding_bottom_20" style="width:48%">
-                <view>
-                    <text><text>￥</text>325</text>
+            <view class="color_fff border_radius_10 box_shadow background_liner box_sizing padding_top_20 padding_bottom_20" style="width:40%">
+                <view class="margin_top_50 ">
+                    <text class="font_size_24 font_weight_600"><text class="font_size_14 font_weight_400">￥</text>325</text>
                 </view>
                 <view class="margin_top_10">
                     <text>我的余额</text>
                 </view>
             </view>
-            <view class="color_5353 border_radius_10 box_shadow bg_f9f box_sizing padding_top_20 padding_bottom_20" style="width:48%">
-                <view>
+            <view class="color_5353 border_radius_10 box_shadow bg_f9f box_sizing padding_left_right_20 padding_top_20 padding_bottom_20" style="width:56%">
+                <view class="padding_bottom_20 border_bottom" data-type="1" bindtap="toPageFn">
                     <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-2rpx;" src="/images/icon/ziyuanxhdpi@2x.png"></image>
+                    <text class="margin_left_10">历史记录</text>
                 </view>
-                <view class="margin_top_10">
-                    <text>历史记录</text>
+                <view class="margin_top_20 padding_bottom_20 border_bottom" data-type="2" bindtap="toPageFn">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-2rpx;" src="/images/icon/authentication.png"></image>
+                    <text class="margin_left_10">身份认证</text>
+                </view> 
+                <view class="margin_top_20 padding_bottom_10" data-type="3" bindtap="toPageFn">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-2rpx;" src="/images/icon/address.png"></image>
+                    <text class="margin_left_10">我的地址</text>
+                </view>
+            </view>
+        </view>
+
+        <!-- 个人金库 -->
+        <view class="box_sizing padding_left_right_20">
+
+            <!-- VIP -->
+            <view data-type="4" bindtap="toPageFn" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
+                <view class="flex box_sizing padding_top_10 padding_bottom_10">
+                    <view class="color_5fc text_center ">
+                        <view class="font_weight_600 font_size_20">
+                            <text class="margin_left_10">VIP</text>
+                        </view>
+                        <view class="margin_top_5">
+                            <text class="margin_left_10">铂金会员</text>
+                        </view>
+                    </view>
+                    <view class="margin_left_30 font_size_14">
+                        <view class="color_333">
+                            <text>余额：￥35</text>
+                        </view>
+                        <view class="margin_top_10 color_666">
+                            <text>时间：3天</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="width_20 text_center line_height_70 box_sizing color_bab9 font_size_14">
+                    <text class="">充值</text>
+                </view>
+            </view>
+
+            <!-- 代金池 -->
+            <view class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
+                <view class="flex box_sizing padding_top_10 padding_bottom_10">
+                    <view class="color_5fc text_center ">
+                        <view class="font_weight_600 font_size_20">
+                            <text class="margin_left_10">代金池</text>
+                        </view>
+                        <view class="margin_top_5">
+                            <text class="margin_left_10">余额￥586</text>
+                        </view>
+                    </view>
+                    <view class="margin_left_30 font_size_14">
+                        <view class="color_333">
+                            <text>本餐品可使用代金池额度</text>
+                        </view>
+                        <view class="margin_top_10 color_666">
+                            <text>￥3</text>
+                        </view>
+                    </view>
+                </view>
+                <!-- <view class="width_20 text_center box_sizing color_bab9 relative">
+                <view class="absolute selected">
+                    <image class="width_fixed_30 height_fixed_30" src="/images/icon/queding@2x.png"></image>
+                </view>
+            </view> -->
+            </view>
+
+            <!-- 折扣卡 -->
+            <view hidden="true" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
+                <view class="flex box_sizing padding_top_10 padding_bottom_10">
+                    <view class="color_5fc text_center ">
+                        <view class="font_weight_600 font_size_20">
+                            <text class="margin_left_10">折扣卡</text>
+                        </view>
+                        <view class="margin_top_5">
+                            <text class="margin_left_10">剩余张数</text>
+                        </view>
+                        <view class="margin_top_10">
+                            <text class="margin_left_10">7折卡  5张</text>
+                        </view>
+                        <view class="margin_top_5">
+                            <text class="margin_left_10">5折卡  6张</text>
+                        </view>
+                    </view>
+                    <view class="margin_left_30">
+                        <view class="margin_top_10 color_666">
+                            <text>一份对应一张</text>
+                        </view>
+                        <view class="margin_top_5 color_333">
+                            <text>本次使用张数：</text>
+                        </view>
+                        <view class="flex margin_top_20">
+                            <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
+                                <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
+                            </view>
+                            <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
+                                <text>{{discountNumber}}</text>
+                            </view>
+                            <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
+                                <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view class="width_20 text_center box_sizing color_bab9 relative">
+                    <view class="absolute selected">
+                        <image class="width_fixed_30 height_fixed_30" src="/images/icon/queding@2x.png"></image>
+                    </view>
                 </view>
             </view>
         </view>
@@ -178,105 +284,7 @@
 
         </view>
 
-        <!-- 个人金库 -->
-        <view class="box_sizing padding_left_right_20">
-
-            <!-- VIP -->
-            <view class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20" data-type="3" bindtap="toPageFn">
-                <view class="flex box_sizing padding_top_10 padding_bottom_10">
-                    <view class="color_5fc text_center ">
-                        <view class="font_weight_600 font_size_20">
-                            <text class="margin_left_10">VIP</text>
-                        </view>
-                        <view class="margin_top_5">
-                            <text class="margin_left_10">铂金会员</text>
-                        </view>
-                    </view>
-                    <view class="margin_left_30">
-                        <view class="color_333">
-                            <text>余额：￥35</text>
-                        </view>
-                        <view class="margin_top_10 color_666">
-                            <text>时间：3天</text>
-                        </view>
-                    </view>
-                </view>
-                <view class="width_20 text_center line_height_70 box_sizing color_bab9">
-                    <text class="">充值</text>
-                </view>
-            </view>
-
-            <!-- 代金池 -->
-            <view class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
-                <view class="flex box_sizing padding_top_10 padding_bottom_10">
-                    <view class="color_5fc text_center ">
-                        <view class="font_weight_600 font_size_20">
-                            <text class="margin_left_10">代金池</text>
-                        </view>
-                        <view class="margin_top_5">
-                            <text class="margin_left_10">余额￥586</text>
-                        </view>
-                    </view>
-                    <view class="margin_left_30">
-                        <view class="color_333">
-                            <text>本餐品可使用代金池额度</text>
-                        </view>
-                        <view class="margin_top_10 color_666">
-                            <text>￥3</text>
-                        </view>
-                    </view>
-                </view>
-                <!-- <view class="width_20 text_center box_sizing color_bab9 relative">
-                <view class="absolute selected">
-                    <image class="width_fixed_30 height_fixed_30" src="/images/icon/queding@2x.png"></image>
-                </view>
-            </view> -->
-            </view>
-
-            <!-- 折扣卡 -->
-            <view hidden="true" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
-                <view class="flex box_sizing padding_top_10 padding_bottom_10">
-                    <view class="color_5fc text_center ">
-                        <view class="font_weight_600 font_size_20">
-                            <text class="margin_left_10">折扣卡</text>
-                        </view>
-                        <view class="margin_top_5">
-                            <text class="margin_left_10">剩余张数</text>
-                        </view>
-                        <view class="margin_top_10">
-                            <text class="margin_left_10">7折卡  5张</text>
-                        </view>
-                        <view class="margin_top_5">
-                            <text class="margin_left_10">5折卡  6张</text>
-                        </view>
-                    </view>
-                    <view class="margin_left_30">
-                        <view class="margin_top_10 color_666">
-                            <text>一份对应一张</text>
-                        </view>
-                        <view class="margin_top_5 color_333">
-                            <text>本次使用张数：</text>
-                        </view>
-                        <view class="flex margin_top_20">
-                            <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
-                                <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
-                            </view>
-                            <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
-                                <text>{{discountNumber}}</text>
-                            </view>
-                            <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
-                                <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-                <view class="width_20 text_center box_sizing color_bab9 relative">
-                    <view class="absolute selected">
-                        <image class="width_fixed_30 height_fixed_30" src="/images/icon/queding@2x.png"></image>
-                    </view>
-                </view>
-            </view>
-        </view>
+        
 
     </view>
     

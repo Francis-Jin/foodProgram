@@ -12,19 +12,22 @@ Page({
 
     /** 弹出收回. */
     plus() {
-        if (!this.data.isPopping) {
-            //弹出
-            this.setData({
-                isPopping: true
-            })
-        }
-        else {
-            //缩回
-            this.setData({
-                isPopping: false
-            });
-            // console.log("弹出")
-        }
+        // if (!this.data.isPopping) {
+        //     //弹出
+        //     this.setData({
+        //         isPopping: true
+        //     })
+        // }
+        // else {
+        //     //缩回
+        //     this.setData({
+        //         isPopping: false
+        //     });
+        //     // console.log("弹出")
+        // }
+        wx.navigateTo({
+            url: '/pages/cart/cart',
+        })
     },
 
     /** 隐藏弹框 */

@@ -10,3 +10,9 @@
     font-weight: 400;
     color: #fff;
 }
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}

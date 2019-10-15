@@ -1,33 +1,37 @@
 {
     "pages": [
-        "pages/cart/cart",
         "pages/start/start",
-        "pages/login/login",
-        
-        "pages/cook_details/cook_details",
-        "pages/author/author",
-        
         "pages/my/my",
-        "pages/order_details/order_details",
+        "pages/cook_details/cook_details",
+        "pages/my_address/my_address",
+        "pages/history/history",
+        "pages/solar_terms/solar_terms",
+        "pages/index/index",
+        "pages/login/login",
         "pages/settlement/settlement",
+        "pages/add_address/add_address",
+        "pages/order/order",
+        "pages/dietary_knowledge/dietary_knowledge",
+        "pages/solar_terms_details/solar_terms_details",
+        "pages/cart/cart",
+        "pages/author/author",
+        "pages/order_details/order_details",
         "pages/food_details/food_details",
         "pages/account/account",
-        "pages/index/index",
         "pages/recharge/recharge",
         "pages/make_up_list/make_up_list",
         "pages/play_video/play_video",
-        "pages/solar_terms/solar_terms",
-        "pages/order/order"
+        "pages/identity_authentication/identity_authentication"
     ],
     "window": {
-        "backgroundTextStyle": "light",
+        "backgroundTextStyle": "dark",
         "navigationBarBackgroundColor": "#fff",
         "navigationBarTitleText": "",
         "navigationBarTextStyle": "black"
     },
     "tabBar": {
-        "color": "#cdcdcd",
-        "selectedColor": "#5bcbc8",
+        "color": "#666666",
+        "selectedColor": "#000000",
         "list": [
             {
                 "pagePath": "pages/index/index",
@@ -36,8 +40,8 @@
                 "selectedIconPath": "images/icon/recommend_active.png"
             },
             {
-                "pagePath": "pages/cart/cart",
-                "text": "购物车",
+                "pagePath": "pages/order/order",
+                "text": "订单",
                 "iconPath": "images/icon/cart.png",
                 "selectedIconPath": "images/icon/cart_active.png"
             },
@@ -57,6 +61,9 @@
         "van-popup": "./miniprogram_npm/vant-weapp/popup/index",
         "van-rate": "./miniprogram_npm/vant-weapp/rate/index",
         "van-field": "./miniprogram_npm/vant-weapp/field/index",
+        "van-panel": "./miniprogram_npm/vant-weapp/panel/index",
+        "van-button": "./miniprogram_npm/vant-weapp/button/index",
+        "van-picker": "./miniprogram_npm/vant-weapp/picker/index",
         "pay-success": "./miniprogram_npm/common/pay_success/pay_success"
     },
     "sitemapLocation": "sitemap.json"

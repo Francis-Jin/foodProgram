@@ -1,0 +1,23 @@
+<!--pages/solar_terms_details/solar_terms_details.wxml-->
+<view class="container box_sizing padding_left_right_20">
+    <view class="border_radius_right_left height_fixed_180 overflow1 relative bg_f5">
+        <image class="width_100 height_100" src="{{urlBefore + info.imageUrl}}"></image>
+        <!-- <view class="food_name text_right">
+            <view class="font_size_30">
+                <text>{{info.focus}}</text>
+            </view>
+            <view class="font_size_12 margin_top_10">
+                <text>{{info.startDate}}~{{info.nextStartDate}}</text>
+            </view>
+        </view> -->
+    </view>
+    <view class="margin_top_20 box_shadow border_radius_10 box_sizing padding_left_right_20 overflow_hidden">
+        <view class="line_height_40">
+            <text class="font_size_16 color_5151 margin_right_20">{{info.name}}</text>
+            <text class="color_eded font_size_14">{{info.startDate}}~{{info.nextStartDate}}</text>
+        </view>
+        <view class="color_5151 padding_bottom_10 font_size_12 line_height_20">
+            <text>{{info.effect}}</text>
+        </view>
+    </view>
+</view>

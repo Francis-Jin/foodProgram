@@ -17,90 +17,30 @@
             </view>
             <view class="margin_top_10">
 
-                <view class="item border_bottom border_radius_10 flex padding_top_10 padding_bottom_10 relative ">
+                <view wx:for="{{cartLists}}" wx:key="index" class="item border_bottom border_radius_10 flex padding_top_10 padding_bottom_10 relative ">
                     <view class="flex">
                         <view class="width_fixed_80 height_fixed_80">
-                            <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
+                            <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
                         </view>
                         <view class="margin_left_10">
                             <view class="margin_top_10 color_5151">
-                                <text>皮蛋瘦肉粥</text>
+                                <text>{{item.productName}}</text>
                             </view>
                             <view class="margin_top_30">
-                                <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
-                                <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
+                                <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>{{item.marketPrice}}</text>
+                                <text class="color_ff6"><text class="font_size_12">￥</text>{{item.price}}</text>
                             </view>
                         </view>
                         <view style="position:absolute;right:20rpx;bottom:20rpx;">
 
                             <view class="flex margin_top_20">
-                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
+                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="1" bindtap="addReduceFn">
                                     <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
                                 </view>
                                 <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
-                                    <text>{{buyNumber}}</text>
+                                    <text>{{item.quantity}}</text>
                                 </view>
-                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
-                                    <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
-                                </view>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-                <view class="item border_bottom border_radius_10 flex padding_top_10 padding_bottom_10 relative ">
-                    <view class="flex">
-                        <view class="width_fixed_80 height_fixed_80">
-                            <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
-                        </view>
-                        <view class="margin_left_10">
-                            <view class="margin_top_10 color_5151">
-                                <text>皮蛋瘦肉粥</text>
-                            </view>
-                            <view class="margin_top_30">
-                                <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
-                                <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
-                            </view>
-                        </view>
-                        <view style="position:absolute;right:20rpx;bottom:20rpx;">
-
-                            <view class="flex margin_top_20">
-                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
-                                    <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
-                                </view>
-                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
-                                    <text>{{buyNumber}}</text>
-                                </view>
-                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
-                                    <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
-                                </view>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-                <view class="item border_radius_10 flex padding_top_10 padding_bottom_10 relative ">
-                    <view class="flex">
-                        <view class="width_fixed_80 height_fixed_80">
-                            <image class="width_height_100 border_radius_5" src="/images/imgs/cook.png" mode="aspectFill"></image>
-                        </view>
-                        <view class="margin_left_10">
-                            <view class="margin_top_10 color_5151">
-                                <text>皮蛋瘦肉粥</text>
-                            </view>
-                            <view class="margin_top_30">
-                                <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>18</text>
-                                <text class="color_ff6"><text class="font_size_12">￥</text>18</text>
-                            </view>
-                        </view>
-                        <view style="position:absolute;right:20rpx;bottom:20rpx;">
-
-                            <view class="flex margin_top_20">
-                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="1" bindtap="addReduceFn">
-                                    <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
-                                </view>
-                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
-                                    <text>{{buyNumber}}</text>
-                                </view>
-                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-type="2" bindtap="addReduceFn">
+                                <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="2" bindtap="addReduceFn">
                                     <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
                                 </view>
                             </view>
@@ -111,74 +51,168 @@
             </view>
         </view>
 
-        <view class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
-            <view class="flex flex_space_between line_height_50 border_bottom">
-                <view>
+        <!-- 显示内容 -->
+        <view wx:if="{{!show}}">
+            <!-- 方式选择 -->
+            <view class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20 padding_bottom_10">
+                <view class=" line_height_50 border_bottom">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/tianchongxing-@2x.png"></image>
+                    <text class="color_5151">用餐方式选择</text>
+                </view>
+                <view class="line_height_40 flex flex_space_between" data-type="1" bindtap="selectedFn">
+                    <view class="color_5fc">
+                        <text>自取</text>
+                    </view>
+                    <view class="">
+                        <image wx:if="{{deliveryMode == 1}}" src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20 vertical_middle"></image>
+                        <text wx:if="{{deliveryMode != 1}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                    </view>
+                </view>
+                <view class="line_height_40 flex flex_space_between" data-type="2" bindtap="selectedFn">
+                    <view class="color_5fc">
+                        <text>配送</text>
+                    </view>
+                    <view>
+                        <image wx:if="{{deliveryMode == 2}}" src="/images/icon/queding@2x.png" style="top:4rpx;" class="width_fixed_20 height_fixed_20 relative"></image>
+                        <text wx:if="{{deliveryMode != 2}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                    </view>
+                </view>
+            </view>
+            <view wx:if="{{deliveryMode == 2}}" class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
+                <view class="flex flex_space_between line_height_50 border_bottom" bindtap="addressShowFn">
+                    <view>
+                        <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/my@2x.png"></image>
+                        <text class="color_5151">用餐地址选择</text>
+                    </view>
+                    <view>
+                        <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-4rpx;" src="/images/icon/right@2x.png"></image>
+                    </view>
+                </view>
+                <view class="margin_top_10 padding_bottom_20">
+                    <input disabled="disabled" placeholder-style="color:#e3e3e3" value="{{addressText}}" placeholder="选择用餐地址（目前只开放M区）" />
+                </view>
+            </view>
+
+            <view wx:if="{{deliveryMode == 2}}" class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
+                <view class="flex flex_space_between line_height_50 border_bottom" bindtap="addressShowFn">
+                    <view>
+                        <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/my@2x.png"></image>
+                        <text class="color_5151">向商家留言</text>
+                    </view>
+                    <view>
+                        <!-- <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-4rpx;" src="/images/icon/right@2x.png"></image> -->
+                    </view>
+                </view>
+                <view class="margin_top_10 padding_bottom_20">
+                    <input placeholder-style="color:#e3e3e3" value="{{messageText}}" bindinput="messageInputFn" placeholder="留言" />
+                </view>
+            </view>
+
+            <view wx:if="{{deliveryMode == 1}}" class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
+                <view class=" line_height_50 border_bottom">
                     <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/my@2x.png"></image>
-                    <text class="color_5151">用餐地址选择</text>
+                    <text class="color_5151">自取</text>
                 </view>
-                <view>
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-4rpx;" src="/images/icon/right@2x.png"></image>
-                </view>
-            </view>
-            <view class="margin_top_10 padding_bottom_20">
-                <input placeholder-style="color:#e3e3e3" placeholder="请输入用餐地址（目前只开放M区）" />
-            </view>
-        </view>
-
-        <view class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
-            <view class=" line_height_50 border_bottom">
-                <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/my@2x.png"></image>
-                <text class="color_5151">自取</text>
-            </view>
-            <view class="margin_top_10 padding_bottom_20">
-                <text class="font_size_14 color_bab9">M区7栋1楼126号门面</text>
-            </view>
-        </view>
-
-        <view class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
-            <view class=" line_height_50 border_bottom">
-                <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/peisongyue@2x.png"></image>
-                <text class="color_5151">配送</text>
-            </view>
-            <view class="margin_top_10 padding_bottom_20">
-                <view class="flex flex_space_between color_666 margin_bottom_10">
-                    <view class="">
-                        <text>皮蛋瘦肉粥x1</text>
-                    </view>
-                    <view>
-                        <text class="font_size_12">X</text>
-                        <text>2</text>
-                    </view>
-                </view>
-                <view class="flex flex_space_between color_666 margin_bottom_10">
-                    <view class="">
-                        <text>皮蛋瘦肉粥x1</text>
-                    </view>
-                    <view>
-                        <text class="font_size_12">X</text>
-                        <text>1</text>
-                    </view>
+                <view class="margin_top_10 padding_bottom_20">
+                    <text class="font_size_14 color_bab9">{{systemInfo.address}}</text>
                 </view>
             </view>
+
+            <view wx:if="{{deliveryMode == 2}}" class="box_shadow border_radius_20 overflow1 margin_top_20">
+                <view class=" line_height_50 border_bottom box_sizing padding_left_right_20">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/peisongyue@2x.png"></image>
+                    <text class="color_5151">配送</text>
+                </view>
+                <view class="margin_top_10">
+                    <view class="box_sizing padding_left_right_20">
+                        <block wx:for="{{cartLists}}" wx:key="index">
+                            <view wx:if="{{index == 0}}" class="flex flex_space_between color_666 margin_bottom_10">
+                                <view class="">
+                                    <text>{{item.productName}} x{{item.quantity}}</text>
+                                </view>
+                                <view>
+                                    <text class="font_size_12">X</text>
+                                    <text>{{systemInfo.deliveryFee + (item.quantity-1) * systemInfo.increaseFee}}</text>
+                                </view>
+                            </view>
+                            <view wx:if="{{index > 0}}" class="flex flex_space_between color_666 margin_bottom_10">
+                                <view class="">
+                                    <text>{{item.productName}} x{{item.quantity}}</text>
+                                </view>
+                                <view>
+                                    <text class="font_size_12">X</text>
+                                    <text>{{item.quantity * systemInfo.increaseFee}}</text>
+                                </view>
+                            </view>
+                        </block>
+
+                    </view>
+                    <view class="margin_top_10 border_top">
+                        <view class="flex line_height_40 flex_space_between color_333 box_sizing padding_left_right_20">
+                            <view class="">
+                                <text>配送费</text>
+                            </view>
+                            <view>
+                                <text class="font_size_12">￥</text>
+                                <text>{{deliveryCost}}</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+            <!-- 说明文字 -->
+            <view wx:if="{{deliveryMode == 2}}" class="line_height_50 font_size_12 color_bab9 box_sizing padding_left_10 margin_bottom_30">
+                <text>同个地址第一份配送费{{systemInfo.deliveryFee}}元，多份每多一份加{{systemInfo.increaseFee}}元{{systemInfo.maxDeliveryFee}}元封顶</text>
+            </view>
+
+            <view class="height_fixed_50"></view>
         </view>
 
-        <!-- 说明文字 -->
-        <view class="line_height_50 font_size_12 color_bab9 box_sizing padding_left_10 margin_bottom_30">
-            <text>同个地址第一份配送费2元，多份每多一份加1元十份封顶</text>
-        </view>
-
-        <view class="flex border_radius_10 line_height_40 height_fixed_40 width_90 margin_auto text_center background_liner padding_top_10 padding_bottom_10">
+        <view class="flex margin_topJ_20 border_radius_10 line_height_40 height_fixed_40 width_90 margin_auto text_center background_liner padding_top_10 padding_bottom_10">
             <view class="width_50 color_fff box_sizing" style="border-right:2rpx solid #fff">
                 <text class="font_size_12">共计</text>
-                <text class="font_size_18 font_weight_600">￥28.5</text>
+                <text wx:if="{{deliveryMode == 1}}" class="font_size_18 font_weight_600">￥{{(totalPrice * 1)}}</text>
+                <text wx:if="{{deliveryMode == 2}}" class="font_size_18 font_weight_600">￥{{(totalPrice * 1 + deliveryCost * 1)}}</text>
             </view>
-            <view class="width_50 color_fff font_size_18 font_weight_600" bindtap="toPageFn">
-                <text>立即付款</text>
+            <view class="width_50 color_fff font_size_18 font_weight_600" bindtap="submitOrderFn">
+                <text>提交订单</text>
             </view>
         </view>
 
     </view>
 
+    <!-- 地址选择弹出层 -->
+    <van-popup show="{{ show }}" position="bottom" custom-style="height: 500rpx;" bind:close="onClose">
+
+        <view class="box_sizing padding_left_right_20 padding_top_10 padding_bottom_10 relative">
+            <!-- 有地址列表 -->
+            <view wx:if="{{addressLists.length > 0}}" style="height:360rpx;;overflow:auto;">
+                <view wx:for="{{addressLists}}" wx:key="index" class="address_item flex flex_space_between margin_bottom_10 border_bottom">
+                    <view class="width_90 padding_bottom_10">
+                        <view class="color_333 margin_bottom_5">
+                            <text class="margin_right_30">{{item.name}}</text>
+                            <text>{{item.phone}}</text>
+                        </view>
+                        <view class="color_999">
+                            <text>{{item.address + item.doorplate}}</text>
+                        </view>
+                    </view>
+                    <view class="width_10 text_right line_height_40" data-itemid='{{item.id}}' bindtap="selectedAddresFn">
+                        <image wx:if="{{item.checked}}" src="/images/icon/queding@2x.png" style="top:4rpx;" class="width_fixed_20 height_fixed_20 relative vertical_middle"></image>
+                        <text wx:if="{{!item.checked}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                    </view>
+                </view>
+            </view>
+            <!-- 无地址列表 -->
+            <view wx:else class="text_center line_height_100 color_999">
+                <text>暂无地址，前去添加</text>
+            </view>
+
+            <view bindtap="addAddressFn" class="background_yellow_liner text_center color_fff" style="position:fixed;left:0;bottom:0;width:100%;height:100rpx;line-height:100rpx;">
+                <text>添加地址</text>
+            </view>
+        </view>
+    </van-popup>
 
 </view>

@@ -3,22 +3,22 @@
 
     <view class="padding_left_right_10 padding_bottom_30">
 
-        <view class="border_radius_right_left height_fixed_180 overflow1 relative">
+        <view class="border_radius_right_left height_fixed_180 overflow1 relative bg_f5">
             <image class="width_100 height_100" src="{{urlBefore + info.cover}}"></image>
-            <view class="food_name font_size_16 font_weight_600">
+            <view class="food_name font_size_16 font_weight_600 color_5bc">
                 <text>{{info.name}}</text>
             </view>
         </view>
 
-        <view class="box_shadow flex flex_space_between line_height_50 border_radius_30 overflow1 margin_top_20">
-            <view class="flex">
+        <view class="box_shadow flex font_size_14 flex_space_between line_height_50 border_radius_30 overflow1 margin_top_20">
+            <view class="flex"> 
                 <view class="del_line margin_right_20 margin_left_20 color_bab9">
                     <text>原价</text>
-                    <text class="font_size_12">￥</text>
+                    <text class="font_size_14">￥</text>
                     <text>{{info.marketPrice}}</text>
                 </view>
                 <view class="color_ff6">
-                    <text class="font_size_12">￥</text>
+                    <text class="font_size_14">￥</text>
                     <text class="font_size_18">{{info.price}}</text>
                 </view>
             </view>
@@ -33,7 +33,7 @@
                 <view class="margin_right_10 margin_left_20">
                     <text class="background_liner iconfont icon-shou color_fff border_radius__100 padding_5"></text>
                 </view>
-                <view class="color_5151">
+                <view class="color_5151 font_size_14">
                     <text>推荐理由</text>
                 </view>
             </view>
@@ -45,7 +45,7 @@
         <!-- 发起拼单 -->
         <view class="box_shadow flex flex_space_between height_fixed_70 border_radius_20 overflow1 margin_top_20" data-type="2" bindtap="toPageFn">
             <view class="box_sizing padding_top_10">
-                <view class="margin_right_10 margin_left_20">
+                <view class="margin_right_10 margin_left_20 font_size_14">
                     <text class="background_liner iconfont icon-fenxiang2 color_fff border_radius__100 padding_5"></text>
                     <text class="margin_left_10 color_5151">发起拼单</text>
                 </view>
@@ -70,15 +70,15 @@
                     </view>
                 </view>
                 <view class="margin_left_30">
-                    <view class="color_333">
+                    <view class="color_333 font_size_14">
                         <text>余额：￥35</text>
                     </view>
-                    <view class="margin_top_10 color_666">
+                    <view class="margin_top_10 color_666 font_size_14">
                         <text>时间：3天</text>
                     </view>
                 </view>
             </view>
-            <view class="width_20 text_center line_height_70 box_sizing color_bab9">
+            <view class="width_20 text_center line_height_70 box_sizing color_bab9 font_size_14">
                 <text class="">充值</text>
             </view>
         </view>
@@ -95,10 +95,10 @@
                     </view>
                 </view>
                 <view class="margin_left_30">
-                    <view class="color_333">
+                    <view class="color_333 font_size_14">
                         <text>本餐品可使用代金池额度</text>
                     </view>
-                    <view class="margin_top_10 color_666">
+                    <view class="margin_top_10 color_666 font_size_14">
                         <text>￥3</text>
                     </view>
                 </view>

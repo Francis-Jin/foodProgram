@@ -8,11 +8,26 @@ Page({
     data: {
         modalShow:true,
         array:[],
+        urlBefore: app.globalData.urlBefore,
         dietOrientationLists: null,
         modalTitle: '您的膳食方向',
         directionValue: '',
         directionId: '',
         thisDate: '',
+    },
+
+    /** 获取节气 */
+    getSolarTermFn(){
+        let that = this
+        app.appRequest({
+            url: '/app/recommend/getSolarTerm.action',
+            method: 'GET',
+            success(res){
+                that.setData({
+                    solarTermInfo: res.data
+                })
+            }
+        })
     },
 
     /** 获取膳食方向. */
@@ -26,8 +41,8 @@ Page({
                 res.data.forEach(item => {
                     lists.push(item.name)
                 })
-                if (app.globalData.userInfo.dietOrientation != 0){
-                    let directionValue = res.data.filter(item => item.code == app.globalData.userInfo.dietOrientation)[0].name
+                if (wx.getStorageSync("userInfo").dietOrientation != 0){
+                    let directionValue = res.data.filter(item => item.code == wx.getStorageSync("userInfo").dietOrientation)[0].name
                     that.setData({
                         directionValue: directionValue 
                     })
@@ -52,7 +67,7 @@ Page({
             method: 'post',
             getParams:{
                 dietOrientation: directionCode,
-                unionId: app.globalData.userInfo.unionId 
+                unionId: wx.getStorageSync("userInfo").unionId 
             },
             success(res){
                 console.log(res)
@@ -67,6 +82,8 @@ Page({
         var year = date.getFullYear();
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
+        var myddy = date.getDay();//获取存储当前日期
+        var weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
         if (month >= 1 && month <= 9) {
             month = "0" + month;
         }
@@ -75,7 +92,8 @@ Page({
         }
         var currentdate = year + ' 年 ' + month + ' 月 ' + strDate + ' 日 '
         this.setData({
-            thisDate: currentdate
+            thisDate: currentdate,
+            weekDay: weekday[myddy],
         })
     },
 
@@ -92,6 +110,7 @@ Page({
     onLoad: function () {
         this.getDateFn()
         this.getDietOrientationFn()
+        this.getSolarTermFn()
     },
 
 

@@ -149,6 +149,10 @@ page {
     color: #515151;
 }
 
+.color_eded {
+    color: #ededed;
+}
+
 .color_e3 {
     color: #e3e3e3;
 }
@@ -220,15 +224,15 @@ page {
 }
 
 .background_yellow_liner {
-    background: linear-gradient(60deg, #FD8828, #FA6D35);
+    background: linear-gradient(60deg, #fd8828, #fa6d35);
 }
 
 .background_liner {
-    background: linear-gradient(60deg, #50cdaf, #64c8de);
+    background: linear-gradient(60deg, #51cdaf, #64c8de);
 }
 
 .background_bottom_liner {
-    background: linear-gradient(to bottom, #50cdaf, #64c8de);
+    background: linear-gradient(to bottom, #51cdaf, #64c8de);
 }
 
 /** 层级关系. */
@@ -777,6 +781,38 @@ page {
 
 /** 元素缩进. */
 
+.text_indent_8 {
+    text-indent: 16rpx;
+}
+
+.text_indent_10 {
+    text-indent: 20rpx;
+}
+
+.text_indent_12 {
+    text-indent: 24rpx;
+}
+
+.text_indent_14 {
+    text-indent: 28rpx;
+}
+
+.text_indent_16 {
+    text-indent: 32rpx;
+}
+
+.text_indent_18 {
+    text-indent: 36rpx;
+}
+
+.text_indent_20 {
+    text-indent: 40rpx;
+}
+
+.text_indent_22 {
+    text-indent: 44rpx;
+}
+
 .text_indent_24 {
     text-indent: 48rpx;
 }
@@ -1166,6 +1202,26 @@ page {
 
 .margin_top_50 {
     margin-top: 100rpx;
+}
+
+.margin_top_60 {
+    margin-top: 120rpx;
+}
+
+.margin_top_70 {
+    margin-top: 140rpx;
+}
+
+.margin_top_80 {
+    margin-top: 160rpx;
+}
+
+.margin_top_90 {
+    margin-top: 180rpx;
+}
+
+.margin_top_100 {
+    margin-top: 200rpx;
 }
 
 .margin_right_5 {

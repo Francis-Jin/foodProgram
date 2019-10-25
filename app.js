@@ -4,8 +4,10 @@ App({
         successPics: [],
         sessionKey: '',
         userInfo: null,
-        baseApi: 'http://dongk.4kb.cn/food', //测试服
-        urlBefore: 'http://dongk.4kb.cn/food/upload', //测试服
+        // baseApi: 'http://dongk.4kb.cn/food', //测试服 接口请求前缀
+        // urlBefore: 'http://dongk.4kb.cn/food/upload', //测试服 图片前缀
+        baseApi: 'https://food.zhiyanginfo.top/food', //正试服 接口请求前缀
+        urlBefore: 'https://food.zhiyanginfo.top/food/upload/', //正试服 图片前缀
         //获取数据列表，默认获取10条数据
         dataLimit: 10,
     },

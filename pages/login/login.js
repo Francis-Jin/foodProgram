@@ -40,8 +40,7 @@ Page({
                         success(res) {
                             wx.hideLoading()
                             if (res.code == 200) {
-                                console.log(res.data)
-                                if(res.data){
+                                if (res.data.homeplace){
                                     wx.redirectTo({
                                         url: '/pages/solar_terms/solar_terms',
                                     })

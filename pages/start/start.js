@@ -7,32 +7,34 @@ Page({
      */
     data: {
         userInfo: wx.getStorageSync("userInfo"),
-        text:''
+        text: ''
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
+        console.log(options)
         let that = this
         this.setData({
-            index:options.index
+            paySuccessType: options.paySuccessType,
+            index: options.index
         })
         this.getMessageFn()
     },
 
     /** 获取信息 */
-    getMessageFn(){
+    getMessageFn() {
         let that = this
         app.appRequest({
             url: '/app/sysConf/getSysConf.action',
             method: 'get',
-            success(res){
+            success(res) {
                 console.log(res.data.welcome.split(',')[0])
                 that.setData({
                     text: res.data.welcome.split(',')
                 })
-                setTimeout(function () {
+                setTimeout(function() {
                     that.bindload();
                 }, 100)
             }
@@ -46,12 +48,11 @@ Page({
 
     },
     /** 获取用户信息. */
-    
+
     /**
      * 生命周期函数--监听页面显示
      */
-    onShow: function() {
-    },
+    onShow: function() {},
 
     /**
      * 生命周期函数--监听页面隐藏
@@ -98,17 +99,18 @@ Page({
                 url: '/pages/index/index'
             })
         } else {
-            if (wx.getStorageSync("userInfo")){
-                if (!wx.getStorageSync("userInfo").homeplace){
-                   wx.redirectTo({
-                       url: '/pages/author/author',
-                   })
-               }else{
-                   wx.redirectTo({
-                       url: '/pages/solar_terms/solar_terms',
-                   })
-               }
-            }else{
+            if (wx.getStorageSync("userInfo")) {
+                if (!wx.getStorageSync("userInfo").homeplace) {
+                    wx.redirectTo({
+                        url: '/pages/author/author',
+                    })
+                } else {
+                    let paySuccessType = this.data.paySuccessType
+                    wx.redirectTo({
+                        url: '/pages/solar_terms/solar_terms?paySuccessType=' + paySuccessType,
+                    })
+                }
+            } else {
                 wx.redirectTo({
                     url: '/pages/login/login',
                 })

@@ -7,7 +7,8 @@ Page({
      * 页面的初始数据
      */
     data: {
-        userInfo: wx.getStorageSync("userInfo")
+        userInfo: wx.getStorageSync("userInfo"),
+        selectedId: '' ,//1 配送员 2厨师
     },
 
     /**
@@ -17,6 +18,28 @@ Page({
         console.log(wx.getStorageSync("userInfo"))
     },
 
+    /** 身份选择. */
+    selectedFn(e){
+        let type = e.currentTarget.dataset.type
+        this.setData({
+            selectedId: type 
+        })
+    },
+
+    /** 跳转到身份认证. */
+    goAuthenticationFn(){
+        if(this.data.selectedId){
+            wx.navigateTo({
+                url: '/pages/authentication/authentication?selectedId=' + this.data.selectedId,
+            })
+        }else{
+            wx.showToast({
+                title: '请选择身份',
+                icon: 'none'
+            })
+        }
+        
+    },
     /**
      * 生命周期函数--监听页面初次渲染完成
      */

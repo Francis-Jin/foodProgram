@@ -1,5 +1,6 @@
 // pages/add_address/add_address.js
 var app = getApp()
+let citys = []
 Page({
 
     /**
@@ -9,10 +10,83 @@ Page({
         userName: '',
         userPhone: '',
         doorpValue: '',
-        addressSelectedText:'',
+        addressSelectedText: '',
         isAddAndEdit: false,
+        isPhoneError: false,
         objectMultiArray: [],
         addressId: '',
+        // 地址选择数据
+        showAddress: false,
+        columns: "",
+    },
+
+    /** 地址联动. */
+    vantAddressChange(e) {
+        const {
+            picker,
+            value,
+            index
+        } = e.detail;
+        if (index == 0) {
+            picker.setColumnValues(1, value[0].child);
+            picker.setColumnValues(2, value[0].child[0].child);
+        }
+        if (index == 1) {
+            picker.setColumnValues(2, value[1].child);
+        }
+    },
+
+    onConfirm(e) {
+        console.log(e)
+        let that = this
+        let d = e.detail.value
+        let code = []
+        let addressSelectedText = ''
+        d.forEach(item => {
+            if(item) {
+                code.push(item.code)
+                addressSelectedText += item.name
+            }
+        })
+        console.log(code.length)
+       if(code.length<3){
+           wx.showModal({
+               title: '提示',
+               showCancel:false,
+               content: addressSelectedText + "下无可选单元，请联系管理员",
+               confirmColor: "#5bcbc8",
+               success() {
+                   that.setData({
+                       code: code,
+                       showAddress: false,
+                       addressSelectedText: ""
+                   })
+               }
+           })
+       }else{
+           that.setData({
+               code: code,
+               showAddress: false,
+               addressSelectedText: addressSelectedText
+           })
+       }
+        
+
+
+    },
+
+    /** 显示上拉框. */
+    showAddressPickerFn() {
+        this.setData({
+            showAddress: true
+        })
+    },
+
+    /** 隐藏上拉狂. */
+    onClose() {
+        this.setData({
+            showAddress: false
+        })
     },
 
     /**
@@ -22,12 +96,13 @@ Page({
         console.log(options)
         let type = options.type
         let addressId = options.addressId
-        if(type == 'edit'){
+        if (type == 'edit') {
             // 编辑地址
             let userName = options.userName
             let userPhone = options.userPhone
             let addressSelectedText = options.addressSelectedText
             let doorpValue = options.doorpValue
+            let code = options.code
             this.setData({
                 type: type,
                 addressId: addressId,
@@ -35,9 +110,10 @@ Page({
                 userName: userName,
                 userPhone: userPhone,
                 addressSelectedText: addressSelectedText,
-                doorpValue: doorpValue
+                doorpValue: doorpValue,
+                code: code.split(',')
             })
-        }else{
+        } else {
             this.setData({
                 type: type,
                 addressId: '',
@@ -48,7 +124,7 @@ Page({
     },
 
     /** 删除地址. */
-    deleteAddressFn(){
+    deleteAddressFn() {
         let that = this
         app.appRequest({
             url: '/app/userAddress/deleteUserAddress.action',
@@ -56,13 +132,13 @@ Page({
             postData: {
                 id: that.data.addressId
             },
-            success(res){
+            success(res) {
                 wx.showToast({
                     title: '已删除',
                     icon: 'none',
                     duration: 3000,
                     success() {
-                        setTimeout(function () {
+                        setTimeout(function() {
                             wx.navigateBack({
                                 detal: 1
                             })
@@ -80,15 +156,32 @@ Page({
             url: "/app/userAddress/listAddress.action",
             method: "get",
             success(res) {
-                console.log(res)
+                citys = res.data
+                let arr = [{
+                        values: citys,
+                        className: 'column1',
+                        defaultIndex: 0
+                    },
+                    {
+                        values: citys[0].child,
+                        className: 'column2',
+                        defaultIndex: 0
+                    },
+                    {
+                        values: citys[0].child[0].child,
+                        className: 'column2',
+                        defaultIndex: 0
+                    }
+                ]
                 that.setData({
-                    objectMultiArray: res.data
+                    columns: arr
                 })
+
             }
         })
     },
 
-    bindMultiPickerChange(e){
+    bindMultiPickerChange(e) {
         let objectMultiArray = this.data.objectMultiArray
         let value = e.detail.value
         let text = objectMultiArray[0][value[0]].name + objectMultiArray[1][value[1]].name + objectMultiArray[2][value[2]].name
@@ -98,16 +191,47 @@ Page({
     },
 
     /** 姓名输入时。 */
-    onChange(e){
+    onChange(e) {
         this.setData({
             userName: e.detail
         })
     },
-    /** 电话输入时。 */
-    ageChange(e) {
-        this.setData({
-            userPhone: e.detail
-        })
+
+    /** 输入手机号改变时. */
+    phoneChange(e) {
+        let phone = e.detail
+        let r = /^1[3456789]\d{9}$/
+        if (!(r.test(phone))) {
+            this.setData({
+                isPhoneError: true
+            })
+            return false
+        } else {
+            this.setData({
+                isPhoneError: false,
+                userPhone: phone
+            })
+        }
+
+    },
+
+    /** 手机号失去焦点时. */
+    phoneBlur(e) {
+        console.log(e)
+        let phone = e.detail.value
+        let r = /^1[3456789]\d{9}$/
+        if (!(r.test(phone))) {
+            this.setData({
+                userPhone: '',
+                isPhoneError: true
+            })
+            return false
+        } else {
+            this.setData({
+                isPhoneError: false,
+                userPhone: phone
+            })
+        }
     },
     /** 门牌号输入时。 */
     addressChange(e) {
@@ -117,9 +241,9 @@ Page({
     },
 
     /** 点击添加按钮 */
-    addAddressFn(){
+    addAddressFn() {
         let that = this
-        if(!that.data.userName){
+        if (!that.data.userName) {
             wx.showToast({
                 title: '请输入姓名',
                 icon: 'none'
@@ -140,7 +264,16 @@ Page({
             })
             return false
         }
-        if(that.data.isAddAndEdit){
+        if (that.data.code.length < 3) {
+            wx.showModal({
+                title: '提示',
+                showCancel: false,
+                content: addressSelectedText + "下无可选单元，请联系管理员",
+                confirmColor: "#5bcbc8",
+            })
+            return false
+        }
+        if (that.data.isAddAndEdit) {
             // 编辑更新
             app.appRequest({
                 url: "/app/userAddress/updateUserAddress.action",
@@ -151,6 +284,9 @@ Page({
                     phone: that.data.userPhone,
                     address: that.data.addressSelectedText,
                     doorplate: that.data.doorpValue,
+                    communitySectionId: that.data.code[0] ? that.data.code[0] : 0,
+                    communityBuildingId: that.data.code[1] ? that.data.code[1] : 0,
+                    communityBuildingUnitId: that.data.code[2] ? that.data.code[2] : 0,
                     createUser: wx.getStorageSync("userInfo").id
                 },
                 success(res) {
@@ -158,7 +294,7 @@ Page({
                         title: '已更新',
                         duration: 3000,
                         success() {
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 wx.navigateBack({
                                     detal: 1
                                 })
@@ -167,7 +303,7 @@ Page({
                     })
                 }
             })
-        }else{
+        } else {
             // 新添加
             app.appRequest({
                 url: "/app/userAddress/saveUserAddress.action",
@@ -176,7 +312,10 @@ Page({
                     name: that.data.userName,
                     phone: that.data.userPhone,
                     address: that.data.addressSelectedText,
-                    doorplate: that.data.doorpValue,
+                    doorplate: that.data.doorpValue, 
+                    communitySectionId: that.data.code[0] ? that.data.code[0] : 0,
+                    communityBuildingId: that.data.code[1] ? that.data.code[1] : 0,
+                    communityBuildingUnitId: that.data.code[2] ? that.data.code[2] : 0,
                     createUser: wx.getStorageSync("userInfo").id
                 },
                 success(res) {
@@ -184,7 +323,7 @@ Page({
                         title: '添加成功',
                         duration: 3000,
                         success() {
-                            setTimeout(function () {
+                            setTimeout(function() {
                                 wx.navigateBack({
                                     detal: 1
                                 })

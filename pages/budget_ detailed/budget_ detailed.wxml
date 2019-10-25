@@ -1,0 +1,18 @@
+<!--pages/budget_ detailed/budget_ detailed.wxml-->
+<view class="container box_sizing padding_left_right_20">
+    <view wx:for="{{lists}}" wx:key="index" data-itemid="{{item.id}}" bindtap="toBudgetDetailsFn" class="item flex flex_space_between border_bottom padding_top_10 padding_bottom_10">
+        <view class="">
+            <view class="margin_top_10 font_size_14 font_weight">
+                <text>{{item.typeName}}</text>
+            </view>
+            <view class="font_size_12 color_999">
+                <text>{{item.createTime}}</text>
+            </view>
+        </view>
+        <view class="line_height_50 font_size_18 font_weight">
+            <text wx:if="{{item.category == 1}}">+</text>
+            <text wx:if="{{item.category == 2}}">-</text>
+            <text>{{item.amount}}</text>
+        </view>
+    </view>
+</view>

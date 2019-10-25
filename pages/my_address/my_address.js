@@ -21,14 +21,20 @@ Page({
     addAddressFn(e) {
         console.log(e)
         let type = e.currentTarget.dataset.type
+        let item = e.currentTarget.dataset.item
+        let code = []
+        code.push(item.communitySectionId)
+        code.push(item.communityBuildingId)
+        code.push(item.communityBuildingUnitId)
+        console.log(code)
         if (type == 'edit') {
-            let addressId = e.currentTarget.dataset.item.id
-            let userName = e.currentTarget.dataset.item.name
-            let userPhone = e.currentTarget.dataset.item.phone
-            let addressSelectedText = e.currentTarget.dataset.item.address
-            let doorpValue = e.currentTarget.dataset.item.doorplate
+            let addressId = item.id
+            let userName = item.name
+            let userPhone = item.phone
+            let addressSelectedText = item.address
+            let doorpValue = item.doorplate
             wx.navigateTo({
-                url: '/pages/add_address/add_address?type=' + type + "&addressId=" + addressId + "&userName=" + userName + "&userPhone=" + userPhone + "&addressSelectedText=" + addressSelectedText + "&doorpValue=" + doorpValue,
+                url: '/pages/add_address/add_address?type=' + type + "&addressId=" + addressId + "&userName=" + userName + "&userPhone=" + userPhone + "&addressSelectedText=" + addressSelectedText + "&doorpValue=" + doorpValue + '&code=' + code.join(),
             })
         } else {
             wx.navigateTo({

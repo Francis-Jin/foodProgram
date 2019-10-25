@@ -9,6 +9,10 @@ Page({
         page: 1,
         pageSize: 10,
         orderLists: [],
+        payShow: false, // 是否显示支付方式选择弹框
+        selectedId: '', //支付方式选择的id （1：微信支付，2：余额支付）
+
+        makeAppointmentShow: false, //是否显示预约点餐
     },
 
     /**
@@ -25,8 +29,15 @@ Page({
         this.setData({
             page: 1,
             pageSize: 10,
+            payShow:false,
             orderLists: []
         })
+        let balancePaySuccess = wx.getStorageSync('balancePaySuccess')
+        if (balancePaySuccess) {
+            this.setData({
+                makeAppointmentShow: true
+            })
+        }
         this.getOrderLists()
     },
 
@@ -64,20 +75,61 @@ Page({
         })
     },
 
-    /** 去支付 */
+    /** 支付方式选择. */
+    selectedPayFn(e) {
+        let type = e.currentTarget.dataset.type
+        this.setData({
+            selectedId: type
+        })
+    },
+
+    /** 点击支付方式弹框确认按钮. */
+    confirmAppointFn() {
+        let that = this
+        let selectedId = that.data.selectedId
+        let orderId = that.data.orderId
+        if (selectedId == 1) {
+            that.wxPayFn()
+        }
+        if (selectedId == 2) {
+            wx.navigateTo({
+                url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
+            })
+        }
+        that.setData({
+            payShow: false
+        })
+    },
+
+    /** 隐藏支付方式选择. */
+    onPayClose(){
+        this.setData({
+            payShow: false
+        })
+    },
+
+    /** 显示支付方式选择. */
     payOrder(e) {
+        let that = this
         let orderId = e.currentTarget.dataset.id
+        that.setData({
+            orderId: orderId,
+            payShow: true
+        })
+    },
+
+    /** 微信支付. */
+    wxPayFn() {
+        let that = this
         app.appRequest({
             url: "/app/orderInfo/payFee.action",
             method: "post",
             postData: {
-                orderId: orderId,
+                orderId: that.data.orderId,
                 unionId: wx.getStorageSync("userInfo").unionId
             },
             success(res) {
-                console.log(res)
                 let str = JSON.parse(res.data)
-                console.log(str)
                 wx.requestPayment({
                     timeStamp: str.timeStamp,
                     nonceStr: str.nonceStr,
@@ -85,12 +137,14 @@ Page({
                     signType: str.signType,
                     paySign: str.paySign,
                     success(res) {
-                        wx.navigateTo({
-                            url: '/pages/order_details/order_details?orderId=' + orderId,
+                        that.setData({
+                            makeAppointmentShow: true 
                         })
                     },
                     fail(err) {
-                        console.log(err)
+                        that.setData({
+                            payShow: false
+                        })
                         wx.showModal({
                             title: '提示',
                             content: '支付失败',
@@ -100,6 +154,22 @@ Page({
                     }
                 })
             }
+        })
+    },
+
+    /** 点击返回首页按钮. */
+    toBackIndexFn() {
+        wx.setStorageSync('balancePaySuccess', false)
+        wx.switchTab({
+            url: '/pages/index/index',
+        })
+    },
+
+    /** 点击预约点餐按钮. */
+    toMakeAppointmentFn() {
+        wx.setStorageSync('balancePaySuccess', false)
+        wx.redirectTo({
+            url: '/pages/start/start?paySuccessType=true',
         })
     },
 
@@ -114,7 +184,10 @@ Page({
      * 生命周期函数--监听页面隐藏
      */
     onHide: function() {
-
+        wx.setStorageSync('balancePaySuccess', false)
+        this.setData({
+            makeAppointmentShow: false
+        })
     },
 
     /**

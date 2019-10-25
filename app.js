@@ -4,8 +4,8 @@ App({
         successPics: [],
         sessionKey: '',
         userInfo: null,
-        baseApi: 'http://dongk.4kb.cn/food',
-        urlBefore: 'http://dongk.4kb.cn/food/upload',
+        baseApi: 'http://dongk.4kb.cn/food', //测试服
+        urlBefore: 'http://dongk.4kb.cn/food/upload', //测试服
         //获取数据列表，默认获取10条数据
         dataLimit: 10,
     },
@@ -52,7 +52,6 @@ App({
                    withCredentials: true,
                    lang: '',
                    success: function(res) {
-                       console.log(res)
                        let encryptedData = res.encryptedData
                        let iv = res.iv
                        that.appRequest({

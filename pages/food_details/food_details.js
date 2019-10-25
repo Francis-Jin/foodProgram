@@ -6,26 +6,77 @@ Page({
      * 页面的初始数据
      */
     data: {
+        userInfo: '',
         urlBefore: app.globalData.urlBefore,
         discountNumber:1,
         isPopping:false,
         buyNumber:0,
         foodId: '',//菜品ID
+        vipSavePrice: '',
+
+        guideMongoliaShowStatus: false, //是否显示引导蒙层
     },
     
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        let that = this
+        wx.getSystemInfo({
+            success: function (res) {
+                //model中包含着设备信息
+                console.log(res)
+                var model = res.model
+                console.log(model.search('iPhone X') != -1)
+                if (model.search('iPhone X') != -1) {
+                    that.setData({
+                        isIpx: true
+                    })
+                } else {
+                    that.setData({
+                        isIpx: false
+                    })
+                }
+            }
+        })
+        let newUser = wx.getStorageSync('userInfo').newUser
+        if (newUser == 1) {
+            this.setData({
+                guideMongoliaShowStatus: true
+            })
+        }
         let itemId = options.itemId
-
-        this.getDetails(itemId)
         this.setData({
+            userInfo: wx.getStorageSync('userInfo'),
             foodId:itemId
         })
     },
 
-    /** 获取信息. */
+    /** 关闭引导蒙层. */
+    closeGuideMongoliaFn() {
+        this.setData({
+            guideMongoliaShowStatus: false
+        })
+        this.getUserInfoFn()
+    },
+
+    /** 获取用户信息. */
+    getUserInfoFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/userInfo/getUserInfo.action',
+            method: 'get',
+            getParams: {
+                id: wx.getStorageSync('userInfo').id,
+                newUser: 0
+            },
+            success(res) {
+                wx.setStorageSync('userInfo', res.data)
+            }
+        })
+    },
+
+    /** 获取菜品信息. */
     getDetails(id){
         let that = this
         app.appRequest({
@@ -38,6 +89,7 @@ Page({
             success(res){
                 that.setData({
                     info: res.data.DishInfoVo,
+                    vipSavePrice: (res.data.DishInfoVo.price - res.data.DishInfoVo.vipPrice).toFixed(2),
                     buyNumber: res.data.shoppingCartTotal
                 })
             }
@@ -57,10 +109,10 @@ Page({
                 createUser: wx.getStorageSync("userInfo").id
             },
             success(res){
-                wx.showToast({
-                    title: res.message,
-                    icon: 'none'
-                })
+                // wx.showToast({
+                //     title: res.message,
+                //     icon: 'none'
+                // })
                 that.getDetails(itemId)
             }
         })
@@ -69,16 +121,19 @@ Page({
     /** 页面跳转. */
     toPageFn(e) {
         let _type = e.currentTarget.dataset.type
-        console.log(_type)
         if (_type == 1) {
             // 推荐理由
-            wx.navigateTo({
-                url: '/pages/account/account',
+            wx.showToast({
+                title: '功能正在更新',
+                icon: 'none'
             })
+            // wx.navigateTo({
+            //     url: '/pages/account/account',
+            // })
         } else if (_type == 2) {
             // 去拼单
             wx.navigateTo({
-                url: '/pages/make_up_list/make_up_list',
+                url: '/pages/make_up_list/make_up_list?foodId=' + this.data.foodId,
             })
         } else if (_type == 3) {
             // 去充值
@@ -153,8 +208,14 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function () {
+        let that = this
         let itemId = this.data.foodId
-        this.getDetails(itemId)
+        setTimeout(function(){
+            that.getDetails(itemId)
+        },200)
+        this.setData({
+            userInfo: wx.getStorageSync('userInfo')
+        })
     },
 
     /**

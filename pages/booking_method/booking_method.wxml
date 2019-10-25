@@ -1,0 +1,59 @@
+<!--pages/booking_method/booking_method.wxml-->
+<!-- 页面主要内容 -->
+<view class="flex flex_space_between line_height_40 topBack bg_fff" style="{{ isIpx ? 'padding-top:90rpx' : 'padding-top:40rpx'}}">
+    <view class="width_30 box_sizing padding_left_10 color_333" bindtap="backOrderListsFn">
+        <text class="iconfont icon-left2"></text>
+    </view>
+    <view class="width_30 text_center font_size_16 font_weight">
+        <text>预约点餐</text>
+    </view>
+    <view class="width_30"></view>
+</view>
+<view class="height_fixed_70"></view>
+
+<view class="container box_sizing padding_left_right_20 padding_top_20">
+
+    <view>
+        <!-- 明日早餐 -->
+        <view class="box_shadow border_radius_10 margin_bottom_20" data-type="1" bindtap="toPageFn">
+            <view class="flex flex_space_between box_sizing padding_left_right_20">
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/breakfast.png"></image>
+                    <text class="margin_left_10 color_5353 font_size_14">明日早餐</text>
+                </view>
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image>
+                </view>
+            </view>
+        </view>
+
+        <!-- 明日午餐 -->
+        <view class="box_shadow border_radius_10 margin_bottom_20" data-type="2" bindtap="toPageFn">
+            <view class="flex flex_space_between box_sizing padding_left_right_20">
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/lunch.png"></image>
+                    <text class="margin_left_10 color_5353 font_size_14">明日午餐</text>
+                </view>
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image>
+                </view>
+            </view>
+        </view>
+
+        <!-- 明日晚餐 -->
+        <view class="box_shadow border_radius_10 margin_bottom_20" data-type="3" bindtap="toPageFn">
+            <view class="flex flex_space_between box_sizing padding_left_right_20">
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/dinner.png"></image>
+                    <text class="margin_left_10 color_5353 font_size_14">明日晚餐</text>
+                </view>
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image>
+                </view>
+            </view>
+        </view>
+
+    </view>
+
+
+</view>

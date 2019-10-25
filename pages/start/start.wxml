@@ -1,6 +1,6 @@
 <view class="start-img">
 
-    <view class="width_fixed_160 height_fixed_160 relative" style="margin: 350rpx auto 80rpx;">
+    <view class="width_fixed_160 height_fixed_160 relative" style="margin: 200rpx auto 80rpx;">
         <view class="start width_height_100">
             <image class="width_height_100" src="/images/icon/startText.png"></image>
         </view>

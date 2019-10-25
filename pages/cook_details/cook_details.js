@@ -11,7 +11,7 @@ Page({
     },
 
     /** 跳转视频播放. */
-    toPlayVideo(e){
+    toPlayVideo(e) {
         let url = e.currentTarget.dataset.url
         let cookName = this.data.detailInfo.name
         console.log(cookName)
@@ -22,24 +22,32 @@ Page({
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad: function (options) {
+    onLoad: function(options) {
         let itemId = options.itemId
         this.getCookInfoVoFn(itemId)
     },
 
+    /** 页面跳转. */
+    topPageDetails(e) {
+        let _itemId = e.currentTarget.dataset.itemid
+        wx.navigateTo({
+            url: '/pages/food_details/food_details?itemId=' + _itemId,
+        })
+    },
+
     /** 获取厨师详情. */
-    getCookInfoVoFn(id){
+    getCookInfoVoFn(id) {
         let that = this
         app.appRequest({
             url: "/app/recommend/getCookInfoVo.action",
             method: "get",
-            getParams:{
-                id:id
+            getParams: {
+                id: id
             },
-            success(res){
+            success(res) {
                 // res.data.intro = res.data.content.replace(/\<img/gi, `<img style="max-width:90%;height:auto"`)
                 that.setData({
-                    detailInfo:res.data
+                    detailInfo: res.data
                 })
             }
         })
@@ -48,49 +56,62 @@ Page({
     /**
      * 生命周期函数--监听页面初次渲染完成
      */
-    onReady: function () {
+    onReady: function() {
 
     },
 
     /**
      * 生命周期函数--监听页面显示
      */
-    onShow: function () {
+    onShow: function() {
 
     },
 
     /**
      * 生命周期函数--监听页面隐藏
      */
-    onHide: function () {
+    onHide: function() {
 
     },
 
     /**
      * 生命周期函数--监听页面卸载
      */
-    onUnload: function () {
+    onUnload: function() {
 
     },
 
     /**
      * 页面相关事件处理函数--监听用户下拉动作
      */
-    onPullDownRefresh: function () {
+    onPullDownRefresh: function() {
 
     },
 
     /**
      * 页面上拉触底事件的处理函数
      */
-    onReachBottom: function () {
+    onReachBottom: function() {
 
     },
 
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage: function () {
+    onShareAppMessage: function(res) {
+        if (res.from == "button") {
+            let itemId = res.target.dataset.info;
+            return {
+                title: '日权食厨师页面',
+                path: '/pages/cook_details/cook_details?itemId=' + itemId,
+                success: function(res) {
+                    console.log('成功', res)
+                },
+                fail: function(error) {
+                    console.log('失败',error)
+                }
+            }
+        }
 
     }
 })

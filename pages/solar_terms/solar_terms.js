@@ -6,26 +6,89 @@ Page({
      * 页面的初始数据
      */
     data: {
-        modalShow:true,
-        array:[],
+        modalShow: true,
         urlBefore: app.globalData.urlBefore,
-        dietOrientationLists: null,
+        thisDate: '',
         modalTitle: '您的膳食方向',
         directionValue: '',
-        directionId: '',
-        thisDate: '',
+        show: false,
+        columns: [],
+        otherShow: false, //选择其他时弹框
+        otherValue: '', // 选择其他输入的关键字
+        selectedCode: '',
+        guideMongoliaShowStatus: false, //是否显示引导蒙层
+    },
+
+    /**
+     * 生命周期函数--监听页面初次渲染完成
+     */
+    onLoad: function(options) {
+        let that = this
+        wx.getSystemInfo({
+            success: function (res) {
+                //model中包含着设备信息
+                console.log(res)
+                var model = res.model
+                console.log(model.search('iPhone X') != -1)
+                if (model.search('iPhone X') != -1) {
+                    that.setData({
+                        isIpx: true
+                    })
+                } else {
+                    that.setData({
+                        isIpx: false
+                    })
+                }
+            }
+        })
+        let paySuccessType = options.paySuccessType
+        let newUser = wx.getStorageSync('userInfo').newUser
+        if (newUser == 1) {
+            this.setData({
+                guideMongoliaShowStatus: true
+            })
+        }
+        this.setData({
+            paySuccessType: paySuccessType
+        })
+        this.getDateFn()
+        this.getDietOrientationFn()
+        this.getSolarTermFn()
+    },
+
+    /** 关闭引导蒙层. */
+    closeGuideMongoliaFn(){
+        this.setData({
+            guideMongoliaShowStatus: false
+        })
     },
 
     /** 获取节气 */
-    getSolarTermFn(){
+    getSolarTermFn() {
         let that = this
         app.appRequest({
             url: '/app/recommend/getSolarTerm.action',
             method: 'GET',
-            success(res){
+            success(res) {
                 that.setData({
                     solarTermInfo: res.data
                 })
+            }
+        })
+    },
+
+    /** 获取用户信息. */
+    getUserInfoFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/userInfo/getUserInfo.action',
+            method: 'get',
+            getParams: {
+                id: wx.getStorageSync('userInfo').id,
+                newUser: wx.getStorageSync('userInfo').newUser
+            },
+            success(res) {
+                wx.setStorageSync('userInfo', res.data)
             }
         })
     },
@@ -37,52 +100,168 @@ Page({
             url: "/app/sysConf/getDietOrientation.action",
             method: 'get',
             success(res) {
-                let lists = []
+                let lists = res.data
                 res.data.forEach(item => {
-                    lists.push(item.name)
+                    item.checked = false
                 })
-                if (wx.getStorageSync("userInfo").dietOrientation != 0){
-                    let directionValue = res.data.filter(item => item.code == wx.getStorageSync("userInfo").dietOrientation)[0].name
-                    that.setData({
-                        directionValue: directionValue 
+                if (wx.getStorageSync("userInfo").userDietOrientation) {
+                    let value = []
+                    let selectedCode = []
+                    wx.getStorageSync("userInfo").userDietOrientation.forEach(item => {
+                        value.push(item.dietOrientationName)
+                        selectedCode.push(item.dietOrientationId)
                     })
+                    selectedCode.sort()
+                    that.setData({
+                        directionValue: value,
+                        selectedCode: selectedCode.join()
+                    })
+                    wx.setStorageSync('selectedCode', selectedCode.join())
                 }
                 that.setData({
-                    array: lists,
-                    dietOrientationLists: res.data
+                    columns: lists
                 })
             }
         })
     },
 
-    /** 更新膳食方向. */
-    bindPickerChange: function (e) {
+    /** 选择膳食方向. */
+    selectedFn(e) {
         let that = this
-        this.setData({
-            directionValue: this.data.array[e.detail.value]
+        let code = e.currentTarget.dataset.code
+        let columns = that.data.columns
+        let len = columns.filter(item => item.checked == true).length
+        let directionValue = that.data.directionValue
+        if (code == 2) {
+            columns.forEach(item => {
+                if (item.code == code) {
+                    directionValue = item.name
+                }
+            })
+            that.setData({
+                directionValue: directionValue,
+                selectedCode: code,
+                otherShow: true
+            })
+            return false
+        }
+        columns.forEach(item => {
+            if (item.code == code) {
+                if (item.checked) {
+                    item.checked = false
+                } else {
+                    if (len != 2) {
+                        item.checked = true
+                    } else {
+                        wx.showToast({
+                            title: '最多选择两个哦!',
+                            icon: 'none'
+                        })
+                    }
+                }
+            }
         })
-        let directionCode = that.data.dietOrientationLists.filter(item => item.name == that.data.directionValue)[0].code
+        that.setData({
+            columns: columns
+        })
+    },
+
+    /** 获取输入其他关键字. */
+    reportInputFn(e) {
+        this.setData({
+            otherValue: e.detail.value
+        })
+    },
+
+    /** 输入其他关键字确认. */
+    confirmAppointFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/userInfo/saveSearchKeyword.action',
+            method: 'post',
+            postData: {
+                userId: wx.getStorageSync("userInfo").id,
+                keyword: that.data.otherValue
+            },
+            success(res) {
+                if (res.code == 200) {
+                    app.appRequest({
+                        url: '/app/userInfo/updateUserDietOrientation.action',
+                        method: 'post',
+                        getParams: {
+                            dietOrientation: that.data.selectedCode,
+                            unionId: wx.getStorageSync("userInfo").unionId
+                        },
+                        success(res) {
+                            if (res.code == 200) {
+                                that.setData({
+                                    otherShow: false,
+                                    show: false,
+                                    directionValue: that.data.directionValue,
+                                })
+                                that.getUserInfoFn()
+                                wx.setStorageSync('selectedCode', that.data.selectedCode)
+                            }
+                        }
+                    })
+                }
+            }
+        })
+    },
+
+    /** 确定选择选择膳食方向并更新膳食方向. */
+    onConfirm() {
+        let that = this
+        let columns = that.data.columns
+        let arr = columns.filter(item => item.checked == true)
+        let str = []
+        let directionValueArr = []
+        arr.forEach(item => {
+            str.push(item.code)
+            directionValueArr.push(item.name)
+        })
+        str.sort()
         app.appRequest({
             url: '/app/userInfo/updateUserDietOrientation.action',
             method: 'post',
-            getParams:{
-                dietOrientation: directionCode,
-                unionId: wx.getStorageSync("userInfo").unionId 
+            getParams: {
+                dietOrientation: str.join(),
+                unionId: wx.getStorageSync("userInfo").unionId
             },
-            success(res){
-                console.log(res)
+            success(res) {
+                that.setData({
+                    show: false,
+                    directionValue: directionValueArr,
+                })
+                that.getUserInfoFn()
+                wx.setStorageSync('selectedCode', str.join())
             }
         })
     },
 
+    /** 显示选择膳食方向. */
+    showDirectionFn() {
+        this.setData({
+            show: true
+        })
+    },
+
+    /** 隐藏选择膳食方向 */
+    onClose() {
+        this.setData({
+            show: false
+        })
+    },
+
+
     /** 获取当前日期，时间 */
-    getDateFn(){
+    getDateFn() {
         var date = new Date();
         var seperator1 = "-";
         var year = date.getFullYear();
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
-        var myddy = date.getDay();//获取存储当前日期
+        var myddy = date.getDay(); //获取存储当前日期
         var weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
         if (month >= 1 && month <= 9) {
             month = "0" + month;
@@ -97,20 +276,21 @@ Page({
         })
     },
 
-    /** 点击下一步跳转页面. */
-    nextFn(){
-        wx.redirectTo({
-            url: '/pages/start/start?index=true',
-        })
-    },
 
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onLoad: function () {
-        this.getDateFn()
-        this.getDietOrientationFn()
-        this.getSolarTermFn()
+    /** 点击下一步跳转页面. */
+    nextFn() {
+        let selectedCode = this.data.selectedCode
+        let paySuccessType = this.data.paySuccessType
+        if (paySuccessType == 'true'){
+            wx.redirectTo({
+                url: '/pages/booking_method/booking_method'
+            })
+        }else{
+            wx.redirectTo({
+                url: '/pages/start/start?index=true&selectedCode=' + selectedCode
+            })
+        }
+        
     },
 
 

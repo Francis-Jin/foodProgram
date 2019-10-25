@@ -15,24 +15,13 @@
                     <view class="dot line"></view>
                 </view>
             </view>
-            <view hidden="true" class="width_60">
-                <view class="color_fff font_size_26 box_sizing padding_top_20 padding_right_20 font_weight custom_family">
-                    <text>辰时</text>
-                    <text class="margin_left_10 margin_right_10">·</text>
-                    <text>胃经当令</text>
-                </view>
-                <view class="color_fff font_size_14 box_sizing padding_right_20 custom_family">
-                    <text>太阳升起，阳气初生，吃早餐</text>
-                </view>
-                <view class="margin_top_30 text_right flex font_weight_300 color_39 flex_space_between bottom_0">
-                    <view class="line_height_40 font_size_18 margin_right_10">
-                        <text>7:00-9:00</text>
-                    </view>
-                    <view class="margin_right_30 color_39 font_size_14">
-                        <view>午后餐</view>
-                        <view>Afternoon meal</view>
-                    </view>
-                </view>
+        </view>
+        <!-- 点击层 -->
+        <view bindtap="showDirectionFn" style="position:absolute;left:0;bottom:0;height:120rpx;width:100%;z-index:5;"></view>
+        <!-- 展示层 -->
+        <view class="text_center z_index_3 color_8484 text_right" style="width:200rpx; position:absolute;right:32%;bottom:{{directionValue.length>1? '40rpx': '66rpx;'}};min-height:20rpx;">
+            <view wx:for="{{directionValue}}" wx:key="index" style="height:28rpx;">
+                <text style="font-size:20rpx">{{item}}</text>
             </view>
         </view>
     </view>
@@ -71,13 +60,13 @@
                             <view class="flex flex_space_between padding_bottom_10 relative">
                                 <view class="font_size_12 line_height_30 overflow1">
                                     <text class="del_line color_999 margin_right_10 font_size_14">￥{{item.marketPrice}}</text>
-                                    <text class="color_ff6 font_size_12">￥</text>
+                                    <text class="color_ff6 font_size_12">{{item.vipDiscount}}折价￥</text>
                                     <text class="color_ff6 font_size_18">{{item.price}}</text>
                                 </view>
                                 <view class="price" data-itemId="{{item.id}}" bindtap="addCart">
                                     <view class="width_fixed_20 height_fixed_20 border_radius__100 line_height_30 margin_right_5">
                                         <!-- <image class="width_height_100" src="/images/icon/tianchongxing-@2x.png"></image> -->
-                                        <text class="iconfont icon-add color_4dc" style="font-size:50rpx;"></text>
+                                        <text class="iconfont icon-add color_4dc" style="font-size:40rpx;"></text>
                                     </view>
                                 </view>
                             </view>
@@ -135,13 +124,13 @@
                             <view class="flex flex_space_between padding_bottom_10 relative">
                                 <view class="font_size_12 line_height_30 overflow1">
                                     <text class="del_line color_999 margin_right_10 font_size_14">￥{{item.marketPrice}}</text>
-                                    <text class="color_ff6 font_size_12">￥</text>
+                                    <text class="color_ff6 font_size_12">{{item.vipDiscount}}折价￥</text>
                                     <text class="color_ff6 font_size_18">{{item.price}}</text>
                                 </view>
                                 <view class="price" data-itemId="{{item.id}}" bindtap="addCart">
                                     <view class="width_fixed_20 height_fixed_20 border_radius__100 line_height_30 margin_right_5">
                                         <!-- <image class="width_height_100" src="/images/icon/tianchongxing-@2x.png"></image> -->
-                                        <text class="iconfont icon-add color_4dc" style="font-size:50rpx;"></text>
+                                        <text class="iconfont icon-add color_4dc" style="font-size:40rpx;"></text>
                                     </view>
                                 </view>
                             </view>
@@ -186,4 +175,84 @@
 
 
 
+</view>
+
+<!-- 膳食方向选择 -->
+<van-popup show="{{ show }}" position="bottom" custom-style="height: 600rpx" bind:close="onClose">
+    <view class="flex flex_space_between height_fixed_50 line_height_50 text_center border_bottom">
+        <view class="width_fixed_50 text_center color_5bc" bindtap="onClose">
+            <text>取消</text>
+        </view>
+        <view>
+            <text>膳食方向</text>
+        </view>
+        <view class="width_fixed_50 text_center color_5bc" bindtap="onConfirm">
+            <text>确定</text>
+        </view>
+    </view>
+    <view class="box_sizing padding_top_10 margin_top_5 padding_bottom_10 padding_left_right_20" style="height:480rpx; overflow:auto">
+        <view wx:for="{{columns}}" wx:key="index" class="item flex flex_space_between  border_bottom" data-code="{{item.code}}" bindtap="selectedFn">
+            <view class="line_height_50">
+                <text>{{item.name}}</text>
+            </view>
+            <view class="line_height_40">
+                <text wx:if="{{item.checked}}" class="iconfont icon-zhengque3 color_5bc relative" style="font-size:40rpx; top:10rpx"></text>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出输入关键字 -->
+<van-popup show="{{ otherShow }}" bind:close="onClose" duration="{{0}}">
+    <view>
+        <view class="">
+            <view class="border_radius_10 overflow_hidden" style="width:500rpx;">
+                <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
+                    <text>输入关键字</text>
+                </view>
+                <view class="margin_top_20 margin_bottom_20 box_sizing padding_left_right_20 ">
+                    <textarea bindinput="reportInputFn" class="width_100 font_size_14" value="{{reportErrorText}}" auto-height placeholder="关键字" placeholder-style="color:#ededed;"></textarea>
+                </view>
+                <view class="background_liner text_center line_height_50 color_fff font_size_16" bindtap="confirmAppointFn">
+                    <text>确定</text>
+                </view>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出领优惠弹框 -->
+<view wx:if="{{isShowDiscountModal}}" class="discountModal">
+
+    <view class="content">
+        <view class="font_size_0 border_radius_20 overflow_hidden relative" style="width:400rpx;height:500rpx;">
+            <image class="width_height_100" src="/images/imgs/20.jpg"></image>
+            <view class="discountModalText number_family text_center">
+                <view>
+                    <text>即享</text>
+                    <text class="number">{{userInfo.voucherAmount}}</text>
+                    <text>元</text>
+                </view>
+                <view>
+                    <text>代金池</text>
+                    <text class="more">更多></text>
+                </view>
+
+            </view>
+        </view>
+        <view class="close" bindtap="closeDiscountModal">
+            <image class="width_fixed_30 height_fixed_30" src="/images/icon/close.png"></image>
+        </view>
+    </view>
+
+</view>
+
+<!-- 弹出引导层 -->
+<view wx:if="{{guideMongoliaShowStatus}}" class="guideMongolia">
+    <view class="guideContent" style="top:{{isIpx ? '20%' : '22%'}}">
+        <image class="width_height_100" src="/images/icon/yd_2.png "></image>
+    </view>
+    <view class="know" bindtap="closeGuideMongoliaFn">
+        <image class="width_height_100" src="/images/icon/i_know.png"></image>
+    </view>
 </view>

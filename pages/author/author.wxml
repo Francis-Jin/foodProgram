@@ -7,15 +7,11 @@
             <van-field value="{{ address }}" required clearable label="家乡" size="large" placeholder="请输入" bind:change="onChange" />
 
             <van-field value="{{ ageValue }}" required clearable label="年龄" size="large" placeholder="请输入" bind:change="ageChange" />
-            
-            <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-                <van-field value="{{ sexValue }}" required disabled clearable label="性别" icon="arrow" size="large" placeholder="选填" />
-            </picker>
 
-            <picker bindchange="bindPickerConstellationChange" value="{{index}}" range="{{array2}}">
-                <van-field value="{{ constellationValue }}" border="{{ false }}" disabled clearable label="星座" icon="arrow" size="large" placeholder="选填" />
-            </picker>
-            
+            <van-field value="{{ sexValue }}" required disabled clearable label="性别" icon="arrow" size="large" placeholder="选填" data-type="1" bindtap="showDirectionFn" />
+
+            <van-field value="{{ constellationValue }}" border="{{ false }}" disabled clearable label="星座" icon="arrow" size="large" placeholder="选填" data-type="2" bindtap="showDirectionFn" />
+
         </van-cell-group>
     </view>
 
@@ -25,7 +21,7 @@
     <text>下一步</text>
 </view>
 
-
-<view class="sectionPicker">
-
-</view>
+<!-- 性别星座选择 -->
+<van-popup show="{{ show }}" position="bottom" bind:close="onClose">
+    <van-picker show-toolbar title="" value-key="name" columns="{{ showModalLists }}" bind:cancel="onClose" bind:confirm="onConfirm" />
+</van-popup>

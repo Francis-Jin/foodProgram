@@ -1,4 +1,23 @@
 /**app.wxss**/
-
 @import "./style/public.wxss";
 @import "./style/fontIcon/iconfont.wxss";
+
+/* 修改picker确认按钮颜色. */
+
+.van-picker__cancel, .van-picker__confirm {
+    color: #5fc5e0 !important;
+}
+
+view{
+    margin: 0;
+    padding: 0;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+        
+.van-center-enter-to.van-center-enter-active.van-popup.van-popup--center{
+    border-radius: 20rpx !important;
+    overflow: hidden;
+}

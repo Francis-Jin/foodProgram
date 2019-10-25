@@ -9,7 +9,162 @@ Page({
         showTitle: "",
         showIcon: '',
         uploadImgLists: [],
-        value: "20%"
+        elementArr1: [
+            {
+            name1: "热量",
+            percentage: '0%',
+            value: '0',
+            unit: '千卡'
+            },
+            {
+                name1: "蛋白质",
+                percentage: '0%',
+                value: '0',
+                unit: 'g'
+            },
+            {
+                name1: "碳水化合物",
+                percentage: '0%',
+                value: '0',
+                unit: 'g'
+            },
+            {
+                name1: "脂肪",
+                percentage: '0%',
+                value: '0',
+                unit: 'g'
+            },
+            {
+                name1: "膳食纤维",
+                percentage: '0%',
+                value: '0',
+                unit: 'g'
+            }
+        ],
+        elementArr2: [
+            {
+                name1: "A",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "B1",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "B2",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "B6",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "C",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "E",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "K",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "胡萝卜素",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "叶酸",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "泛酸",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "烟酸",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            }
+        ],
+        elementArr3: [
+            {
+                name1: "钙",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "铁",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "磷",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "钾",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "钠",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "镁",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "锌",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "硒",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            },
+            {
+                name1: "铜",
+                percentage: '0%',
+                value: '0',
+                unit: 'mg'
+            }
+        ],
     },
 
     /** 展示内容. */

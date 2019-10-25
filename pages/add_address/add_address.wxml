@@ -13,13 +13,13 @@
         <van-cell-group>
             <van-field value="{{ userName }}" required clearable label="姓名" size="large" placeholder="请输入" bind:change="onChange" />
 
-            <van-field value="{{ userPhone }}" required clearable label="电话" size="large" placeholder="请输入" bind:change="ageChange" />
+            <van-field value="{{ userPhone }}" required clearable label="电话" type="number" size="large" bind:blur="phoneBlur" error-message="{{isPhoneError?'手机号格式错误': ''}}" placeholder="请输入" bind:change="phoneChange" />
 
-            <picker mode="multiSelector" bindchange="bindMultiPickerChange" range-key="name" value="{{multiIndex}}" range="{{objectMultiArray}}">
-                <van-field value="{{ addressSelectedText }}" required disabled clearable label="选择地址" icon="arrow" size="large" placeholder="选择花果园M区地址" />
-            </picker>
+            <!-- <picker mode="multiSelector" bindchange="bindMultiPickerChange" range-key="name" value="{{multiIndex}}" range="{{objectMultiArray}}"> -->
+            <van-field value="{{ addressSelectedText }}" required disabled clearable label="选择地址" icon="arrow" size="large" placeholder="选择花果园M区地址" bindtap="showAddressPickerFn" />
+            <!-- </picker> -->
 
-            <van-field value="{{ doorpValue }}" required clearable label="门牌号" size="large" placeholder="例：1号门" bind:change="addressChange" />
+            <van-field value="{{ doorpValue }}" clearable label="门牌号" size="large" placeholder="例：1号门" bind:change="addressChange" />
 
         </van-cell-group>
     </view>
@@ -38,3 +38,17 @@
     </view>
 
 </view>
+
+<!-- 地址选择. -->
+
+<!-- 弹出当日收益 -->
+<van-popup show="{{ showAddress }}" position="bottom">
+    <van-picker 
+        show-toolbar
+        title="选择地址"
+        value-key="name"
+        columns="{{ columns }}"
+        bind:cancel="onClose"
+        bind:confirm="onConfirm"
+        bind:change="vantAddressChange" />
+</van-popup>

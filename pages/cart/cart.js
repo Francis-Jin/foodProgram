@@ -32,7 +32,7 @@ Page({
             cartLists: [],
             checkedAll: false,
             totalPrice: 0,
-            administrationType:1
+            administrationType: 1
         })
         this.getCartListsFn()
     },
@@ -151,12 +151,12 @@ Page({
                 })
             } else {
                 thisItem.quantity--
-                cartLists.forEach(item => {
-                    if (item.id == itemId) {
-                        item.quantity = thisItem.quantity
-                        productId = item.productId
-                    }
-                })
+                    cartLists.forEach(item => {
+                        if (item.id == itemId) {
+                            item.quantity = thisItem.quantity
+                            productId = item.productId
+                        }
+                    })
                 // 调用函数更新数量
                 that.updateQuantityFn(productId, thisItem.quantity)
                 // 计算总价
@@ -171,12 +171,12 @@ Page({
         } else {
             // 加
             thisItem.quantity++
-            cartLists.forEach(item => {
-                if (item.id == itemId) {
-                    item.quantity = thisItem.quantity
-                    productId = item.productId
-                }
-            })
+                cartLists.forEach(item => {
+                    if (item.id == itemId) {
+                        item.quantity = thisItem.quantity
+                        productId = item.productId
+                    }
+                })
             // 调用函数更新数量
             that.updateQuantityFn(productId, thisItem.quantity)
             // 计算总价
@@ -198,7 +198,8 @@ Page({
             method: "post",
             getParams: {
                 "productId": id,
-                "quantity": num
+                "quantity": num,
+                "userId": wx.getStorageSync('userInfo').id
             },
             success(res) {
 
@@ -219,7 +220,7 @@ Page({
         let that = this
         let cartLists = that.data.cartLists
         let arr = cartLists.filter(item => item.checked == true)
-        if(arr.length == 0){
+        if (arr.length == 0) {
             wx.showToast({
                 title: '请选择商品',
                 icon: 'none'
@@ -235,9 +236,9 @@ Page({
     },
 
     /** 删除购物车列表. */
-    delCartListsFn(){
+    delCartListsFn() {
         let that = this
-        let arr = that.data.cartLists.filter(item=>item.checked == true)
+        let arr = that.data.cartLists.filter(item => item.checked == true)
         if (arr.length == 0) {
             wx.showToast({
                 title: '请选择商品',
@@ -246,7 +247,7 @@ Page({
             return false
         }
         let productId = []
-        arr.forEach(item=>{
+        arr.forEach(item => {
             productId.push(item.productId)
         })
         console.log(productId)
@@ -255,13 +256,14 @@ Page({
             method: "GET",
             getParams: {
                 "productId": productId.join(),
-                "userId": wx.getStorageSync("userInfo").id 
+                "userId": wx.getStorageSync("userInfo").id
             },
-            success(res){
+            success(res) {
                 that.setData({
                     cartLists: [],
                     checkedAll: false,
-                    totalPrice: 0
+                    totalPrice: 0,
+                    administrationType: 1
                 })
                 that.getCartListsFn()
             }

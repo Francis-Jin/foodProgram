@@ -7,16 +7,46 @@ Page({
      */
     data: {
         urlBefore: app.globalData.urlBefore,
-        detailsInfo: '' 
+        detailsInfo: '',
+        isIpx: false 
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        let that = this
         let orderId = options.orderId
+        this.setData({
+            orderId: orderId
+        })
         this.getOrderDetailsFn(orderId)
         this.getSysConfFn()
+        wx.getSystemInfo({
+            success: function (res) {
+                //model中包含着设备信息
+                console.log(res)
+                var model = res.model
+                console.log(model.search('iPhone X') != -1)
+                if (model.search('iPhone X') != -1) {
+                    that.setData({
+                        isIpx: true
+                    })
+                } else {
+                    that.setData({
+                        isIpx: false
+                    })
+                }
+            }
+        })
+    },
+
+    /** 拨打配送员电话. */
+    callTelFn(e){
+        let tel = e.currentTarget.dataset.tel
+        wx.makePhoneCall({
+            phoneNumber: tel,
+        })
     },
 
     /** 获取配置信息. */
@@ -50,6 +80,39 @@ Page({
                     detailsInfo: res.data
                 })
             }
+        })
+    },
+
+    /** 取消订单. */
+    cancleOrderFn(){
+        let that = this
+        let orderId = that.data.orderId
+        wx.showLoading({
+            title: '取消中',
+        })
+        app.appRequest({
+            url: '/app/orderInfo/cancelOrderInfo.action',
+            method: 'post',
+            postData: {
+                orderId: orderId
+            },
+            success(res){
+                wx.hideLoading()
+                if(res.code==200){
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
+                    })
+                    that.getOrderDetailsFn(orderId)
+                }
+            }
+        })
+    },
+
+    /** 点击头部返回订单列表. */
+    backOrderListsFn(){
+        wx.switchTab({
+            url: '/pages/order/order',
         })
     },
     /**

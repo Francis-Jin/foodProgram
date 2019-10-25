@@ -1,0 +1,10 @@
+/* pages/spell_list_details/spell_list_details.wxss */
+.scroll_init{
+    display: inline-block;
+}
+
+.tab-h {
+    width: 100%;
+    white-space: nowrap;
+    height: 100rpx;
+}

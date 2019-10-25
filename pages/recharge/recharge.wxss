@@ -15,39 +15,23 @@
     width: 90%;
 }
 
-/* 支付成功. */
-
-.pay_content {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    background: rgba(0, 0, 0, 0.5);
+.inputValue{
+    box-sizing: border-box;
+    border: 1rpx solid #FA7133;
+    border-radius: 10rpx; 
 }
 
-.pay_success {
-    position: absolute;
-    width: 400rpx;
-    left: 50%;
-    margin-left: -200rpx;
-    background: #fff;
-    top: 40%;
-    text-align: center;
-    border-radius: 20rpx;
-}
-.pay_success .text{
-    padding-top: 30rpx;
-    color: #333;
+.parentBox{
+    width: 673rpx;
 }
 
-.pay_success .icon {
-    line-height: 160rpx;
+.item{
+    box-sizing: border-box;
+    border: 1rpx solid #FA7133;
+    border-radius: 10rpx;
 }
 
-.pay_success image {
-    width: 80rpx;
-    height: 80rpx;
-    vertical-align: middle;
+.item.active{
+    color: #fff;
+    background: linear-gradient(60deg, #fd8828, #fa6d35);
 }

@@ -1,0 +1,117 @@
+<!--pages/single_appoint_details/single_appoint_details.wxml-->
+
+
+<view class="box_sizing padding_left_right_20">
+    <view class="background_liner text_center color_fff padding_top_10 margin_bottom_20 padding_bottom_10 border_radius_10">
+        <view class="font_size_12">
+            <text>快递员</text>
+        </view>
+        <view class="font_size_16 margin_top_5 font_weight">
+            <text>{{username}}</text>
+        </view>
+    </view>
+    <view>
+        <view wx:if="{{lists.length > 0}}">
+            <block wx:for="{{lists}}" wx:key="index">
+                <view class="box_shadow border_radius_20 overflow_hidden margin_bottom_20 box_sizing padding_left_right_20">
+                    <view class="line_height_50 flex flex_space_between border_bottom" data-id="{{item.id}}" bindtap="toDeailsFn">
+                        <view class="color_4dc font_size_14">
+                            <text class="margin_right_5">订单号：</text>
+                            <text>{{item.orderId}}</text>
+                        </view>
+                        <view class="color_666">
+                            <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle relative" style="top:-6rpx;" src="/images/icon/more.png"></image>
+                        </view>
+                    </view>
+                    <view class="margin_top_20 padding_bottom_20 border_bottom flex flex_space_between">
+                        <view class="width_70">
+                            <view class="margin_bottom_10">
+                                <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle" src="/images/icon/tel.png"></image>
+                                <text class="margin_left_10 color_5353 font_size_14">{{item.name}}</text>
+                                <text class="margin_left_10 color_5353 font_size_14">{{item.phone}}</text>
+                            </view>
+                            <view class="flex">
+                                <view class="width_40">
+                                    <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle" src="/images/icon/dizhi@2x.png"></image>
+                                    <text class="margin_left_10 color_5353 font_size_14">地 址：</text>
+                                </view>
+                                <view class="">
+                                    <text class="color_5353 font_size_14">{{item.address}}</text>
+                                </view>
+                            </view>
+                        </view>
+                        <view class="width_30 relative">
+                            <view class="width_100 padding_top_10 padding_bottom_10 font_size_14 color_5151 text_center bg_f9" style="position:absolute;left:0;top:50%;margin-top:-50rpx;">
+                                <view>
+                                    <!-- <text>订单取消</text> -->
+                                    <text>{{item.statusName}}</text>
+                                </view>
+                                <!-- <view class="font_size_18 font_weight color_ff6">
+                            <text>1</text>
+                        </view> -->
+                            </view>
+                        </view>
+                    </view>
+                    <view class="margin_top_20 padding_bottom_20">
+                        <!-- <view class="margin_bottom_10">
+                        <image class="width_fixed_20 height_fixed_20 border_radius__100 vertical_middle relative" style="top:-4rpx;" src="/images/icon/time.png"></image>
+                        <text class="margin_left_10 color_5353 font_size_14">配送时间：</text>
+                        <text class="margin_left_10 color_5353 font_size_14">2 ：03</text>
+                    </view> -->
+                        <view wx:if="{{item.status == 3 || item.status == 4}}" class="color_5151  flex flex_space_between font_size_14 line_height_20 border_radius_5">
+                            <view class="width_50 flex flex_space_between">
+                                <view wx:if="{{item.status == 3}}" data-orderid="{{item.orderId}}" data-item="取餐" bindtap="personAppointFn" class="jd_item active width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
+                                    <text>取餐</text>
+                                </view>
+                                <view wx:if="{{item.status == 4}}" data-orderid="{{item.orderId}}" data-item="送达" bindtap="personAppointFn" class="jd_item active width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
+                                    <text>送达</text>
+                                </view>
+                            </view>
+                            <view data-orderid="{{item.orderId}}" data-item="出错" bindtap="personAppointFn" class="jd_item width_40 flex flex_space_between">
+                                <view></view>
+                                <view class="width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
+                                    <text>出错</text>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+
+                </view>
+            </block>
+        </view>
+        <view wx:else class="text_center color_999 line_height_100 margin_top_100">
+            <text>暂无数据</text>
+        </view>
+    </view>
+</view>
+
+<!-- 弹出确认配送员 -->
+<van-popup show="{{appointShow }}" bind:close="onClose" duration="{{0}}">
+    <view>
+        <view wx:if="{{appointName != '出错' && appointName != '处理'}}" class="border_radius_10 overflow_hidden" style="width:500rpx;">
+            <view class="line_height_100 text_center color_5151">
+                <text wx:if="{{selectedActive == 1}}">是否指派</text>
+                <text wx:if="{{selectedActive == 2}}">是否</text>
+                <text class="color_5bc">{{appointName}}</text>
+            </view>
+            <view class="background_liner text_center line_height_50 color_fff font_size_16" bindtap="confirmAppointFn">
+                <text>确定</text>
+            </view>
+        </view>
+        <view wx:if="{{appointName == '出错' || appointName == '处理'}}" class="">
+
+            <view class="border_radius_10 overflow_hidden" style="width:500rpx;">
+                <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
+                    <text wx:if="{{appointName == '出错'}}">出错报备</text>
+                    <text wx:if="{{appointName == '处理'}}">处理意见</text>
+                </view>
+                <view class="margin_top_20 margin_bottom_20 box_sizing padding_left_right_20 ">
+                    <textarea bindinput="reportInputFn" class="width_100 font_size_14" value="{{reportErrorText}}" auto-height placeholder="{{appointName == '处理' ? '输入处理意见':'输入出错原因'}}" placeholder-style="color:#ededed;"></textarea>
+                </view>
+                <view class="background_liner text_center line_height_50 color_fff font_size_16" bindtap="confirmAppointFn">
+                    <text>确定</text>
+                </view>
+            </view>
+        </view>
+    </view>
+</van-popup>

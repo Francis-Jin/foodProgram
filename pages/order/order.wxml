@@ -15,7 +15,9 @@
             <view class="line_height_30 box_sizing padding_top_20 padding_left_right_20" data-id="{{item.id}}" bindtap="toDeailsFn">
                 <view class="color_8484">
                     <text>购买类型：</text>
-                    <text>{{item.category == 1 ? '个人购买' : '拼单购买'}}</text>
+                    <text wx:if="{{item.category == 1}}">普通购买</text>
+                    <text wx:if="{{item.category == 2}}">拼单</text>
+                    <text wx:if="{{item.category == 3}}">预约</text>
                 </view>
                 <view class="color_8484">
                     <text>下单时间：</text>
@@ -48,3 +50,60 @@
     </view>
 
 </view>
+
+<!-- 弹出支付方式选择. -->
+<van-popup show="{{ payShow }}" bind:close="onPayClose" duration="{{0}}">
+    <view class="z_index_3">
+        <view class="border_radius_10 overflow_hidden" style="width:500rpx;">
+            <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
+                <text>选择支付方式</text>
+            </view>
+            <view class="padding_top_20 padding_bottom_20">
+                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50 border_bottom" data-type="1" bindtap="selectedPayFn">
+                    <view>
+                        <text class="iconfont icon-logo-wechat font_weight_600 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">微信支付</text>
+                    </view>
+                    <view>
+                        <text wx:if="{{selectedId != 1}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                        <text wx:if="{{selectedId == 1}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                    </view>
+                </view>
+                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="2" bindtap="selectedPayFn">
+                    <view>
+                        <text class="iconfont icon-icon font_weight_100 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">余额支付</text>
+                    </view>
+                    <view>
+                        <text wx:if="{{selectedId != 2}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                        <text wx:if="{{selectedId == 2}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                    </view>
+                </view>
+
+            </view>
+            <view class="background_liner text_center line_height_50 color_fff font_size_16" bindtap="confirmAppointFn">
+                <text>确定</text>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出预约点餐弹框. -->
+<van-popup show="{{ makeAppointmentShow }}" duration="{{0}}">
+    <view class="border_radius_10 overflow_hidden" style="width:460rpx;">
+        <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+            <text>支付成功</text>
+        </view>
+        <view class="font_size_0 text_center padding_bottom_20">
+            <image class="width_fixed_60 height_fixed_60" src="/images/icon/success.png"></image>
+        </view>
+        <view class="flex flex_space_between">
+            <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="toBackIndexFn">
+                <text>返回首页</text>
+            </view>
+            <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_5bc" bindtap="toMakeAppointmentFn">
+                <text>预约点餐</text>
+            </view>
+        </view>
+    </view>
+</van-popup>

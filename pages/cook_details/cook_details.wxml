@@ -10,14 +10,16 @@
                     <image class="width_height_100" src="{{urlBefore + detailInfo.headImg}}" mode="aspectFit"></image>
                 </view>
             </view>
-            <view class="width_60">
-                <view class="color_fff font_size_20 box_sizing padding_top_30 padding_right_20 custom_family">
-                    <text>{{detailInfo.name}}</text>
+            <view class="width_60 flex">
+                <view class="width_40">
+                    <view class="color_fff font_size_20 box_sizing padding_top_30 padding_right_20 custom_family">
+                        <text>{{detailInfo.name}}</text>
+                    </view>
+                    <view class="font_size_14 box_sizing padding_right_20 custom_family" style="color:#F3FDF8">
+                        <text>{{detailInfo.constellationName}}</text>
+                    </view>
                 </view>
-                <view class="font_size_14 box_sizing padding_right_20 custom_family" style="color:#F3FDF8">
-                    <text>{{detailInfo.constellationName}}</text>
-                </view>
-                <view class="margin_top_40 flex font_weight_300 color_bab9 flex_space_between bottom_0">
+                <view class="width_60 padding_top_30 flex font_weight_300 color_fff">
                     <view class="font_size_14 margin_right_10">
                         <text>{{detailInfo.motto}}</text>
                     </view>
@@ -32,7 +34,7 @@
             <image class="width_fixed_20 height_fixed_20" src="/images/icon/message.png"></image>
         </view>
         <view class="color_4dc">
-            <text>403</text>
+            <text>0</text>
         </view>
     </view>
     <view class="width_30 text_center">
@@ -40,55 +42,45 @@
             <image class="width_fixed_20 height_fixed_20" src="/images/icon/fabulous.png"></image>
         </view>
         <view class="color_4dc">
-            <text>2163</text>
+            <text>0</text>
         </view>
     </view>
-    <view class="width_30 text_center">
+    <view class="width_30 text_center relative">
         <view>
             <image class="width_fixed_20 height_fixed_20" src="/images/icon/share.png"></image>
         </view>
         <view class="color_4dc">
-            <text>转发</text>
+            <text>分享</text>
+        </view>
+        <button style="position:absolute;width:100%;height:100%;left:0;top:0;opacity:0;" data-info="{{detailInfo.id}}" open-type="share"></button>
+    </view>
+</view>
+
+<!-- 厨师介绍 -->
+<view class="box_sizing padding_left_right_20 margin_top_20">
+    <view class="width_100 margin_top_10 line_height_30 text_center color_666 padding_bottom_10">
+        <text>{{detailInfo.videoTitle}}</text>
+    </view>
+    <view class="relative width_100" data-url="{{urlBefore + detailInfo.videoUrl}}" bindtap="toPlayVideo">
+        <view class="width_100 border_radius_20 box_shadow overflow_hidden height_fixed_160">
+            <image class="width_height_100" src="{{urlBefore + detailInfo.videoCover}}"></image>
+        </view>
+        <view class="width_fixed_50 height_fixed_50" style="position:absolute;left:50%;top:50%;margin-top:-50rpx;margin-left:-50rpx;border-radius:50%;">
+            <image class="width_height_100" src="/images/icon/play.png"></image>
         </view>
     </view>
 </view>
 
 <!-- 推荐菜品 -->
-<view class="box_sizing margin_bottom_20">
-    <view class="border_radius_10 box_shadow">
-        <view class="line_height_50 box_sizing padding_left_right_10 border_bottom font_weight_600 font_size_18">
-            <text class="color_4dc">推荐菜品</text>
-        </view>
-        
-        <view class="margin_top_10 margin_top_20 padding_left_right_20 ">
-            <view class="width_100 border_radius_20 overflow_hidden height_fixed_160">
-                <image class="width_height_100" src="{{urlBefore + detailInfo.cookRecommendDishList[0].cover}}"></image>
-            </view>
-        </view>
-        
-        <view class="width_100 margin_top_10 line_height_30 text_center color_666 padding_bottom_10">
-            <text>{{detailInfo.cookRecommendDishList[0].dishName}}</text>
-        </view>
-        <!-- <view class="box_sizing padding_left_right_20">
-            <scroll-view scroll-x="true" class="tab-h" scroll-left="{{navScrollLeft}}" scroll-with-animation="true">
-                <block wx:for="{{detailInfo.cookRecommendDishList}}" wx:key='index'>
-                    <view class="tab-item">
-                        <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
-                    </view>
-                </block>
-            </scroll-view>
-        </view> -->
-    </view>
-</view>
-
-<view class="padding_left_right_20">
-    <view class="relative width_100" data-url="{{urlBefore + detailInfo.videoUrl}}" bindtap="toPlayVideo">
+<view class="box_sizing padding_left_right_20 margin_top_20">
+    <view class="relative width_100" data-itemId="{{detailInfo.cookRecommendDishList[0].dishId}}" bindtap="topPageDetails">
         <view class="width_100 border_radius_20 box_shadow overflow_hidden height_fixed_160">
-            <image class="width_height_100" src="{{urlBefore + detailInfo.videoCover}}" mode="aspectFit"></image>
+            <image class="width_height_100" src="{{urlBefore + detailInfo.cookRecommendDishList[0].cover}}"></image>
         </view>
-        <view class="width_fixed_50 height_fixed_50" style="position:absolute;left:50%;top:50%;margin-top:-50rpx;margin-left:-50rpx;border-radius:50%;">
-            <image class="width_height_100" src="/images/icon/play.png"></image>
-        </view>
+    </view>
+    <view class="width_100 margin_top_10 line_height_30 text_center color_666 padding_bottom_10">
+        <text>个人代表作品：</text>
+        <text>{{detailInfo.cookRecommendDishList[0].dishName}}</text>
     </view>
     <view class="padding_top_20 padding_bottom_20">
         <rich-text nodes="{{detailInfo.intro}}"></rich-text>

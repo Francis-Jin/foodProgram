@@ -16,3 +16,8 @@
   height: 0;
   color: transparent;
 }
+
+.van-center-enter-to.van-center-enter-active.van-popup.van-popup--center{
+    border-radius: 20rpx !important;
+    overflow: hidden;
+}

@@ -1,85 +1,34 @@
 <!--pages/recharge/recharge.wxml-->
 <!--pages/cook_details/cook_details.wxml-->
-<view class="container">
-    <view class="width_100 height_fixed_160 relative">
-        <view class="absolute_100">
-            <image class="width_height_100" src="/images/imgs/top_img_1.png"></image>
+<view class="container box_sizing padding_left_right_20 ">
+
+    <view class="padding_top_5">
+        <view class="width_100" style="height:40vh; border_radius_10">
+            <image class="width_height_100" src="{{urlBefore + '/static/miniapp/vip_bg.png'}}"></image>
         </view>
     </view>
-    <view class="content_recharge box_shadow">
 
-        <view class="border_radius_10 line_height_50 box_sizing padding_left_20 box_shadow">
-            <text class="iconfont icon-huiyuan2 margin_right_10 color_5bc relative" style="font-size:50rpx;top:8rpx"></text>
-            <text class="color_5353 font_size_20">会员充值</text>
-        </view>
-
-        <view class="box_sizing padding_left_right_20">
-            <view class="flex flex_space_between padding_top_20">
-                <view class="width_60">
-                    <text class="iconfont icon-huiyuan2 margin_right_10 color_f7c"></text>
-                    <text class="color_5353">充值30元 - </text>
-                    <text class="color_5bc">8</text>
-                    <text class="color_5353">折优惠</text>
-                </view>
-                <view class="width_30 text_right">
-                    <!-- <image src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20 vertical_middle"></image> -->
-                    <text class="iconfont icon-yuanxing color_e3" style="font-size:40rpx;"></text>
-                </view>
-            </view>
-            <view class="flex flex_space_between padding_top_20">
-                <view class="width_60">
-                    <text class="iconfont icon-huiyuan2 margin_right_10 color_8ae"></text>
-                    <text class="color_5353">充值50元 - </text>
-                    <text class="color_5bc">7</text>
-                    <text class="color_5353">折优惠</text>
-                </view>
-                <view class="width_30 text_right">
-                    <!-- <image src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20 vertical_middle"></image> -->
-                    <text class="iconfont icon-yuanxing color_e3" style="font-size:40rpx;"></text>
-                </view>
-            </view>
-            <view class="flex flex_space_between padding_top_20">
-                <view class="width_60">
-                    <text class="iconfont icon-huiyuan2 margin_right_10 color_69c"></text>
-                    <text class="color_5353">充值70元 - </text>
-                    <text class="color_5bc">6</text>
-                    <text class="color_5353">折优惠</text>
-                </view>
-                <view class="width_30 text_right">
-                    <!-- <image src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20 vertical_middle"></image> -->
-                    <text class="iconfont icon-yuanxing color_e3" style="font-size:40rpx;"></text>
-                </view>
-            </view>
-            <view class="flex flex_space_between padding_top_20 padding_bottom_20">
-                <view class="width_60">
-                    <text class="iconfont icon-huiyuan2 margin_right_10 color_fc6"></text>
-                    <text class="color_5353">充值90元 - </text>
-                    <text class="color_5bc">5</text>
-                    <text class="color_5353">折优惠</text>
-                </view>
-                <view class="width_30 text_right">
-                    <image src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20 vertical_middle"></image>
-                    <!-- <text class="iconfont icon-yuanxing color_e3" style="font-size:40rpx;"></text> -->
-                </view>
+    <view class="margin_top_20">
+        <view class="flex flex_space_between parentBox">
+            <view data-index="{{index}}" bindtap="slectedChoneZhiFn" wx:if="{{index < 3}}" wx:for="{{priceArr}}" wx:key="index" class="{{item.checked ? 'active' : ''}} item width_30 height_fixed_60 text_center line_height_60 color_ff6">
+                <text>{{item.price}}元</text>
             </view>
         </view>
-
-        <!-- 立即充值按钮 -->
-        <view class="clickRecharge text_center line_height_60 color_fff background_liner border_radius_10" bindtap="toPay">
-            <text class="font_size_20 font_weight_600">立即付款</text>
-        </view>
-
-        <!-- 充值成功弹框 -->
-        <view wx:if="{{isShowPaySuccess}}" class="pay_content">
-            <view class="pay_success">
-                <view class="text">
-                    <text>支付成功</text>
-                </view>
-                <view class="icon">
-                    <image src="/images/icon/queding@2x.png"></image>
-                </view>
+        <view class="margin_top_20 flex flex_space_between parentBox">
+            <view data-index="{{index}}" bindtap="slectedChoneZhiFn" wx:if="{{index >= 3}}" wx:for="{{priceArr}}" wx:key="index" class="{{item.checked ? 'active' : ''}} item width_30 height_fixed_60 text_center line_height_60 color_ff6">
+                <text>{{item.price}}元</text>
             </view>
         </view>
-
     </view>
+
+    <view class="margin_top_20 weui-cell inputValue padding_top_10 padding_bottom_10 padding_left_10 box_sizing weui-cell_input">
+        <input class="" maxlength="5" cursor-spacing="20" bindblur="inputBlurFn" type="number" value="{{inputVal}}" bindinput="rechargeAmountInputFn" placeholder="输入其他金额" />
+    </view>
+
+    <!-- 立即充值按钮 -->
+    <view class="clickRecharge text_center line_height_60 color_fff background_yellow_liner border_radius_10" bindtap="toRechargeFn">
+        <text class="font_size_20 font_weight_600">立即充值</text>
+    </view>
+
+
 </view>

@@ -1,0 +1,32 @@
+/* pages/delinvery_indent/delinvery_indent.wxss */
+
+.top_bar{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 2;
+}
+.item.active .text::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10rpx;
+    width: 100%;
+    height: 4rpx;
+    background: linear-gradient(120deg, #48cbae 40%, #5fc5e0 60%);
+    border-radius: 2rpx;
+}
+
+.jd_item.active,
+.appoint_item.active{
+    background: linear-gradient(120deg, #48cbae 40%, #5fc5e0 60%);
+    color: #ffffff;
+}
+
+.profitBtn{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}

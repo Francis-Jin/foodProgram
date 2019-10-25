@@ -1,2 +1,38 @@
 <!--pages/identity_authentication/identity_authentication.wxml-->
-<text>pages/identity_authentication/identity_authentication.wxml</text>
+<view class="container box_sizing padding_20">
+
+    <view class="box_shadow border_radius_10">
+        <view class="box_sizing border_radius_10 box_shadow padding_left_right_20 line_height_40 color_ff6">
+            <text class="iconfont icon-shenfenxuanze font_weight relative" style="font-size:40rpx;top:6rpx"></text>
+            <text class="font_size_16 margin_left_10">选择身份</text>
+        </view>
+        <view class="box_sizing padding_left_right_20 padding_top_20 padding_bottom_20">
+            <view class="init flex flex_space_between line_height_50 border_bottom" data-type="2" bindtap="selectedFn">
+                <view>
+                    <text class="iconfont icon-chushimao font_weight_600 relative color_ff6" style="font-size:40rpx;top:6rpx"></text>
+                    <text class="font_size_16 margin_left_10 color_5353 font_size_14">我是厨师</text>
+                </view>
+                <view>
+                    <text wx:if="{{selectedId != 2}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                    <text wx:if="{{selectedId == 2}}" class="iconfont icon-zhengque3 relative color_ff6" style="font-size:40rpx;top:6rpx"></text>
+                </view>
+            </view>
+            <view class="init flex flex_space_between line_height_50" data-type="1" bindtap="selectedFn">
+                <view>
+                    <text class="iconfont icon-huabankaobei- font_weight_100 relative color_ff6" style="font-size:40rpx;top:6rpx"></text>
+                    <text class="font_size_16 margin_left_10 color_5353 font_size_14">我是配送员</text>
+                </view>
+                <view>
+                    <text wx:if="{{selectedId != 1}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                    <text wx:if="{{selectedId == 1}}" class="iconfont icon-zhengque3 relative color_ff6" style="font-size:40rpx;top:6rpx"></text>
+                </view>
+            </view>
+
+        </view>
+    </view>
+
+    <view class="line_height_50 text_center color_fff background_yellow_liner margin_top_100 border_radius_10" bindtap="goAuthenticationFn">
+        <text>去认证</text>
+    </view>
+
+</view>

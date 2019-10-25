@@ -1,0 +1,7 @@
+/* pages/single_appoint_details/single_appoint_details.wxss */
+
+.jd_item.active,
+.appoint_item.active{
+    background: linear-gradient(120deg, #48cbae 40%, #5fc5e0 60%);
+    color: #ffffff;
+}

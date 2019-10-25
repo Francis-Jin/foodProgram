@@ -1,0 +1,46 @@
+<!--pages/budget_dt_ detail/budget_dt_ detail.wxml-->
+<view class="container box_sizing padding_left_right_20 font_size_14">
+    <view class="flex padding_top_10 padding_bottom_10 border_bottom">
+        <view class="color_333 text_right">
+            <text>类别：</text>
+        </view>
+        <view class="width_70 color_999">
+            <text wx:if="{{info.category == 1}}">收入</text>
+            <text wx:if="{{info.category == 2}}">支出</text>
+        </view>
+    </view>
+    <view class="flex  padding_top_10 padding_bottom_10 border_bottom">
+        <view class="color_333 text_right">
+            <text>摘要：</text>
+        </view>
+        <view class="width_70 color_999">
+            <text>{{info.typeName}}</text>
+        </view>
+    </view>
+    <view class="flex  padding_top_10 padding_bottom_10 border_bottom">
+        <view class="color_333 text_right">
+            <text>时间：</text>
+        </view>
+        <view class="width_70 color_999">
+            <text>{{info.createTime}}</text>
+        </view>
+    </view>
+    <view class="flex  padding_top_10 padding_bottom_10 border_bottom">
+        <view class="color_333 text_right">
+            <text>金额：</text>
+        </view>
+        <view class="width_70 color_999">
+           <text wx:if="{{info.category == 1}}">+</text>
+            <text wx:if="{{info.category == 2}}">-</text>
+            <text>{{info.amount}}</text>
+        </view>
+    </view>
+     <view class="flex padding_top_10 padding_bottom_10 border_bottom">
+        <view class="color_333 text_right">
+            <text>备注：</text>
+        </view>
+        <view class="width_70 color_999">
+            <text>{{info.remarks}}</text>
+        </view>
+    </view>
+</view>

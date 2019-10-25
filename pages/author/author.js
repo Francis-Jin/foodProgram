@@ -7,16 +7,14 @@ Page({
      */
     data: {
         address: '', //家乡
-        constellationValue: '', //星座value
-        constellationId: '', //星座ID
-        sexValue: '', //性别value
-        sexId: '', //性别ID
         ageValue: '', //年龄
-        modalShow: false, //是否显示上拉选择
-        modalType: '',
-        modalTitle: '',
-        array: ['男', '女'],
-        actions1: [{
+        sexValue: '', //性别value
+        sexCode: '', //性别code
+        constellationValue: '', //星座value
+        constellationCode: '', //星座code
+        show: false, //是否显示上拉选择
+        showModalLists: [], //显示弹窗的数据
+        sexArr: [{
                 code: 1,
                 name: '男'
             },
@@ -24,9 +22,39 @@ Page({
                 code: 2,
                 name: '女'
             }
-        ], // 性别
-        array2: [], //星座
-        constellationLists: null,
+        ],
+        selectedType: '', //选择星座还是性别 1: 性别 2：星座
+        constellationArr: [], //星座列表
+    },
+
+    /** 隐藏上拉框 */
+    onClose(e){
+        this.setData({
+            show: false
+        })
+    },
+
+    /** 确认选择. */
+    onConfirm(e){
+        //选择星座还是性别 1: 性别 2：星座
+        let that = this 
+        let code = e.detail.value.code
+        let name = e.detail.value.name
+        let selectedType = that.data.selectedType
+        if(selectedType == 1){
+            that.setData({
+                sexCode: code,
+                sexValue: name,
+                show: false
+            })
+        }
+        if(selectedType == 2){
+            that.setData({
+                constellationCode: code,
+                constellationValue: name,
+                show: false
+            })
+        }
     },
 
     /**
@@ -45,19 +73,34 @@ Page({
             ageValue: e.detail
         })
     },
-    /** 性别选择. */
-    bindPickerChange: function(e) {
+
+
+    /** 显示性别星座. */
+    showDirectionFn(e) {
+        let that = this
+        let type = e.currentTarget.dataset.type
+        if (type == 1) {
+            this.setData({
+                show: true,
+                selectedType: type,
+                showModalLists: this.data.sexArr
+            })
+        } else {
+            this.setData({
+                show: true,
+                selectedType: type,
+                showModalLists: this.data.constellationArr
+            })
+        }
+    },
+
+    /** 隐藏性别星座 */
+    onClose() {
         this.setData({
-            sexValue: this.data.array[e.detail.value]
+            show: false
         })
     },
-    /** 星座选择. */
-    bindPickerConstellationChange(e) {
-       this.setData({
-           constellationValue: this.data.array2[e.detail.value]
-       })
-    },
-    
+
     /** 下一步 */
     nextFn() {
         let that = this
@@ -83,24 +126,25 @@ Page({
             return false
         }
 
-        let sexCode = that.data.actions1.filter(item => item.name == that.data.sexValue)[0].code
-        let constellationCode = that.data.constellationLists.filter(item => item.name == that.data.constellationValue)[0].code
+        let sexCode = that.data.sexCode
+        let constellationCode = that.data.constellationCode
+
         app.appRequest({
             url: "/app/userInfo/updateUserInfo.action",
             method: 'post',
-            getParams:{ 
+            getParams: {
                 "homeplace": that.data.address,
-                "constellation": constellationCode,
-                "sex": sexCode,
                 "age": that.data.ageValue,
+                "sex": sexCode,
+                "constellation": constellationCode,
                 "unionId": wx.getStorageSync("userInfo").unionId
             },
-            success(res){
-                if(res.code == 200){
+            success(res) {
+                if (res.code == 200) {
                     wx.redirectTo({
                         url: '/pages/solar_terms/solar_terms',
                     })
-                }else{
+                } else {
                     wx.showToast({
                         title: '服务器出错了,稍后再试',
                         icon: 'none'
@@ -111,20 +155,20 @@ Page({
     },
 
     /** 获取星座. */
-    getConstellationFn(){
+    getConstellationFn() {
         let that = this
         app.appRequest({
             url: "/app/sysConf/getConstellation.action",
             method: 'get',
-            success(res){
+            success(res) {
                 console.log(res)
                 let lists = []
-                res.data.forEach(item=>{
+                res.data.forEach(item => {
                     lists.push(item.name)
                 })
                 that.setData({
                     array2: lists,
-                    constellationLists: res.data
+                    constellationArr: res.data
                 })
             }
         })

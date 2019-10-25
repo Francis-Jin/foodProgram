@@ -1,0 +1,417 @@
+<!--pages/make_an_appointment/make_an_appointment.wxml-->
+<!-- 头部自定义样式 -->
+<!-- <view>
+    <view class="flex flex_space_between line_height_40 padding_top_20 topBack bg_fff">
+        <view class="width_30 box_sizing padding_left_10 color_333" bindtap="backOrderListsFn">
+            <text class="iconfont icon-left2"></text>
+        </view>
+        <view class="width_30 text_center font_size_14">
+            <text>明日预约</text>
+        </view>
+        <view class="width_30"></view>
+    </view>
+    <view class="height_fixed_70"></view>
+</view> -->
+<!-- 页面主要内容 -->
+<view class="container box_sizing padding_left_right_20 padding_top_20">
+
+    <view wx:if="{{HaveMealsLists.length > 0}}">
+        <!-- 明日早餐 -->
+        <view wx:if="{{assembleMode == 1}}" class="box_shadow border_radius_10 margin_bottom_20">
+            <view class="flex flex_space_between box_sizing padding_left_right_20">
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/breakfast.png"></image>
+                    <text class="margin_left_10 color_5353 font_size_14">明日早餐</text>
+                </view>
+                <view class="height_fixed_50 line_height_50">
+                    <!-- <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image> -->
+                </view>
+            </view>
+            <!-- 商品列表 -->
+            <view class="box_sizing padding_left_right_20">
+                <block wx:if="{{item.category == 1}}" wx:for="{{HaveMealsLists}}" wx:key="index">
+                    <view class="item border_radius_10 flex padding_bottom_20 relative padding_top_20 border_top">
+                        <view class="flex">
+                            <view class="width_fixed_60 height_fixed_60">
+                                <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}"></image>
+                            </view>
+                            <view class="margin_left_10">
+                                <view class="color_5151">
+                                    <text>{{item.dishName}}</text>
+                                </view>
+                                <view class="margin_top_20">
+                                    <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>{{item.price}}</text>
+                                    <text class="color_ff6"><text class="font_size_12">￥</text>{{item.bookPrice}}</text>
+                                </view>
+                            </view>
+                            <view style="position:absolute;right:20rpx;bottom:20rpx;">
+                                <view class="flex margin_top_20">
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item}}" data-type="1" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
+                                        <text>{{item.quantity}}</text>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item}}" data-type="2" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </view>
+
+        <!-- 明日午餐 -->
+        <view wx:if="{{assembleMode == 2}}" class="box_shadow border_radius_10 margin_bottom_20">
+            <view class="flex flex_space_between box_sizing padding_left_right_20">
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/lunch.png"></image>
+                    <text class="margin_left_10 color_5353 font_size_14">明日午餐</text>
+                </view>
+                <view class="height_fixed_50 line_height_50">
+                    <!-- <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image> -->
+                </view>
+            </view>
+            <!-- 商品列表 -->
+            <view class="box_sizing padding_left_right_20">
+
+                <block wx:if="{{item.category == 2}}" wx:for="{{HaveMealsLists}}" wx:key="index">
+                    <view class="item border_radius_10 flex padding_bottom_20 relative padding_top_20 border_top">
+                        <view class="flex">
+                            <view class="width_fixed_60 height_fixed_60">
+                                <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}"></image>
+                            </view>
+                            <view class="margin_left_10">
+                                <view class="color_5151">
+                                    <text>{{item.dishName}}</text>
+                                </view>
+                                <view class="margin_top_20">
+                                    <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>{{item.price}}</text>
+                                    <text class="color_ff6"><text class="font_size_12">￥</text>{{item.bookPrice}}</text>
+                                </view>
+                            </view>
+                            <view style="position:absolute;right:20rpx;bottom:20rpx;">
+                                <view class="flex margin_top_20">
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item}}" data-type="1" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
+                                        <text>{{item.quantity}}</text>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item}}" data-type="2" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </block>
+
+            </view>
+        </view>
+
+        <!-- 明日晚餐 -->
+        <view wx:if="{{assembleMode == 3}}" class="box_shadow border_radius_10 margin_bottom_20">
+            <view class="flex flex_space_between box_sizing padding_left_right_20">
+                <view class="height_fixed_50 line_height_50">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/dinner.png"></image>
+                    <text class="margin_left_10 color_5353 font_size_14">明日晚餐</text>
+                </view>
+                <view class="height_fixed_50 line_height_50">
+                    <!-- <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image> -->
+                </view>
+            </view>
+            <!-- 商品列表 -->
+            <view class="box_sizing padding_left_right_20">
+
+                <block wx:if="{{item.category == 3}}" wx:for="{{HaveMealsLists}}" wx:key="index">
+                    <view class="item border_radius_10 flex padding_bottom_20 relative padding_top_20 border_top">
+                        <view class="flex">
+                            <view class="width_fixed_60 height_fixed_60">
+                                <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}"></image>
+                            </view>
+                            <view class="margin_left_10">
+                                <view class="color_5151">
+                                    <text>{{item.dishName}}</text>
+                                </view>
+                                <view class="margin_top_20">
+                                    <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>{{item.price}}</text>
+                                    <text class="color_ff6"><text class="font_size_12">￥</text>{{item.bookPrice}}</text>
+                                </view>
+                            </view>
+                            <view style="position:absolute;right:20rpx;bottom:20rpx;">
+                                <view class="flex margin_top_20">
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item}}" data-type="1" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
+                                        <text>{{item.quantity}}</text>
+                                    </view>
+                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item}}" data-type="2" bindtap="addReduceFn">
+                                        <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </block>
+
+            </view>
+        </view>
+
+        <!-- 预约点餐按钮. -->
+        <view class="confirmBtn padding_bottom_20 padding_top_20 box_sizing padding_left_right_20" bindtap="waysOfPurchasingFn">
+            <view class="flex flex_space_between border_radius_10 {{totalPriceAll == 0 ? 'bg_f5' : 'background_yellow_liner'}}  padding_top_10 padding_bottom_10 color_fff text_center">
+                <view class="width_50 box_sizing height_fixed_40 line_height_40" style="border-right:2rpx dashed #fff">
+                    <text class="font_size_12">共计</text>
+                    <text class="font_size_16 font_weight">￥{{totalPriceAll}}</text>
+                </view>
+                <view class="width_50 height_fixed_40 line_height_40 font_size_16 font_weight">
+                    <text>立即预约</text>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view wx:else class="text_center line_height_100 margin_top_50 color_999">
+        <text>暂无明日预约菜单</text>
+    </view>
+    <view class="height_fixed_100"></view>
+</view>
+
+
+<!-- 点击立即预约弹窗. -->
+<van-popup show="{{ showSpellList }}" position="bottom" custom-style="height: 900rpx;" bind:close="onCloseSpellList">
+    <view class="height_fixed_20"></view>
+    <!-- 主要内容 -->
+    <view class="box_sizing padding_left_right_20 padding_top_10 padding_bottom_10 relative overflow_auto" style="height:760rpx;">
+        <!-- 用餐方式选择. -->
+        <view class="box_shadow border_radius_20 overflow1 box_sizing padding_left_right_20 padding_bottom_10">
+            <view class=" line_height_50 border_bottom">
+                <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/lunch.png"></image>
+                <text class="color_5151">选择用餐方式</text>
+            </view>
+            <view class="height_fixed_40 line_height_40 margin_top_5 flex flex_space_between" data-type="1" bindtap="selectedFn">
+                <view class="color_5fc">
+                    <text>自取</text>
+                </view>
+                <view class="">
+                    <image wx:if="{{deliveryMode == 1}}" src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20 vertical_middle"></image>
+                    <text wx:if="{{deliveryMode != 1}}" class="iconfont icon-yuanxing color_e3" style="font-size:40rpx;"></text>
+                </view>
+            </view>
+            <view class="height_fixed_40 line_height_40 flex flex_space_between" data-type="2" bindtap="selectedFn">
+                <view class="color_5fc">
+                    <text>配送</text>
+                </view>
+                <view class="height_fixed_30 relative">
+                    <image wx:if="{{deliveryMode == 2}}" src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20"></image>
+                    <text wx:if="{{deliveryMode != 2}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                </view>
+            </view>
+        </view>
+
+        <!-- 选择配送或取餐时间. -->
+        <view class="box_shadow margin_top_20 border_radius_20 overflow1 box_sizing padding_left_right_20 padding_bottom_10">
+            <view class="line_height_50 border_bottom">
+                <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/time.png"></image>
+                <text class="color_5151">选择用餐时间</text>
+            </view>
+            <view class="height_fixed_40 line_height_40 margin_top_5 flex flex_space_between" data-type="1" bindtap="selectedAssembleFn">
+                <view class="color_5fc">
+                    <text>用餐时间</text>
+                    <text wx:if="{{selectedTime != ''}}" class="margin_left_30">{{selectedTime}}</text>
+                </view>
+                <view class="">
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image>
+                </view>
+            </view>
+        </view>
+
+        <!-- 用餐地址选择. -->
+        <view wx:if="{{deliveryMode == 2}}" bindtap="addressShowFn" class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
+            <view class="flex flex_space_between line_height_50 border_bottom">
+                <view>
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/my@2x.png"></image>
+                    <text class="color_5151">用餐地址选择</text>
+                </view>
+                <view>
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-4rpx;" src="/images/icon/right@2x.png"></image>
+                </view>
+            </view>
+            <view class="margin_top_10 padding_bottom_20">
+                <input disabled="disabled" placeholder-style="color:#e3e3e3" value="{{addressText}}" placeholder="选择用餐地址（目前只开放M区）" />
+            </view>
+        </view>
+
+        <!-- 给商家留言. -->
+        <view hidden="true" class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
+            <view class="flex flex_space_between line_height_50 border_bottom" bindtap="addressShowFn">
+                <view>
+                    <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/my@2x.png"></image>
+                    <text class="color_5151">向商家留言</text>
+                </view>
+                <view>
+                    <!-- <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-4rpx;" src="/images/icon/right@2x.png"></image> -->
+                </view>
+            </view>
+            <view class="margin_top_10 padding_bottom_20">
+                <input placeholder-style="color:#e3e3e3" value="{{messageText}}" bindinput="messageInputFn" placeholder="留言" />
+            </view>
+        </view>
+
+        <!-- 显示自取地址. -->
+        <view wx:if="{{deliveryMode == 1}}" class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
+            <view class=" line_height_50 border_bottom">
+                <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/my@2x.png"></image>
+                <text class="color_5151">自取地址</text>
+            </view>
+            <view class="margin_top_10 padding_bottom_20">
+                <text class="font_size_14 color_bab9">{{systemInfo.address}}</text>
+            </view>
+        </view>
+        <!-- 显示配送信息 -->
+        <view wx:if="{{deliveryMode == 2}}" class="box_shadow border_radius_20 overflow1 margin_top_20">
+            <view class=" line_height_50 border_bottom box_sizing padding_left_right_20">
+                <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/peisongyue@2x.png"></image>
+                <text class="color_5151">配送</text>
+            </view>
+            <view class="margin_top_10">
+                <view class="box_sizing padding_left_right_20">
+                    <block wx:for="{{modalFoodArr}}" wx:key="index">
+                        <view wx:if="{{index == 0}}" class="flex flex_space_between color_666 margin_bottom_10">
+                            <view class="">
+                                <text>{{item.dishName}} x{{item.quantity}}</text>
+                            </view>
+                            <view>
+                                <text class="font_size_12">X</text>
+                                <text>{{deliveryFee + (item.quantity - 1) * increaseFee}}</text>
+                            </view>
+                        </view>
+                        <view wx:else class="flex flex_space_between color_666 margin_bottom_10">
+                            <view class="">
+                                <text>{{item.dishName}} x{{item.quantity}}</text>
+                            </view>
+                            <view>
+                                <text class="font_size_12">X</text>
+                                <text>{{item.quantity * increaseFee}}</text>
+                            </view>
+                        </view>
+                    </block>
+                </view>
+                <view class="margin_top_10 border_top">
+                    <view class="flex line_height_40 flex_space_between color_333 box_sizing padding_left_right_20">
+                        <view class="">
+                            <text>配送费</text>
+                        </view>
+                        <view>
+                            <text class="font_size_12">￥</text>
+                            <text>{{modalPriceAll}}</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <!-- 发起拼单按钮。 -->
+    <view bindtap="goPayIndentFn" class="text_center line_height_50 color_fff background_liner" style="position:fixed;left:0;bottom:0;width:100%">
+        <text>确定预约</text>
+        <text>（￥{{totalPriceAllModal}}）</text>
+    </view>
+
+    <!-- 地址选择弹出层 -->
+    <van-popup show="{{ showAddress }}" position="bottom" custom-style="height: 500rpx;" bind:close="onCloseAddressFn">
+
+        <view class="box_sizing padding_left_right_20 padding_top_10 padding_bottom_10 relative">
+            <!-- 有地址列表 -->
+            <view wx:if="{{addressLists.length > 0}}" style="height:360rpx;;overflow:auto;">
+                <view wx:for="{{addressLists}}" wx:key="index" data-itemid='{{item.id}}' bindtap="selectedAddresFn" class="address_item flex flex_space_between margin_bottom_10 border_bottom">
+                    <view class="width_90 padding_bottom_10">
+                        <view class="color_333 margin_bottom_5">
+                            <text class="margin_right_30">{{item.name}}</text>
+                            <text>{{item.phone}}</text>
+                        </view>
+                        <view class="color_999">
+                            <text>{{item.address + item.doorplate}}</text>
+                        </view>
+                    </view>
+                    <view class="width_10 text_right line_height_40">
+                        <image wx:if="{{item.checked}}" src="/images/icon/queding@2x.png" style="top:4rpx;" class="width_fixed_20 height_fixed_20 relative vertical_middle"></image>
+                        <text wx:if="{{!item.checked}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                    </view>
+                </view>
+            </view>
+            <!-- 无地址列表 -->
+            <view wx:else class="text_center line_height_100 color_999">
+                <text>暂无地址，前去添加</text>
+            </view>
+
+            <view bindtap="addAddressFn" class="background_yellow_liner text_center color_fff" style="position:fixed;left:0;bottom:0;width:100%;height:100rpx;line-height:100rpx;">
+                <text>添加地址</text>
+            </view>
+        </view>
+    </van-popup>
+
+    <!-- 弹出时间选择器 -->
+    <van-popup show="{{ showTime }}" position="bottom" bind:close="onCloseAddressFn">
+        <van-picker show-toolbar columns="{{ columns }}" bind:cancel="onCloseAddressFn" bind:confirm="confirmSelectedTimeFn" />
+    </van-popup>
+
+</van-popup>
+
+<!-- 弹出支付方式选择. -->
+<van-popup show="{{ payShow }}" bind:close="onPayClose" duration="{{0}}">
+    <view class="z_index_3">
+        <view class="border_radius_10 overflow_hidden" style="width:500rpx;">
+            <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
+                <text>选择支付方式</text>
+            </view>
+            <view class="padding_top_20 padding_bottom_20">
+                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50 border_bottom" data-type="1" bindtap="selectedPayFn">
+                    <view>
+                        <text class="iconfont icon-logo-wechat font_weight_600 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">微信支付</text>
+                    </view>
+                    <view>
+                        <text wx:if="{{selectedId != 1}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                        <text wx:if="{{selectedId == 1}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                    </view>
+                </view>
+                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="2" bindtap="selectedPayFn">
+                    <view>
+                        <text class="iconfont icon-icon font_weight_100 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">余额支付</text>
+                    </view>
+                    <view>
+                        <text wx:if="{{selectedId != 2}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                        <text wx:if="{{selectedId == 2}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                    </view>
+                </view>
+
+            </view>
+            <view class="background_liner text_center line_height_50 color_fff font_size_16" bindtap="confirmAppointFn">
+                <text>确定</text>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出预约成功弹框. -->
+<view wx:if="{{showPaySuccessStatus}}" class="paySuccess">
+    <view class="success" bindtap="backIndexFn">
+        <view class="line_height_50 height_fixed_50">
+            <text>支付成功</text>
+        </view>
+        <view class="font_sizea_0">
+            <image class="width_fixed_60 height_fixed_60 vertical_middle" src="/images/icon/success.png "></image>
+        </view>
+        <view class="color_7a7a line_height_50 height_fixed_50">
+            <text>返回首页</text>
+        </view>
+    </view>
+    <view class="cancel" bindtap="cancelBlanceFn">
+        <text>取消预约</text>
+    </view>
+</view>

@@ -1,1 +1,13 @@
 /* pages/order_details/order_details.wxss */
+.footerBtn{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+.topBack{
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+}

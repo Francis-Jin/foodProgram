@@ -3,26 +3,30 @@
     <image class="width_height_100" src="{{urlBefore + solarTermInfo.bgImage}}"></image>
 </view>
 
-<view class="container text_center import_content">
+<view class="container import_content">
 
-    <view class="padding_top_30 padding_bottom_5 color_666 font_size_16">
+    <view class="padding_top_30 text_center padding_bottom_5 color_666 font_size_16">
         <text>{{thisDate}}</text>
     </view>
-     <view class="color_666 margin_bottom_10 font_size_16">
+    <view class="color_666 text_center margin_bottom_10 font_size_16">
         <text>{{weekDay}}</text>
     </view>
     <view class="width_fixed_200 height_fixed_200 margin_auto">
         <!-- <image class="width_height_100" src=""></image> -->
     </view>
-    <view class="flex flex_space_between box_sizing color_8484 padding_left_right_20 line_height_80 margin_top_80">
-        <view class="width_60 text_right">
-            <text class="margin_right_20">您的膳食方向 : </text>
-            <text class="font_size_22 color_333">{{directionValue ? directionValue : '无'}}</text>
+    <view class="flex box_sizing padding_left_50 flex_space_between box_sizing color_8484 padding_left_right_20  margin_top_80">
+        <view class="width_60">
+            <view class="width_100">
+                 <text class="margin_right_20">请选择您的膳食方向 : </text>
+            </view>
+            <view class="width_100 margin_top_10">
+                <view wx:for="{{directionValue}}" wx:key="index" class="font_size_16 color_333">
+                    <text>{{item}}</text>
+                </view>
+            </view>
         </view>
-        <view class="width_40 padding_top_5">
-            <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-                <text class="padding_top_5 padding_bottom_5 padding_left_right_20 background_yellow_liner border_radius_10 color_fff">修改</text>
-            </picker>
+        <view class="width_40 padding_top_5 text_center" bindtap="showDirectionFn">
+            <text class="padding_top_5 padding_bottom_5 padding_left_right_20 background_yellow_liner border_radius_10 color_fff">方向选择</text>
         </view>
     </view>
 
@@ -30,6 +34,60 @@
         <text>下一页</text>
     </view>
 
+</view>
 
 
+<!-- 膳食方向选择 -->
+<!-- 地址选择弹出层 -->
+<van-popup show="{{ show }}" position="bottom" custom-style="height: 600rpx" bind:close="onClose">
+    <view class="flex flex_space_between height_fixed_50 line_height_50 text_center border_bottom">
+        <view class="width_fixed_50 text_center color_5bc" bindtap="onClose">
+            <text>取消</text>
+        </view>
+        <view>
+            <text>膳食方向</text>
+        </view>
+        <view class="width_fixed_50 text_center color_5bc" bindtap="onConfirm">
+            <text>确定</text>
+        </view>
+    </view>
+    <view class="box_sizing padding_top_10 margin_top_5 padding_bottom_10 padding_left_right_20" style="height:480rpx; overflow:auto">
+        <view wx:for="{{columns}}" wx:key="index" class="item flex flex_space_between  border_bottom" data-code="{{item.code}}" bindtap="selectedFn">
+            <view class="line_height_50">
+                <text>{{item.name}}</text>
+            </view>
+            <view class="line_height_40">
+                <text wx:if="{{item.checked}}" class="iconfont icon-zhengque3 color_5bc relative" style="font-size:40rpx; top:10rpx"></text>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出输入关键字 -->
+<van-popup show="{{ otherShow }}" bind:close="onClose" duration="{{0}}">
+    <view>
+        <view class="">
+            <view class="border_radius_10 overflow_hidden" style="width:500rpx;">
+                <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
+                    <text>输入关键字</text>
+                </view>
+                <view class="margin_top_20 margin_bottom_20 box_sizing padding_left_right_20 ">
+                    <textarea bindinput="reportInputFn" class="width_100 font_size_14" value="{{reportErrorText}}" auto-height placeholder="关键字" placeholder-style="color:#ededed;"></textarea>
+                </view>
+                <view class="background_liner text_center line_height_50 color_fff font_size_16" bindtap="confirmAppointFn">
+                    <text>确定</text>
+                </view>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出引导层 -->
+<view wx:if="{{guideMongoliaShowStatus}}" class="guideMongolia">
+    <view class="guideContent" style="top:{{isIpx?'30%' : '34%'}}">
+        <image class="width_height_100" src="/images/icon/yd_1.png "></image>
+    </view>
+    <view class="know" bindtap="closeGuideMongoliaFn">
+        <image class="width_height_100" src="/images/icon/i_know.png"></image>
+    </view>
 </view>

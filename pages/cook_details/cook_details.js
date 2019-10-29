@@ -45,7 +45,7 @@ Page({
                 id: id
             },
             success(res) {
-                // res.data.intro = res.data.content.replace(/\<img/gi, `<img style="max-width:90%;height:auto"`)
+                res.data.intro = res.data.intro.replace(/\<img/gi, `<img style="max-width:100%;height:auto"`)
                 that.setData({
                     detailInfo: res.data
                 })

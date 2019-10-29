@@ -60,7 +60,7 @@
                             <view class="flex flex_space_between padding_bottom_10 relative">
                                 <view class="font_size_12 line_height_30 overflow1">
                                     <text class="del_line color_999 margin_right_10 font_size_14">￥{{item.marketPrice}}</text>
-                                    <text class="color_ff6 font_size_12">{{item.vipDiscount}}折价￥</text>
+                                    <text class="color_ff6 font_size_12">{{item.vipDiscount}}折￥</text>
                                     <text class="color_ff6 font_size_18">{{item.vipPrice}}</text>
                                 </view>
                                 <view class="price" data-itemId="{{item.id}}" bindtap="addCart">
@@ -124,7 +124,7 @@
                             <view class="flex flex_space_between padding_bottom_10 relative">
                                 <view class="font_size_12 line_height_30 overflow1">
                                     <text class="del_line color_999 margin_right_10 font_size_14">￥{{item.marketPrice}}</text>
-                                    <text class="color_ff6 font_size_12">{{item.vipDiscount}}折价￥</text>
+                                    <text class="color_ff6 font_size_12">{{item.vipDiscount}}折￥</text>
                                     <text class="color_ff6 font_size_18">{{item.vipPrice}}</text>
                                 </view>
                                 <view class="price" data-itemId="{{item.id}}" bindtap="addCart">

@@ -41,7 +41,7 @@
                 <view class="color_5151 margin_top_20 font_size_14 box_sizing">
                     <view>
                         <text>2人</text>
-                        <text class="color_5fc">￥{{info.doubleDiscount}}</text>
+                        <text class="color_5fc">￥{{info.doublePrice}}</text>
                     </view>
                     <view>
                         <text>{{info.multipleLimit}}人</text>

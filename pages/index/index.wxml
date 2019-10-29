@@ -37,11 +37,11 @@
                             <image class="max_width_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
                         <view class="width_100 text_right flex flex_space_between" style="position:absolute; right:10rpx; bottom:20rpx;">
-                            <view class="text_indent_8 color_fff">
+                            <view class="text_indent_8 font_size_14 color_fff">
                                 <text>{{item.name}}</text>
                             </view>
                             <view>
-                                <van-rate value="{{ item.star }}" size="{{ 14 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
+                                <van-rate value="{{ item.star }}" size="{{ 12 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
                             </view>
                         </view>
                     </view>
@@ -101,11 +101,11 @@
                             <image class="max_width_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
                         <view class="width_100 text_right flex flex_space_between" style="position:absolute; right:10rpx; bottom:20rpx;">
-                            <view class="text_indent_8 color_fff">
+                            <view class="text_indent_8 font_size_14 color_fff">
                                 <text>{{item.name}}</text>
                             </view>
                             <view>
-                                <van-rate value="{{ item.star }}" size="{{ 14 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
+                                <van-rate value="{{ item.star }}" size="{{ 12 }}" allow-half color="#FCBA35" void-color="#fff" void-icon="star" />
                             </view>
                         </view>
                     </view>

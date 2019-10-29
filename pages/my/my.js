@@ -6,7 +6,8 @@ Page({
      * 页面的初始数据
      */
     data: {
-        roleId: '',
+        roleId: 0,
+        userInfo: null,
         groupLeaderType: '', // 1:组员
         elementArr1: [{
                 name1: "热量",
@@ -161,7 +162,16 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
-        
+        this.setData({
+            userInfo: wx.getStorageSync('userInfo')
+        })
+    },
+    
+    /** 点击登录按钮去登录. */
+    toLoginFn(){
+        wx.redirectTo({
+            url: '/pages/start/start?isLogin=true',
+        })
     },
 
     /** 获取普通用户微量元素计算. */
@@ -230,6 +240,13 @@ Page({
     toPageFn(e) {
         let that = this
         let _type = e.currentTarget.dataset.type
+        let userInfo = wx.getStorageSync("userInfo")
+        if (!userInfo) {
+            wx.redirectTo({
+                url: '/pages/start/start?isLogin=true',
+            })
+            return false
+        }
         if (_type == 1) {
             // 历史记录
             wx.navigateTo({

@@ -79,12 +79,19 @@ Page({
     /** 获取菜品信息. */
     getDetails(id){
         let that = this
+        let userInfo = wx.getStorageSync("userInfo")
+        let userId = 0
+        if(!userInfo){
+            userId = 0
+        }else{
+            userId = userInfo.id
+        }
         app.appRequest({
             url: "/app/dishInfo/dishInfoDetail.action",
             method: "get",
             getParams: {
                 dishId:id,
-                userId: wx.getStorageSync("userInfo").id
+                userId: userId
             },
             success(res){
                 that.setData({
@@ -100,6 +107,13 @@ Page({
     addCart(){
         let that = this
         let itemId = that.data.foodId
+        let userInfo = wx.getStorageSync("userInfo")
+        if(!userInfo){
+            wx.redirectTo({
+                url: '/pages/start/start?isLogin=true',
+            })
+            return false
+        }
         app.appRequest({
             url: "/app/shoppingCart/saveShoppingCart.action",
             method: 'post',
@@ -121,6 +135,13 @@ Page({
     /** 页面跳转. */
     toPageFn(e) {
         let _type = e.currentTarget.dataset.type
+        let userInfo = wx.getStorageSync("userInfo")
+        if (!userInfo) {
+            wx.redirectTo({
+                url: '/pages/start/start?isLogin=true',
+            })
+            return false
+        }
         if (_type == 1) {
             // 推荐理由
             wx.showToast({

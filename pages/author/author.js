@@ -9,9 +9,9 @@ Page({
         address: '', //家乡
         ageValue: '', //年龄
         sexValue: '', //性别value
-        sexCode: '', //性别code
+        sexCode: 0, //性别code
         constellationValue: '', //星座value
-        constellationCode: '', //星座code
+        constellationCode: 0, //星座code
         show: false, //是否显示上拉选择
         showModalLists: [], //显示弹窗的数据
         sexArr: [{

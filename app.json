@@ -2,8 +2,9 @@
     "pages": [
         "pages/start/start",
         "pages/my/my",
-        "pages/recharge/recharge",
+        "pages/login/login",
         "pages/index/index",
+        "pages/recharge/recharge",
         "pages/booking_method/booking_method",
         "pages/make_an_appointment/make_an_appointment",
         "pages/settlement/settlement",
@@ -24,7 +25,6 @@
         "pages/my_address/my_address",
         "pages/history/history",
         "pages/order/order",
-        "pages/login/login",
         "pages/dietary_knowledge/dietary_knowledge",
         "pages/solar_terms_details/solar_terms_details",
         "pages/order_details/order_details",

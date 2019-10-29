@@ -7,7 +7,7 @@
             <text class="font_size_16 margin_left_10">选择身份</text>
         </view>
         <view class="box_sizing padding_left_right_20 padding_top_20 padding_bottom_20">
-            <view class="init flex flex_space_between line_height_50 border_bottom" data-type="2" bindtap="selectedFn">
+            <view hidden="true" class="init flex flex_space_between line_height_50 border_bottom" data-type="2" bindtap="selectedFn">
                 <view>
                     <text class="iconfont icon-chushimao font_weight_600 relative color_ff6" style="font-size:40rpx;top:6rpx"></text>
                     <text class="font_size_16 margin_left_10 color_5353 font_size_14">我是厨师</text>

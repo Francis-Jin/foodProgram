@@ -56,9 +56,15 @@ Page({
             selectedCode: wx.getStorageSync('selectedCode')
         })
         let newUser = wx.getStorageSync('userInfo').newUser
-        if(newUser == 1){
+        let voucherAmount = wx.getStorageSync('userInfo').voucherAmount
+        if (newUser == 1 && voucherAmount > 0){
             this.setData({
                 isShowDiscountModal: true
+            })
+        }
+        if (newUser == 1 && voucherAmount == 0){
+            this.setData({
+                guideMongoliaShowStatus: true
             })
         }
         setInterval(function() {
@@ -137,6 +143,13 @@ Page({
     /** 输入其他关键字确认. */
     confirmAppointFn() {
         let that = this
+        let userInfo = wx.getStorageSync("userInfo")
+        if (!userInfo) {
+            wx.redirectTo({
+                url: '/pages/start/start?isLogin=true',
+            })
+            return false
+        }
         app.appRequest({
             url: '/app/userInfo/saveSearchKeyword.action',
             method: 'post',
@@ -217,6 +230,13 @@ Page({
     /** 确定选择选择膳食方向并更新膳食方向. */
     onConfirm() {
         let that = this
+        let userInfo = wx.getStorageSync("userInfo")
+        if (!userInfo) {
+            wx.redirectTo({
+                url: '/pages/start/start?isLogin=true',
+            })
+            return false
+        }
         let columns = that.data.columns
         let arr = columns.filter(item => item.checked == true)
         let str = []
@@ -276,6 +296,13 @@ Page({
     addCart(e) {
         let that = this
         let itemId = e.currentTarget.dataset.itemid
+        let userInfo = wx.getStorageSync("userInfo")
+        if (!userInfo) {
+            wx.redirectTo({
+                url: '/pages/start/start?isLogin=true',
+            })
+            return false
+        }
         app.appRequest({
             url: "/app/shoppingCart/saveShoppingCart.action",
             method: 'post',

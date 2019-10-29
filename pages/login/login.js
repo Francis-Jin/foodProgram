@@ -16,6 +16,13 @@ Page({
 
     },
 
+    /** 暂不登录. */
+    canleLoginFn(){
+        wx.switchTab({
+            url: '/pages/index/index',
+        })
+    },
+
     getUserInfo: function(e) {
         let that = this
         console.log(e)

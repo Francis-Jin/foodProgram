@@ -1,9 +1,19 @@
 <!--pages/login/login.wxml-->
 <view class="container relative">
-    <view class="login_box">
-        <image class="width_height_100" src="/images/imgs/login.png" mode="aspectFill"></image>
+    <view class="login_box margin_top_20 height_fixed_120">
+        <image class="width_height_100" src="/images/imgs/login_1.png" mode="aspectFill"></image>
     </view>
-    <view class="btn">
-        <button open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 确认授权 </button>
+    <view class="margin_top_50 color_666 line_height_30 font_size_14 box_sizing padding_left_50 padding_right_50">
+        <!-- <text>用户登录：</text> -->
+        <text>登录后，根据一日12时辰和自己的健康需求，为您定制一日三餐</text>
+        <!-- <text>,让您能健康饮食、吃得安心，吃得放心！</text> -->
+    </view>
+    <view class="btn flex flex_space_between">
+        <view class="init" bindtap="canleLoginFn">
+            <text>暂不登录</text>
+        </view>
+        <view class="init">
+            <button open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 登录 </button>
+        </view>
     </view>
 </view>

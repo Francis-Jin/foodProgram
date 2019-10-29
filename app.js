@@ -149,6 +149,6 @@ App({
 
     /** 进入页面调用. */
     onShow: function() {
-        this.loginFn()
+        // this.loginFn()
     }
 })

@@ -62,7 +62,7 @@
                         <text>VIP</text>
                     </view>
                     <view class="color_5fc text_center">
-                        <text>余额￥{{userInfo.balance}}</text>
+                        <text>余额￥{{userInfo.balance ? userInfo.balance : 0}}</text>
                     </view>
                 </view>
                 <view class="box_sizing padding_top_10 font_size_14">
@@ -100,7 +100,7 @@
                         <text>代金池</text>
                     </view>
                     <view class="margin_top_5 text_center">
-                        <text>余额￥{{userInfo.voucherBalance}}</text>
+                        <text>余额￥{{userInfo.voucherBalance ? userInfo.voucherBalance : 0}}</text>
                     </view>
                 </view>
                 <view class="width_50 padding_left_10">

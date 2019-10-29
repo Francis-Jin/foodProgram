@@ -12,32 +12,37 @@
                 </view>
             </view>
             <view class="width_60">
-                <view class="color_fff font_size_18 box_sizing padding_top_30 padding_right_20 custom_family">
-                    <text wx:if="{{roleId == 3}}">{{userInfo.nickname}}</text>
-                    <text wx:if="{{roleId != 3}}">{{userInfo.name}}</text>
-                    <text wx:if="{{roleId == 4}}" class="margin_left_5 font_size_14">（配送员）</text>
-                    <text wx:if="{{roleId == 5}}" class="margin_left_5 font_size_14">（厨师）</text>
+                <view wx:if="{{!userInfo}}" bindtap="toLoginFn" class="background_yellow_liner font_size_14 line_height_40 text_center border_radius_50 width_fixed_100 margin_top_40 color_fff relative" style="top:20rpx;">
+                    <text>登录账户</text>
                 </view>
-                <view class="font_size_12 box_sizing padding_right_20 margin_top_10 custom_family" style="color:#F3FDF8">
-                    <text wx:if="{{roleId == 4}}">{{userInfo.areaName}}</text>
-                    <text wx:if="{{roleId == 3 || roleId == 5}}">{{userInfo.constellationName}}</text>
-                    <!-- <text wx:if="{{roleId == 5}}">{{userInfo.areaName}}</text> -->
-                </view>
-                <view class="margin_top_10 flex font_weight_300 color_5353">
-                    <view class="width_40">
-                        <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/icon_comment@2x.png"></image>
-                        <text class="margin_left_10 color_fff">0</text>
+                <view wx:else>
+                    <view class="color_fff font_size_18 box_sizing padding_top_30 padding_right_20 custom_family">
+                        <text wx:if="{{roleId == 3}}">{{userInfo.nickname}}</text>
+                        <text wx:if="{{roleId != 3}}">{{userInfo.name}}</text>
+                        <text wx:if="{{roleId == 4}}" class="margin_left_5 font_size_14">（配送员）</text>
+                        <text wx:if="{{roleId == 5}}" class="margin_left_5 font_size_14">（厨师）</text>
                     </view>
-                    <view class="width_40">
-                        <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/zan@2x.png"></image>
-                        <text class="margin_left_10 color_fff">0</text>
+                    <view class="font_size_12 box_sizing padding_right_20 margin_top_10 custom_family" style="color:#F3FDF8">
+                        <text wx:if="{{roleId == 4}}">{{userInfo.areaName}}</text>
+                        <text wx:if="{{roleId == 3 || roleId == 5}}">{{userInfo.constellationName}}</text>
+                        <!-- <text wx:if="{{roleId == 5}}">{{userInfo.areaName}}</text> -->
+                    </view>
+                    <view class="margin_top_10 flex font_weight_300 color_5353">
+                        <view class="width_40">
+                            <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/icon_comment@2x.png"></image>
+                            <text class="margin_left_10 color_fff">0</text>
+                        </view>
+                        <view class="width_40">
+                            <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-4rpx;" src="/images/icon/zan@2x.png"></image>
+                            <text class="margin_left_10 color_fff">0</text>
+                        </view>
                     </view>
                 </view>
             </view>
         </view>
     </view>
 
-<!-- 
+    <!-- 
     <view class="margin_top_10 box_sizing padding_left_right_20">
         <view data-type="2" bindtap="toDeliveryFn" class="flex flex_space_between box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
             <view class="">
@@ -51,7 +56,7 @@
     </view> -->
 
     <!-- 普通用户 -->
-    <view wx:if="{{roleId == 3}}">
+    <view wx:if="{{roleId == 3 || roleId == 0}}">
 
         <view class="flex flex_space_between text_center box_sizing padding_left_right_20 margin_top_10">
             <view class="color_fff border_radius_10 box_shadow background_liner box_sizing padding_top_20 padding_bottom_10" style="width:40%">

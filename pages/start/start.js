@@ -7,7 +7,8 @@ Page({
      */
     data: {
         userInfo: wx.getStorageSync("userInfo"),
-        text: ''
+        text: '',
+        isLogin: ''
     },
 
     /**
@@ -18,7 +19,8 @@ Page({
         let that = this
         this.setData({
             paySuccessType: options.paySuccessType,
-            index: options.index
+            index: options.index,
+            isLogin: options.isLogin
         })
         this.getMessageFn()
     },
@@ -111,9 +113,17 @@ Page({
                     })
                 }
             } else {
-                wx.redirectTo({
-                    url: '/pages/login/login',
-                })
+                console.log(this.data.isLogin)
+                if (!this.data.isLogin){
+                    wx.switchTab({
+                        url: '/pages/index/index',
+                    })
+                }else{
+                    wx.redirectTo({
+                        url: '/pages/login/login',
+                    }) 
+                }
+                
             }
         }
 

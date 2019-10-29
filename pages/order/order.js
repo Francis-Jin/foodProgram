@@ -19,7 +19,12 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
-
+        let userInfo = wx.getStorageSync('userInfo')
+        if(!userInfo){
+            wx.redirectTo({
+                url: '/pages/start/start?isLogin=true',
+            })
+        }
     },
 
     /**

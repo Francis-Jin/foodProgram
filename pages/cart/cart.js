@@ -14,6 +14,8 @@ Page({
         page: 1,
         pageSize: 10,
         totalPrice: 0, //选择商品结算的总价
+        totalVIPPriceAll: 0, // 选择商品vip价格总计
+        deleteCartShopShow: false, // 是否显示删除弹窗
     },
 
 
@@ -71,11 +73,18 @@ Page({
         let arr = cartLists.filter(item => item.checked == true)
         // 计算总价
         let totalPrice = 0
+        let totalVIPPriceAll = 0
         arr.forEach(item => {
             totalPrice += item.price * item.quantity
+            if(item.vipPrice > 0){
+                totalVIPPriceAll += item.vipPrice * item.quantity
+            }else{
+                totalVIPPriceAll += item.price * item.quantity
+            }
         })
         arr.length == that.data.cartLists.length ? checkedAll = true : checkedAll = false
         that.setData({
+            totalVIPPriceAll: totalVIPPriceAll,
             totalPrice: totalPrice,
             checkedAll: checkedAll,
             cartLists: cartLists
@@ -107,8 +116,14 @@ Page({
             let arr = cartLists.filter(item => item.checked == true)
             // 计算总价
             let totalPrice = 0
+            let totalVIPPriceAll = 0
             arr.forEach(item => {
                 totalPrice += item.price * item.quantity
+                if (item.vipPrice > 0) {
+                    totalVIPPriceAll += item.vipPrice * item.quantity
+                } else {
+                    totalVIPPriceAll += item.price * item.quantity
+                }
             })
             this.setData({
                 totalPrice,
@@ -121,10 +136,17 @@ Page({
             let arr = cartLists.filter(item => item.checked == true)
             // 计算总价
             let totalPrice = 0
+            let totalVIPPriceAll = 0
             arr.forEach(item => {
                 totalPrice += item.price * item.quantity
+                if (item.vipPrice > 0) {
+                    totalVIPPriceAll += item.vipPrice * item.quantity
+                } else {
+                    totalVIPPriceAll += item.price * item.quantity
+                }
             })
             this.setData({
+                totalVIPPriceAll: totalVIPPriceAll,
                 totalPrice: totalPrice,
                 cartLists: cartLists,
                 checkedAll: true
@@ -141,6 +163,7 @@ Page({
         let thisItem = cartLists.filter(item => item.id == itemId)[0]
         let arr = cartLists.filter(item => item.checked == true)
         let totalPrice = 0
+        let totalVIPPriceAll = 0
         let productId
         if (_type == 1) {
             // 减
@@ -162,8 +185,14 @@ Page({
                 // 计算总价
                 arr.forEach(item => {
                     totalPrice += item.price * item.quantity
+                    if (item.vipPrice > 0) {
+                        totalVIPPriceAll += item.vipPrice * item.quantity
+                    } else {
+                        totalVIPPriceAll += item.price * item.quantity
+                    }
                 })
                 this.setData({
+                    totalVIPPriceAll: totalVIPPriceAll,
                     totalPrice: totalPrice,
                     cartLists: cartLists
                 })
@@ -182,8 +211,14 @@ Page({
             // 计算总价
             arr.forEach(item => {
                 totalPrice += item.price * item.quantity
+                if (item.vipPrice > 0) {
+                    totalVIPPriceAll += item.vipPrice * item.quantity
+                } else {
+                    totalVIPPriceAll += item.price * item.quantity
+                }
             })
             this.setData({
+                totalVIPPriceAll: totalVIPPriceAll,
                 totalPrice: totalPrice,
                 cartLists: cartLists
             })
@@ -231,31 +266,41 @@ Page({
         wx.setStorageSync("cartLists", arr)
 
         wx.navigateTo({
-            url: '/pages/settlement/settlement?totalPrice=' + that.data.totalPrice,
+            url: '/pages/settlement/settlement?totalPrice=' + that.data.totalPrice + "&totalVIPPriceAll=" + that.data.totalVIPPriceAll,
         })
+    },
+
+    /** 点击删除商品按钮. */
+    deleteGoodFn(e){
+        console.log(e)
+        let productId = e.currentTarget.dataset.productid
+        this.setData({
+            productId: productId,
+            deleteCartShopShow: true
+        })
+    },
+
+    /** 点击取消按钮隐藏弹窗. */
+    onCancelDeleteFn(e){
+        this.setData({
+            deleteCartShopShow: false
+        })
+    },
+
+    /** 点击确认按钮删除当前商品、隐藏弹窗. */
+    confirmDeleteFn(e){
+        let that = this
+        that.delCartListsFn()
     },
 
     /** 删除购物车列表. */
     delCartListsFn() {
         let that = this
-        let arr = that.data.cartLists.filter(item => item.checked == true)
-        if (arr.length == 0) {
-            wx.showToast({
-                title: '请选择商品',
-                icon: 'none'
-            })
-            return false
-        }
-        let productId = []
-        arr.forEach(item => {
-            productId.push(item.productId)
-        })
-        console.log(productId)
         app.appRequest({
             url: "/app/shoppingCart/deleteShoppingCarts.action",
             method: "GET",
             getParams: {
-                "productId": productId.join(),
+                "productId": that.data.productId,
                 "userId": wx.getStorageSync("userInfo").id
             },
             success(res) {
@@ -263,7 +308,12 @@ Page({
                     cartLists: [],
                     checkedAll: false,
                     totalPrice: 0,
+                    deleteCartShopShow:false,
                     administrationType: 1
+                })
+                wx.showToast({
+                    title: '已删除',
+                    icon: 'none'
                 })
                 that.getCartListsFn()
             }

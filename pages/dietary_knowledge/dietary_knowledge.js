@@ -27,6 +27,7 @@ Page({
                 id: id
             },
             success(res){
+                res.data.content = res.data.content.replace(/\<img/gi, `<img style="max-width:100%;height:auto"`)
                 that.setData({
                     info: res.data
                 })

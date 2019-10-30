@@ -8,11 +8,11 @@
                     <text class="margin_right_10">取餐号:</text>
                     <text>{{item.takeMealCode}}</text>
                 </view>
-                <view class="color_666">
-                    <text>{{item.statusName}}</text>
+                <view class="color_666 font_size_14">
+                    <text>查看详情</text>
                 </view>
             </view>
-            <view class="line_height_30 box_sizing padding_top_20 padding_left_right_20" data-id="{{item.id}}" bindtap="toDeailsFn">
+            <view class="line_height_20 font_size_12 box_sizing padding_top_20 padding_left_right_20" data-id="{{item.id}}" bindtap="toDeailsFn">
                 <view class="color_8484">
                     <text>购买类型：</text>
                     <text wx:if="{{item.category == 1}}">普通购买</text>
@@ -24,8 +24,8 @@
                     <text>{{item.createTime}}</text>
                 </view>
                 <view class="color_8484">
-                    <text>门店名称：</text>
-                    <text>日权食（Q区1号楼）</text>
+                    <text>商品数量：</text>
+                    <text>{{item.quantity}}</text>
                 </view>
                 <view class="color_8484">
                     <text>订单类型：</text>
@@ -36,12 +36,15 @@
                     <text class="color_ff6 font_size_20">￥{{item.orderAmount}}</text>
                 </view>
             </view>
-            <view wx:if="{{item.status != 1}}" class="line_height_50 text_center background_liner color_fff margin_top_10" data-id="{{item.id}}" bindtap="toDeailsFn">
-                <text>查看详情</text>
-            </view>
-            <view wx:if="{{item.status == 1}}" class="line_height_50 text_center background_yellow_liner color_fff margin_top_10" data-id="{{item.id}}" bindtap="payOrder">
-                <text>{{item.statusName}}</text>
-            </view>
+            <!-- <view class="flex flex_space_between padding_bottom_20">
+                <view></view> -->
+                <view wx:if="{{item.status != 1}}" class=" line_height_50 text_center background_liner color_fff margin_top_10" data-id="{{item.id}}" bindtap="toDeailsFn">
+                    <text>{{item.statusName}}</text>
+                </view>
+                <view wx:if="{{item.status == 1}}" data-category="{{item.category}}" class=" line_height_50 text_center background_yellow_liner color_fff margin_top_10" data-id="{{item.id}}" bindtap="payOrder">
+                    <text>{{item.statusName}}</text>
+                </view>
+            <!-- </view> -->
         </view>
     </view>
 
@@ -59,7 +62,7 @@
                 <text>选择支付方式</text>
             </view>
             <view class="padding_top_20 padding_bottom_20">
-                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50 border_bottom" data-type="1" bindtap="selectedPayFn">
+                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50 {{categoryPay !=2 ? 'border_bottom' : ''}}" data-type="1" bindtap="selectedPayFn">
                     <view>
                         <text class="iconfont icon-logo-wechat font_weight_600 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
                         <text class="font_size_16 margin_left_10 color_5353 font_size_14">微信支付</text>
@@ -69,7 +72,7 @@
                         <text wx:if="{{selectedId == 1}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
                     </view>
                 </view>
-                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="2" bindtap="selectedPayFn">
+                <view wx:if="{{categoryPay != 2 }}" class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="2" bindtap="selectedPayFn">
                     <view>
                         <text class="iconfont icon-icon font_weight_100 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
                         <text class="font_size_16 margin_left_10 color_5353 font_size_14">余额支付</text>

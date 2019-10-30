@@ -24,6 +24,9 @@ Page({
         selectedId: '', // 选择支付方式 1：微信支付 2：余额支付
         listGroupBuyByIngLists: [], //正在拼单的列表
 
+        twoPrice: 0, //两人拼金额，
+        morePrice: 0, // 多人拼金额
+
         makeAppointmentShow: false, //是否显示预约点餐
     },
     /**
@@ -79,8 +82,11 @@ Page({
                 userId: wx.getStorageSync("userInfo").id
             },
             success(res) {
+                let info = res.data.DishInfoVo
                 that.setData({
-                    info: res.data.DishInfoVo,
+                    info: info,
+                    twoPrice: info.doublePrice,
+                    morePrice: info.multiplePrice,
                     buyNumber: res.data.shoppingCartTotal
                 })
             }

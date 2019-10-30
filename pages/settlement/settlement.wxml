@@ -80,7 +80,15 @@
             </view>
 
             <!-- VIP -->
-            <view data-type="3" bindtap="toPageFn" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
+            <view class="box_shadow border_radius_10 box_sizing padding_left_right_20 text_center padding_top_10 padding_bottom_10 margin_top_20 color_5fc font_size_14 line_height_20">
+                <view>
+                    <text>提交订单，选择VIP付款</text>
+                </view>
+                <view>
+                    <text>享受最低价格</text>
+                </view>
+            </view>
+            <!-- <view data-type="3" bindtap="toPageFn" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
                 <view class="flex box_sizing padding_top_10 padding_bottom_10">
                     <view class="color_5fc line_height_50 text_center ">
                         <view class="font_weight_600 font_size_20">
@@ -95,6 +103,41 @@
                 </view>
                 <view class="width_20 text_center line_height_70 box_sizing color_bab9 font_size_14">
                     <text class="">充值</text>
+                </view>
+            </view> -->
+            <!-- VIP -->
+            <view hidden="true" data-type="3" bindtap="toPageFn" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
+                <view class="flex box_sizing padding_top_10 padding_bottom_10">
+                    <view class="color_5fc width_fixed_100">
+                        <view class="font_weight_600 margin_top_5 font_size_20 text_center">
+                            <text>VIP</text>
+                        </view>
+                        <view class="color_5fc text_center">
+                            <text>余额￥{{userInfo.balance ? userInfo.balance : 0}}</text>
+                        </view>
+                    </view>
+                    <view class="box_sizing padding_top_10 font_size_14">
+                        <view style="position:relative;top:-6rpx;">
+                            <view class="flex">
+                                <view class="width_fixed_70  line_height_50">
+                                    <text class="font_size_12 color_5151">VIP {{info.vipDiscount}}折</text>
+                                </view>
+                                <view class="line_height_20">
+                                    <view class="margin_top_5">
+                                        <text class="color_5fc font_size_18 font_weight">￥{{info.vipPrice}}</text>
+                                    </view>
+                                    <view class="color_999 font_size_12">
+                                        <text class="padding_left_5">省￥{{vipSavePrice}}</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view class="width_fixed_80 text_center background_liner line_height_70 color_fff box_sizing">
+                    <view class="font_size_14 padding_top_5 box_sizing">
+                        <text>充值</text>
+                    </view>
                 </view>
             </view>
 
@@ -136,7 +179,8 @@
                     </view>
                 </view>
                 <view class="margin_top_10 padding_bottom_20">
-                    <input disabled="disabled" placeholder-style="color:#e3e3e3" value="{{addressText}}" placeholder="选择用餐地址（目前只开放M区）" />
+                    <text>{{addressText}}</text>
+                    <!-- <input disabled="disabled" placeholder-style="color:#e3e3e3" value="" placeholder="选择用餐地址（目前只开放M区）" /> -->
                 </view>
             </view>
 
@@ -155,7 +199,7 @@
                 </view>
             </view>
 
-            <view wx:if="{{deliveryMode == 1}}" class="box_shadow border_radius_20 overflow1 margin_top_20 box_sizing padding_left_right_20">
+            <view wx:if="{{deliveryMode == 1}}" class="box_shadow border_radius_20 margin_top_20 box_sizing padding_left_right_20">
                 <view class=" line_height_50 border_bottom">
                     <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/my@2x.png"></image>
                     <text class="color_5151">自取地址</text>
@@ -276,6 +320,8 @@
                     <view>
                         <text class="iconfont icon-logo-wechat font_weight_600 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
                         <text class="font_size_16 margin_left_10 color_5353 font_size_14">微信支付</text>
+                        <text wx:if="{{deliveryMode == 1 || deliveryMode == ''}}" class="font_size_18 margin_left_10 color_5fc font_weight_600">￥{{(totalPrice * 1)}}</text>
+                        <text wx:if="{{deliveryMode == 2}}" class="font_size_18 margin_left_10 color_5fc font_weight_600">￥{{(totalPrice * 1 + deliveryCost * 1)}}</text>
                     </view>
                     <view>
                         <text wx:if="{{selectedId != 1}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
@@ -285,7 +331,9 @@
                 <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="2" bindtap="selectedPayFn">
                     <view>
                         <text class="iconfont icon-icon font_weight_100 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
-                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">余额支付</text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">VIP 支付</text>
+                        <text wx:if="{{deliveryMode == 1 || deliveryMode == ''}}" class="font_size_18 margin_left_10 color_5fc font_weight_600">￥{{(totalVIPPriceAll * 1)}}</text>
+                        <text wx:if="{{deliveryMode == 2}}" class="font_size_18 margin_left_10 color_5fc font_weight_600">￥{{(totalVIPPriceAll * 1 + deliveryCost * 1)}}</text>
                     </view>
                     <view>
                         <text wx:if="{{selectedId != 2}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>

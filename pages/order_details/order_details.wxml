@@ -113,7 +113,7 @@
             </view>
         </view>
 
-        <view class="box_shadow border_radius_10 overflow_hidden margin_top_20 box_sizing padding_left_right_20 relative">
+        <view class="box_shadow border_radius_10 margin_top_20 box_sizing padding_left_right_20 relative">
             <view class="margin_top_10 padding_bottom_10">
                 <!-- 订单信息 -->
 
@@ -205,10 +205,10 @@
                         </view>
                     </view>
                     <view wx:if="{{detailsInfo.deliveryMode ==1}}" class="flex flex_space_between">
-                        <view class="color_333">
+                        <view class="color_333 get_address">
                             <text>自取地址</text>
                         </view>
-                        <view class="text_right color_666">
+                        <view class="color_666 box_sizing padding_left_20 line_height_20">
                             <text>{{systemInfo.address}}</text>
                         </view>
                     </view>
@@ -227,3 +227,24 @@
         </view>
     </view>
 </view>
+
+
+<!-- 弹出确认删除弹框. -->
+<van-popup show="{{ cancelOrderShow }}" duration="{{0}}">
+    <view class="border_radius_10 overflow_hidden" style="width:460rpx;">
+        <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+            <text>提示</text>
+        </view>
+        <view class="font_size_14 color_8484 text_center padding_bottom_20">
+            <text>真的要狠心取消订单吗？</text>
+        </view>
+        <view class="flex flex_space_between">
+            <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_5bc" bindtap="onCancelOrderFn">
+                <text>取消</text>
+            </view>
+            <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="confirmCancelFn">
+                <text>确定</text>
+            </view>
+        </view>
+    </view>
+</van-popup>

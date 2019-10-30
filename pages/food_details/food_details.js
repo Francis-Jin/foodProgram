@@ -15,12 +15,25 @@ Page({
         vipSavePrice: '',
 
         guideMongoliaShowStatus: false, //是否显示引导蒙层
+
+        // 加入购物车动画小球
+        hide_good_box: true,
+        bus_x: 0,
+        bus_y: 0
     },
     
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+
+        var _windowHeight = wx.getSystemInfoSync().windowHeight;
+
+        // 目标终点元素 - 购物车的位置坐标
+        this.busPos = {};
+        this.busPos['x'] = 10; // x坐标暂写死，自己可根据UI来修改
+        this.busPos['y'] = _windowHeight - 60; // y坐标，也可以根据自己需要来修改
+
         let that = this
         wx.getSystemInfo({
             success: function (res) {
@@ -94,6 +107,7 @@ Page({
                 userId: userId
             },
             success(res){
+                res.data.DishInfoVo.intro = res.data.DishInfoVo.intro.replace(/\<img/gi, `<img style="max-width:100%;height:auto"`)
                 that.setData({
                     info: res.data.DishInfoVo,
                     vipSavePrice: (res.data.DishInfoVo.price - res.data.DishInfoVo.vipPrice).toFixed(2),
@@ -103,31 +117,97 @@ Page({
         })
     },
 
-    /** 添加进购物车. */
-    addCart(){
+    /** 添加购物车 */
+    addCart(e) {
+        console.log(e)
         let that = this
         let itemId = that.data.foodId
+        let addPic = e.currentTarget.dataset.pic
+        console.log(addPic)
+        that.setData({
+            addPic: addPic,
+            itemId: itemId
+        })
         let userInfo = wx.getStorageSync("userInfo")
-        if(!userInfo){
+        if (!userInfo) {
             wx.redirectTo({
                 url: '/pages/start/start?isLogin=true',
             })
             return false
         }
+        // 如果good_box正在运动，不能重复点击
+        if (!this.data.hide_good_box) return;
+        this.finger = {};
+        var topPoint = {};
+        //点击点的坐标
+        this.finger['x'] = e.touches["0"].clientX;
+        this.finger['y'] = e.touches["0"].clientY;
+
+        //控制点的y值定在低的点的上方150处
+        if (this.finger['y'] < this.busPos['y']) {
+            topPoint['y'] = this.finger['y'] - 200;
+        } else {
+            topPoint['y'] = this.busPos['y'] - 200;
+        }
+
+        //控制点的x值在点击点和购物车之间
+        if (this.finger['x' > this.busPos['x']]) {
+            topPoint['x'] = (this.finger['x'] - this.busPos['x']) / 2 + this.busPos['x'];
+        } else {
+            topPoint['x'] = (this.busPos['x'] - this.finger['x']) / 2 + this.finger['x'];
+        }
+
+        this.linePos = app.bezier([this.busPos, topPoint, this.finger], 30);
+        this.startAnimation();
+
+    },
+
+    /** 加入购物车动画. */
+    startAnimation: function () {
+        var index = 0,
+            that = this,
+            bezier_points = that.linePos['bezier_points'];
+        this.setData({
+            hide_good_box: false,
+            bus_x: that.finger['x'],
+            bus_y: that.finger['y']
+        })
+        index = bezier_points.length;
+        this.timer = setInterval(function () {
+            index--;
+            // 设置球的位置
+            that.setData({
+                bus_x: bezier_points[index]['x'],
+                bus_y: bezier_points[index]['y']
+            })
+            // 到最后一个点的时候，开始购物车的一系列变化，并清除定时器，隐藏小球
+            if (index < 1) {
+                clearInterval(that.timer);
+                that.requestAddCart()
+                that.setData({
+                    hide_good_box: true
+                })
+            }
+        }, 33);
+    },
+
+    /** 请求加入购物车. */
+    requestAddCart() {
+        let that = this
         app.appRequest({
             url: "/app/shoppingCart/saveShoppingCart.action",
             method: 'post',
-            getParams:{
-                productId: itemId,
+            getParams: {
+                productId: that.data.foodId,
                 quantity: 1,
                 createUser: wx.getStorageSync("userInfo").id
             },
-            success(res){
+            success(res) {
                 // wx.showToast({
                 //     title: res.message,
                 //     icon: 'none'
                 // })
-                that.getDetails(itemId)
+                that.getDetails(that.data.foodId)
             }
         })
     },

@@ -2,8 +2,8 @@
     "pages": [
         "pages/start/start",
         "pages/my/my",
-        "pages/login/login",
         "pages/index/index",
+        "pages/login/login",
         "pages/recharge/recharge",
         "pages/booking_method/booking_method",
         "pages/make_an_appointment/make_an_appointment",

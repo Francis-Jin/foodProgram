@@ -2,7 +2,7 @@
 <view class="container">
 
     <!-- 顶部 -->
-    <view class="flex z_index_2 bg_fff flex_space_between box_sizing padding_left_right_20 line_height_50 box_shadow border_top topAdmin">
+    <view hidden="true" class="flex z_index_2 bg_fff flex_space_between box_sizing padding_left_right_20 line_height_50 box_shadow border_top topAdmin">
         <view class="color_5353">
             <checkbox-group bindtap="checkboxChange">
                 <label class="checkbox">
@@ -16,19 +16,18 @@
             <text wx:if="{{administrationType == 2}}" class="padding_left_10 background_red_liner padding_right_10 padding_top_5 padding_bottom_5 color_fff font_size_12 border_radius_10">完成</text>
         </view>
     </view>
+    <!-- 顶部占位 -->
+    <view hidden="true" class="height_fixed_50"></view>
 
     <!-- 主要内容部分 -->
     <view class="container">
-        <!-- 顶部占位 -->
-        <view class="height_fixed_50"></view>
-
         <!-- 内容 -->
         <view>
             <!-- 有数据 -->
-            <view wx:if="{{cartLists.length != 0}}" class="margin_top_20 box_sizing padding_left_right_20">
+            <view wx:if="{{cartLists.length != 0}}">
 
                 <view class="data_lists">
-                    <view wx:for="{{cartLists}}" wx:key="index" class="item box_shadow border_radius_10 flex padding_top_10 padding_bottom_10 relative margin_bottom_20">
+                    <view wx:for="{{cartLists}}" wx:key="index" class="item relative box_sizing padding_left_right_20 border_bottom flex padding_top_10 padding_bottom_20 relative margin_bottom_10">
                         <view class="width_fixed_50">
                             <checkbox-group data-itemId="{{item.id}}" bindtap="checkGoodsChange" class="text_center line_height_80">
                                 <label class="checkbox">
@@ -41,7 +40,7 @@
                                 <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
                             </view>
                             <view class="margin_left_10">
-                                <view class="margin_top_10 color_5151">
+                                <view class="margin_top_10 font_size_14 color_5151">
                                     <text>{{item.productName}}</text>
                                 </view>
                                 <view class="margin_top_30">
@@ -49,7 +48,7 @@
                                     <text class="color_ff6"><text class="font_size_12">￥</text>{{item.price}}</text>
                                 </view>
                             </view>
-                            <view style="position:absolute;right:20rpx;bottom:20rpx;">
+                            <view style="position:absolute;right:20rpx;bottom:40rpx;">
 
                                 <view class="flex margin_top_20">
                                     <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="1" bindtap="addReduceFn">
@@ -63,6 +62,9 @@
                                     </view>
                                 </view>
                             </view>
+                        </view>
+                        <view data-productid="{{item.productId}}" bindtap="deleteGoodFn" style="position:absolute;right:40rpx;top:40rpx;width:60rpx;height:60rpx; line-height:60rpx;" class="text_center">
+                            <text class="iconfont icon-delete color_999" style="font-size:40rpx;"></text>
                         </view>
                     </view>
                 </view>
@@ -112,3 +114,23 @@
     </view>
 
 </view>
+
+<!-- 弹出确认删除弹框. -->
+<van-popup show="{{ deleteCartShopShow }}" duration="{{0}}">
+    <view class="border_radius_10 overflow_hidden" style="width:460rpx;">
+        <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+            <text>提示</text>
+        </view>
+        <view class="font_size_14 color_8484 text_center padding_bottom_20">
+            <text>是否要删除该商品</text>
+        </view>
+        <view class="flex flex_space_between">
+            <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="onCancelDeleteFn">
+                <text>取消</text>
+            </view>
+            <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_5bc" bindtap="confirmDeleteFn">
+                <text>确定</text>
+            </view>
+        </view>
+    </view>
+</van-popup>

@@ -63,7 +63,7 @@
     </view>
     <view class="relative width_100" data-url="{{urlBefore + detailInfo.videoUrl}}" bindtap="toPlayVideo">
         <view class="width_100 border_radius_20 box_shadow overflow_hidden height_fixed_160">
-            <image class="width_height_100" src="{{urlBefore + detailInfo.videoCover}}"></image>
+            <image class="width_height_100" src="{{urlBefore + detailInfo.videoCover}}" mode="aspectFill"></image>
         </view>
         <view class="width_fixed_50 height_fixed_50" style="position:absolute;left:50%;top:50%;margin-top:-50rpx;margin-left:-50rpx;border-radius:50%;">
             <image class="width_height_100" src="/images/icon/play.png"></image>
@@ -75,7 +75,7 @@
 <view class="box_sizing padding_left_right_20 margin_top_20">
     <view class="relative width_100" data-itemId="{{detailInfo.cookRecommendDishList[0].dishId}}" bindtap="topPageDetails">
         <view class="width_100 border_radius_20 box_shadow overflow_hidden height_fixed_160">
-            <image class="width_height_100" src="{{urlBefore + detailInfo.cookRecommendDishList[0].cover}}"></image>
+            <image class="width_height_100" mode="aspectFill" src="{{urlBefore + detailInfo.cookRecommendDishList[0].cover}}"></image>
         </view>
     </view>
     <view class="width_100 margin_top_10 line_height_30 text_center color_666 padding_bottom_10">

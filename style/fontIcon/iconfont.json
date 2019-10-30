@@ -356,6 +356,13 @@
       "unicode_decimal": 58885
     },
     {
+      "icon_id": "3315133",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
       "icon_id": "3481902",
       "name": "店铺",
       "font_class": "dianpu",
@@ -515,6 +522,13 @@
       "font_class": "huabanfuben",
       "unicode": "e690",
       "unicode_decimal": 59024
+    },
+    {
+      "icon_id": "7605111",
+      "name": "delete",
+      "font_class": "delete",
+      "unicode": "e627",
+      "unicode_decimal": 58919
     },
     {
       "icon_id": "7685121",

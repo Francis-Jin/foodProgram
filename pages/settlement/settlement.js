@@ -10,6 +10,7 @@ Page({
         urlBefore: app.globalData.urlBefore,
         cartLists: [], //购买的商品
         totalPrice: 0, //选择商品结算的总价
+        totalVIPPriceAll: 0, //vip总价
         deliveryCost: 0,
         deliveryFee: " ", //第一份配送价格，
         increaseFee: " ", //增加一份，增加配送费
@@ -32,10 +33,12 @@ Page({
     onLoad: function(options) {
         let that = this
         let totalPrice = options.totalPrice
+        let totalVIPPriceAll = options.totalVIPPriceAll
         this.getSysConfFn()
         this.setData({
             userInfo: wx.getStorageSync('userInfo'),
-            totalPrice: totalPrice
+            totalPrice: totalPrice,
+            totalVIPPriceAll: totalVIPPriceAll
         })
     },
 
@@ -212,6 +215,7 @@ Page({
         let thisItem = cartLists.filter(item => item.id == itemId)[0]
         let arr = cartLists.filter(item => item.checked == true)
         let totalPrice = 0
+        let totalVIPPriceAll = 0
         let productId
         let quantityAll = 0
         let deliveryCost = 0
@@ -240,8 +244,14 @@ Page({
                 // 计算总价
                 arr.forEach(item => {
                     totalPrice += item.price * item.quantity
+                    if (item.vipPrice > 0) {
+                        totalVIPPriceAll += item.vipPrice * item.quantity
+                    } else {
+                        totalVIPPriceAll += item.price * item.quantity
+                    }
                 })
                 this.setData({
+                    totalVIPPriceAll: totalVIPPriceAll,
                     deliveryCost: deliveryCost,
                     totalPrice: totalPrice,
                     cartLists: cartLists
@@ -267,8 +277,14 @@ Page({
             // 计算总价
             arr.forEach(item => {
                 totalPrice += item.price * item.quantity
+                if (item.vipPrice > 0) {
+                    totalVIPPriceAll += item.vipPrice * item.quantity
+                } else {
+                    totalVIPPriceAll += item.price * item.quantity
+                }
             })
             this.setData({
+                totalVIPPriceAll: totalVIPPriceAll,
                 deliveryCost: deliveryCost,
                 totalPrice: totalPrice,
                 cartLists: cartLists

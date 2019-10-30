@@ -11,3 +11,9 @@
     z-index: 3;
     width: 100%;
 }
+
+.get_address{
+    width: 160rpx;
+    display: flex;
+    align-items: center;
+}

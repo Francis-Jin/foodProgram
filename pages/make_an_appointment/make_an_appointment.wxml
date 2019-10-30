@@ -382,7 +382,7 @@
                 <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="2" bindtap="selectedPayFn">
                     <view>
                         <text class="iconfont icon-icon font_weight_100 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
-                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">余额支付</text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">VIP 支付</text>
                     </view>
                     <view>
                         <text wx:if="{{selectedId != 2}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>

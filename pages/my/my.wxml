@@ -42,53 +42,47 @@
         </view>
     </view>
 
-    <!-- 
-    <view class="margin_top_10 box_sizing padding_left_right_20">
-        <view data-type="2" bindtap="toDeliveryFn" class="flex flex_space_between box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
-            <view class="">
-                <text class="iconfont icon-icon"></text>
-                <text class="margin_left_20 color_5353 font_size_14">收支明细</text>
+    <!-- 个人账户基本信息 -->
+    <view class="flex flex_space_between text_center box_sizing padding_left_right_20 margin_top_10">
+        <view class="color_fff border_radius_10 box_shadow background_liner box_sizing padding_top_20 padding_bottom_10" style="width:40%">
+            <view class="margin_top_15">
+                <text>代金池</text>
             </view>
-            <view class="color_fff font_weight">
-                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            <view class="margin_top_5">
+                <text class="font_size_20 font_weight_600"><text class="font_size_14 font_weight_400">￥</text>{{userInfo.voucherBalance ? userInfo.voucherBalanc : 0}}</text>
+            </view>
+            <view class="margin_top_15">
+                <text>我的余额</text>
+            </view>
+            <view class="margin_top_5">
+                <text class="font_size_20 font_weight_600"><text class="font_size_14 font_weight_400">￥</text>{{userInfo.balance ? userInfo.balance: 0}}</text>
             </view>
         </view>
-    </view> -->
+        <view class="color_5353 border_radius_10 box_shadow bg_f9f box_sizing padding_left_right_20 padding_top_20 padding_bottom_10" style="width:56%">
+            <view class="padding_bottom_10 border_bottom" data-type="1" bindtap="toPageFn">
+                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" style="top:-2rpx;" src="/images/icon/ziyuanxhdpi@2x.png"></image>
+                <text class="margin_left_10 font_size_12">历史记录</text>
+            </view>
+            <view class="margin_top_10 padding_bottom_10 border_bottom" data-type="6" bindtap="toPageFn">
+                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" style="top:-2rpx;" src="/images/icon/authentication.png"></image>
+                <text class="margin_left_10 font_size_12">预约菜单</text>
+            </view>
+            <view class="margin_top_10 padding_bottom_10 border_bottom" data-type="3" bindtap="toPageFn">
+                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" style="top:-2rpx;" src="/images/icon/address.png"></image>
+                <text class="margin_left_10 font_size_12">我的地址</text>
+            </view>
+            <view class="margin_top_10 padding_bottom_10 relative">
+                <text class="iconfont icon-xiaoxi" style="font-size:30rpx; color:#6F6F6F;"></text>
+                <text class="margin_left_10 font_size_12">订阅消息</text>
+                <view style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:1;opacity:0;">
+                    <button class="width_height_100" bindtap="getMessageIdFn"></button>
+                </view>
+            </view>
+        </view>
+    </view>
 
     <!-- 普通用户 -->
     <view wx:if="{{roleId == 3 || roleId == 0}}">
-
-        <view class="flex flex_space_between text_center box_sizing padding_left_right_20 margin_top_10">
-            <view class="color_fff border_radius_10 box_shadow background_liner box_sizing padding_top_20 padding_bottom_10" style="width:40%">
-                <view class="margin_top_15">
-                    <text>代金池</text>
-                </view>
-                <view class="margin_top_5">
-                    <text class="font_size_20 font_weight_600"><text class="font_size_14 font_weight_400">￥</text>{{userInfo.voucherBalance}}</text>
-                </view>
-                <view class="margin_top_15">
-                    <text>我的余额</text>
-                </view>
-                <view class="margin_top_5">
-                    <text class="font_size_20 font_weight_600"><text class="font_size_14 font_weight_400">￥</text>{{userInfo.balance}}</text>
-                </view>
-            </view>
-            <view class="color_5353 border_radius_10 box_shadow bg_f9f box_sizing padding_left_right_20 padding_top_20 padding_bottom_10" style="width:56%">
-                <view class="padding_bottom_20 border_bottom" data-type="1" bindtap="toPageFn">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-2rpx;" src="/images/icon/ziyuanxhdpi@2x.png"></image>
-                    <text class="margin_left_10">历史记录</text>
-                </view>
-                <view class="margin_top_20 padding_bottom_20 border_bottom" data-type="6" bindtap="toPageFn">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-2rpx;" src="/images/icon/authentication.png"></image>
-                    <text class="margin_left_10">预约菜单</text>
-                </view>
-                <view class="margin_top_20 padding_bottom_10" data-type="3" bindtap="toPageFn">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-2rpx;" src="/images/icon/address.png"></image>
-                    <text class="margin_left_10">我的地址</text>
-                </view>
-            </view>
-        </view>
-
         <!-- 个人金库 -->
         <view class="box_sizing padding_left_right_20">
 
@@ -102,7 +96,7 @@
                     </view>
                     <view class="margin_left_30 line_height_50 font_size_14">
                         <view class="color_333">
-                            <text>余额：￥{{userInfo.balance}}</text>
+                            <text>余额：￥{{userInfo.balance ? userInfo.balance : 0}}</text>
                         </view>
                     </view>
                 </view>

@@ -117,7 +117,9 @@ Page({
     payOrder(e) {
         let that = this
         let orderId = e.currentTarget.dataset.id
+        let category = e.currentTarget.dataset.category
         that.setData({
+            categoryPay: category,
             orderId: orderId,
             payShow: true
         })

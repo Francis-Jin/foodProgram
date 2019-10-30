@@ -8,7 +8,8 @@ Page({
     data: {
         urlBefore: app.globalData.urlBefore,
         detailsInfo: '',
-        isIpx: false 
+        isIpx: false ,
+        cancelOrderShow: false, // 是否显示取消订单弹窗
     },
 
     /**
@@ -83,8 +84,24 @@ Page({
         })
     },
 
-    /** 取消订单. */
+    /** 显示取消订单弹窗. */
     cancleOrderFn(){
+        let that = this
+        that.setData({
+            cancelOrderShow: true
+        })
+    },
+
+    /** 隐藏取消订单弹窗. */
+    onCancelOrderFn() {
+        let that = this
+        that.setData({
+            cancelOrderShow: false
+        })
+    },
+
+    /** 确认取消订单. */
+    confirmCancelFn(){
         let that = this
         let orderId = that.data.orderId
         wx.showLoading({
@@ -96,12 +113,15 @@ Page({
             postData: {
                 orderId: orderId
             },
-            success(res){
+            success(res) {
                 wx.hideLoading()
-                if(res.code==200){
+                if (res.code == 200) {
                     wx.showToast({
                         title: res.message,
                         icon: 'none'
+                    })
+                    that.setData({
+                        cancelOrderShow: false
                     })
                     that.getOrderDetailsFn(orderId)
                 }

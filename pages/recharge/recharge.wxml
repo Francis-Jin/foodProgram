@@ -14,11 +14,11 @@
                 <text>{{item.price}}元</text>
             </view>
         </view>
-        <view class="margin_top_20 flex flex_space_between parentBox">
+        <!-- <view class="margin_top_20 flex flex_space_between parentBox">
             <view data-index="{{index}}" bindtap="slectedChoneZhiFn" wx:if="{{index >= 3}}" wx:for="{{priceArr}}" wx:key="index" class="{{item.checked ? 'active' : ''}} item width_30 height_fixed_60 text_center line_height_60 color_ff6">
                 <text>{{item.price}}元</text>
             </view>
-        </view>
+        </view> -->
     </view>
 
     <view class="margin_top_20 weui-cell inputValue padding_top_10 padding_bottom_10 padding_left_10 box_sizing weui-cell_input">

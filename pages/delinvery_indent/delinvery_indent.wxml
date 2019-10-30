@@ -5,7 +5,7 @@
 <view class="container">
     <view class="height_fixed_70"></view>
     <view class="top_bar bg_fff box_shadow flex flex_space_between line_height_50 box_shadow overflow_hidden box_sizing padding_left_right_20" style="border-radius: 0 0 40rpx 40rpx;">
-        <view wx:for="{{topBarLists}}" wx:key="index" data-item="{{item}}" bindtap="onSwitchTabFn" class="item {{selectedActive == item.id ? 'active' : ''}}">
+        <view wx:for="{{topBarLists}}" wx:key="index" data-item="{{item}}" bindtap="onSwitchTabFn" class="item {{selectedActive == item.id ? 'active' : ''}} font_size_14">
             <text class="relative text">{{item.text}}</text>
         </view>
     </view>

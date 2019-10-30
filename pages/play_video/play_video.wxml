@@ -5,7 +5,7 @@
             <text>{{cookName}}厨师的故事视频</text>
         </view>
         <view class="video_box bg_fff">
-            <video class="width_height_100" autoplay="{{ true }}" object-fit="fill" src="{{url}}"></video>
+            <video class="width_height_100" autoplay="{{ true }}" object-fit="contain" src="{{url}}"></video>
         </view>
         <view class="height_fixed_50">
             <!-- 分享、点赞、 -->

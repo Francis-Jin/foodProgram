@@ -261,7 +261,6 @@
     <!-- 发起拼单按钮。 -->
     <view bindtap="goPayIndentFn" class="text_center line_height_50 color_fff background_liner" style="position:fixed;left:0;bottom:0;width:100%">
         <text>发起拼单</text>
-        <text>（￥15）</text>
     </view>
 
     <!-- 地址选择弹出层 -->
@@ -307,20 +306,22 @@
                 <text>选择支付方式</text>
             </view>
             <view class="padding_top_20 padding_bottom_20">
-                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50 border_bottom" data-type="1" bindtap="selectedPayFn">
+                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="1" bindtap="selectedPayFn">
                     <view>
                         <text class="iconfont icon-logo-wechat font_weight_600 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
                         <text class="font_size_16 margin_left_10 color_5353 font_size_14">微信支付</text>
+                        <text wx:if="{{assembleMode == 1}}" class="color_5fc font_weight">￥{{twoPrice}}</text>
+                        <text wx:if="{{assembleMode == 2}}" class="color_5fc font_weight">￥{{morePrice}}</text>
                     </view>
                     <view>
                         <text wx:if="{{selectedId != 1}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
                         <text wx:if="{{selectedId == 1}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
                     </view>
                 </view>
-                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="2" bindtap="selectedPayFn">
+                <view hidden="true" class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50" data-type="2" bindtap="selectedPayFn">
                     <view>
                         <text class="iconfont icon-icon font_weight_100 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
-                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">余额支付</text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">VIP 支付</text>
                     </view>
                     <view>
                         <text wx:if="{{selectedId != 2}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>

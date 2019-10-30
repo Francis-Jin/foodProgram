@@ -4,8 +4,10 @@ App({
         successPics: [],
         sessionKey: '',
         userInfo: null,
-        // baseApi: 'http://dongk.4kb.cn/food', //测试服 接口请求前缀
-        // urlBefore: 'http://dongk.4kb.cn/food/upload', //测试服 图片前缀
+        WW: 0,//系统默认宽度
+        HH: 0,//系统默认高度
+        // baseApi: 'https://dongk.4kb.cn/food', //测试服 接口请求前缀
+        // urlBefore: 'https://dongk.4kb.cn/food/upload', //测试服 图片前缀
         baseApi: 'https://food.zhiyanginfo.top/food', //正试服 接口请求前缀
         urlBefore: 'https://food.zhiyanginfo.top/food/upload/', //正试服 图片前缀
         //获取数据列表，默认获取10条数据
@@ -41,41 +43,6 @@ App({
             fail: function(err) {
                 obj.error(err);
             }
-        })
-    },
-
-    /** 登录 */
-    loginFn() {
-        let that = this
-        wx.login({
-            success: function (res) {
-                let code = res.code
-               wx.getUserInfo({
-                   withCredentials: true,
-                   lang: '',
-                   success: function(res) {
-                       let encryptedData = res.encryptedData
-                       let iv = res.iv
-                       that.appRequest({
-                           url: '/app/userInfo/login.action',
-                           method: "post",
-                           postData: {
-                               "code": code,
-                               "encryptedData": encryptedData,
-                               "iv": iv
-                           },
-                           success(res) {
-                               that.globalData.userInfo = res.data
-                               wx.setStorageSync('userInfo', res.data)
-                           }
-                       })
-                   },
-                   fail: function(res) {},
-                   complete: function(res) {},
-               })
-            },
-            fail: function (res) { },
-            complete: function (res) { },
         })
     },
 
@@ -147,8 +114,59 @@ App({
         }
     },
 
-    /** 进入页面调用. */
-    onShow: function() {
-        // this.loginFn()
+    onLaunch: function(){
+        var that = this
+        wx.getSystemInfo({
+            success: function(res) {
+                wx.setStorageSync("systemInfo", res)
+                var WW = res.windowWidth
+                var HH = res.windowHeight
+                that.globalData.WW = WW
+                that.globalData.HH = HH
+            },
+        })
+    },
+
+    bezier: function (pots, amount) {
+        // 购物车动画特效算法
+        var pot;
+        var lines;
+        var ret = [];
+        var points;
+        for (var i = 0; i <= amount; i++) {
+            points = pots.slice(0);
+            lines = [];
+            while (pot = points.shift()) {
+                if (points.length) {
+                    lines.push(pointLine([pot, points[0]], i / amount));
+                } else if (lines.length > 1) {
+                    points = lines;
+                    lines = [];
+                } else {
+                    break;
+                }
+            }
+            ret.push(lines[0]);
+        }
+        function pointLine(points, rate) {
+            var pointA, pointB, pointDistance, xDistance, yDistance, tan, radian, tmpPointDistance;
+            var ret = [];
+            pointA = points[0];//点击
+            pointB = points[1];//中间
+            xDistance = pointB.x - pointA.x;
+            yDistance = pointB.y - pointA.y;
+            pointDistance = Math.pow(Math.pow(xDistance, 2) + Math.pow(yDistance, 2), 1 / 2);
+            tan = yDistance / xDistance;
+            radian = Math.atan(tan);
+            tmpPointDistance = pointDistance * rate;
+            ret = {
+                x: pointA.x + tmpPointDistance * Math.cos(radian),
+                y: pointA.y + tmpPointDistance * Math.sin(radian)
+            };
+            return ret;
+        }
+        return {
+            'bezier_points': ret
+        };
     }
 })

@@ -34,7 +34,7 @@
 
                     <view wx:if="{{item.category == 2}}" class="item cs_item border_radius_20 box_shadow overflow_hidden height_fixed_160 relative" data-itemId="{{item.id}}" data-type="1" bindtap="topPageDetails">
                         <view class="font_size_0">
-                            <image class="max_width_100" src="{{urlBefore + item.cover}}"></image>
+                            <image class="max_width_100" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
                         </view>
                         <view class="width_100 text_right flex flex_space_between" style="position:absolute; right:10rpx; bottom:20rpx;">
                             <view class="text_indent_8 font_size_14 color_fff">
@@ -59,11 +59,12 @@
                             </view>
                             <view class="flex flex_space_between padding_bottom_10 relative">
                                 <view class="font_size_12 line_height_30 overflow1">
-                                    <text class="del_line color_999 margin_right_10 font_size_14">￥{{item.marketPrice}}</text>
-                                    <text class="color_ff6 font_size_12">{{item.vipDiscount}}折￥</text>
+                                    <text class="color_999 font_size_10">￥</text>
+                                    <text class="color_999 margin_right_10 font_size_14">{{item.price}}</text>
+                                    <text class="color_ff6 font_size_10">{{item.vipDiscount}}折￥</text>
                                     <text class="color_ff6 font_size_18">{{item.vipPrice}}</text>
                                 </view>
-                                <view class="price" data-itemId="{{item.id}}" bindtap="addCart">
+                                <view class="price" data-itemId="{{item.id}}" data-pic="{{urlBefore + item.cover}}" bindtap="addCart">
                                     <view class="width_fixed_20 height_fixed_20 border_radius__100 line_height_30 margin_right_5">
                                         <!-- <image class="width_height_100" src="/images/icon/tianchongxing-@2x.png"></image> -->
                                         <text class="iconfont icon-add color_4dc" style="font-size:40rpx;"></text>
@@ -92,7 +93,7 @@
 
             </view>
 
-            
+
 
             <view class="right_content box_sizing width_50 padding_left_10">
 
@@ -100,7 +101,7 @@
 
                     <view wx:if="{{item.category == 2}}" class="item cs_item border_radius_20 box_shadow overflow_hidden height_fixed_160 relative" data-itemId="{{item.id}}" data-type="1" bindtap="topPageDetails">
                         <view class="font_size_0">
-                            <image class="max_width_100" src="{{urlBefore + item.cover}}"></image>
+                            <image class="max_width_100" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
                         </view>
                         <view class="width_100 text_right flex flex_space_between" style="position:absolute; right:10rpx; bottom:20rpx;">
                             <view class="text_indent_8 font_size_14 color_fff">
@@ -113,7 +114,7 @@
                     </view>
 
                     <view wx:if="{{item.category == 1}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden">
-                        <view class="font_size_0 height_fixed_120" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                        <view class="font_size_0 height_fixed_120" data-itemId="{{item.id}}" data-pic="{{urlBefore + item.cover}}" data-type="2" bindtap="topPageDetails">
                             <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
                         </view>
                         <view class="width_100 box_sizing padding_left_right_10">
@@ -125,11 +126,12 @@
                             </view>
                             <view class="flex flex_space_between padding_bottom_10 relative">
                                 <view class="font_size_12 line_height_30 overflow1">
-                                    <text class="del_line color_999 margin_right_10 font_size_14">￥{{item.marketPrice}}</text>
-                                    <text class="color_ff6 font_size_12">{{item.vipDiscount}}折￥</text>
+                                    <text class="color_999 font_size_10">￥</text>
+                                    <text class="color_999 margin_right_10 font_size_14">{{item.price}}</text>
+                                    <text class="color_ff6 font_size_10">{{item.vipDiscount}}折￥</text>
                                     <text class="color_ff6 font_size_18">{{item.vipPrice}}</text>
                                 </view>
-                                <view class="price" data-itemId="{{item.id}}" bindtap="addCart">
+                                <view class="price" data-itemId="{{item.id}}" data-pic="{{urlBefore + item.cover}}" bindtap="addCart">
                                     <view class="width_fixed_20 height_fixed_20 border_radius__100 line_height_30 margin_right_5">
                                         <!-- <image class="width_height_100" src="/images/icon/tianchongxing-@2x.png"></image> -->
                                         <text class="iconfont icon-add color_4dc" style="font-size:40rpx;"></text>
@@ -174,6 +176,10 @@
         </view>
     </view>
 
+    <!-- 加入购物车小球 -->
+    <view class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;">
+        <image src="{{addPic}}"></image>
+    </view>
 
 
 

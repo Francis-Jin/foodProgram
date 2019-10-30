@@ -166,6 +166,51 @@ Page({
             userInfo: wx.getStorageSync('userInfo')
         })
     },
+
+
+
+    /** 获取模板消息Id. */
+    getMessageIdFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/sysConf/listTmplIds.action',
+            method: 'GET',
+            success(res) {
+                console.log(res)
+                if (res.code == 200) {
+                    let tmplIds = res.data
+                    that.requestMsg(tmplIds)
+                } else {
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
+                    })
+                }
+            }
+        })
+    },
+
+    /** 获取模板消息下发权限. */
+    requestMsg(tmplIds) {
+        return new Promise((resolve, reject) => {
+            wx.requestSubscribeMessage({
+                tmplIds: tmplIds,
+                success: (res) => {
+                    console.log(res)
+                    if (res.errMsg == 'requestSubscribeMessage:ok'){
+                        wx.showToast({
+                            title: '订阅成功',
+                        })
+                    }
+                },
+                fail(err) {
+                    //失败
+                    console.error(err);
+                    reject()
+                }
+            })
+        })
+    },
     
     /** 点击登录按钮去登录. */
     toLoginFn(){
@@ -177,62 +222,64 @@ Page({
     /** 获取普通用户微量元素计算. */
     getUserFn() {
         let that = this
-        app.appRequest({
-            url: '/app/userInfo/getUserNutrient.action',
-            method: 'get',
-            getParams: {
-                userId: wx.getStorageSync('userInfo').id
-            },
-            success(res) {
-                if (res.data.length > 0) {
-                    let objAll = res.data[0]
-                    let objAllArr = Object.keys(objAll)
-                    let objAllArrNum = objAllArr.slice(1,objAllArr.length)
-                    let elementArr1 = that.data.elementArr1
-                    let elementArr2 = that.data.elementArr2
-                    let elementArr3 = that.data.elementArr3
-                    let maxValue1 = [],maxValue2 = [],maxValue3 = []
-                    elementArr1.forEach((item, index)=>{
-                        item.value = objAll[objAllArrNum[index]]
-                    })
-                    elementArr2.forEach((item, index) => {
-                        item.value = objAll[objAllArrNum[elementArr1.length + index]]
-                    })
-                    elementArr3.forEach((item, index) => {
-                        item.value = objAll[objAllArrNum[elementArr1.length + elementArr2.length + index]]
-                    })
-                    elementArr1.forEach(item=>{
-                        maxValue1.push(item.value)
-                    })
-                    elementArr2.forEach(item => {
-                        maxValue2.push(item.value)
-                    })
-                    elementArr3.forEach(item => {
-                        maxValue3.push(item.value)
-                    })
-                    maxValue1.sort()
-                    maxValue2.sort()
-                    maxValue3.sort()
+        if (wx.getStorageSync('userInfo')){
+            app.appRequest({
+                url: '/app/userInfo/getUserNutrient.action',
+                method: 'get',
+                getParams: {
+                    userId: wx.getStorageSync('userInfo').id
+                },
+                success(res) {
+                    if (res.data.length > 0) {
+                        let objAll = res.data[0]
+                        let objAllArr = Object.keys(objAll)
+                        let objAllArrNum = objAllArr.slice(1, objAllArr.length)
+                        let elementArr1 = that.data.elementArr1
+                        let elementArr2 = that.data.elementArr2
+                        let elementArr3 = that.data.elementArr3
+                        let maxValue1 = [], maxValue2 = [], maxValue3 = []
+                        elementArr1.forEach((item, index) => {
+                            item.value = objAll[objAllArrNum[index]]
+                        })
+                        elementArr2.forEach((item, index) => {
+                            item.value = objAll[objAllArrNum[elementArr1.length + index]]
+                        })
+                        elementArr3.forEach((item, index) => {
+                            item.value = objAll[objAllArrNum[elementArr1.length + elementArr2.length + index]]
+                        })
+                        elementArr1.forEach(item => {
+                            maxValue1.push(item.value)
+                        })
+                        elementArr2.forEach(item => {
+                            maxValue2.push(item.value)
+                        })
+                        elementArr3.forEach(item => {
+                            maxValue3.push(item.value)
+                        })
+                        maxValue1.sort()
+                        maxValue2.sort()
+                        maxValue3.sort()
 
-                    elementArr1.forEach(item => {
-                        item.percentage = parseInt(item.value / maxValue1[maxValue1.length - 1] * 100) + '%'
-                    })
-                    elementArr2.forEach(item => {
-                        item.percentage = parseInt(item.value / maxValue2[maxValue2.length - 1] * 100) + '%'
-                    })
-                    elementArr3.forEach(item => {
-                        item.percentage = parseInt(item.value / maxValue3[maxValue3.length - 1] * 100) + '%'
-                    })
-                    that.setData({
-                        elementArr1: elementArr1,
-                        elementArr2: elementArr2,
-                        elementArr3: elementArr3
-                    })
+                        elementArr1.forEach(item => {
+                            item.percentage = parseInt(item.value / maxValue1[maxValue1.length - 1] * 100) + '%'
+                        })
+                        elementArr2.forEach(item => {
+                            item.percentage = parseInt(item.value / maxValue2[maxValue2.length - 1] * 100) + '%'
+                        })
+                        elementArr3.forEach(item => {
+                            item.percentage = parseInt(item.value / maxValue3[maxValue3.length - 1] * 100) + '%'
+                        })
+                        that.setData({
+                            elementArr1: elementArr1,
+                            elementArr2: elementArr2,
+                            elementArr3: elementArr3
+                        })
 
+                    }
                 }
-            }
-        })
+            })
 
+        }
 
     },
 
@@ -249,9 +296,10 @@ Page({
         }
         if (_type == 1) {
             // 历史记录
-            wx.navigateTo({
-                url: '/pages/history/history',
-            })
+            // wx.navigateTo({
+            //     url: '/pages/history/history',
+            // })
+            
         } else if (_type == 2) {
             // 身份认证
             wx.navigateTo({
@@ -332,7 +380,7 @@ Page({
      */
     onShow: function() {
         this.getUserFn()
-        this.getUserInfoFn()
+        if (wx.getStorageSync('userInfo')) this.getUserInfoFn()
         let roleId = wx.getStorageSync('userInfo').roleId
         let groupLeaderType = wx.getStorageSync('userInfo').headMan
         let userInfo = wx.getStorageSync('userInfo')

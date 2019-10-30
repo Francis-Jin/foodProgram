@@ -93,8 +93,11 @@
 
             </view>
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> df3bad91574d8b61be8090abfe683b593ee9c555
             <view class="right_content box_sizing width_50 padding_left_10">
 
                 <block wx:for="{{listsRight}}" wx:key="index">

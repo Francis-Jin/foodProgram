@@ -6,7 +6,7 @@ App({
         userInfo: null,
         WW: 0,//系统默认宽度
         HH: 0,//系统默认高度
-        // baseApi: 'https://dongk.4kb.cn/food', //测试服 接口请求前缀test
+        // baseApi: 'https://dongk.4kb.cn/food', //测试服 接口请求前缀test123
         // urlBefore: 'https://dongk.4kb.cn/food/upload', //测试服 图片前缀
         baseApi: 'https://food.zhiyanginfo.top/food', //正试服 接口请求前缀
         urlBefore: 'https://food.zhiyanginfo.top/food/upload/', //正试服 图片前缀

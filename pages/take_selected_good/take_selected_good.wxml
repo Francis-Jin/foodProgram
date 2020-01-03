@@ -1,0 +1,30 @@
+<!--pages/take_selected_good/take_selected_good.wxml-->
+<view class="search">
+    <van-search placeholder="搜索" bind:search="searchDataFn" />
+</view>
+
+<view class="container box_sizing padding_left_right_20">
+    <view class="lists">
+        <view wx:for="{{lists}}" wx:key="index" data-item="{{item}}" bindtap="selectedFoodFn" class="item flex flex_space_between line_height_50 border_bottom padding_top_10 padding_bottom_10">
+            <view class="width_20 height_fixed_50">
+                <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
+            </view>
+            <view class="width_60 box_sizing padding_left_10">
+                <text>{{item.name}}</text>
+            </view>
+            <view class="width_20">
+                <checkbox-group data-itemId="{{item.id}}" bindtap="checkGoodsChange" class="text_center line_height_40">
+                    <label class="checkbox">
+                        <checkbox class="width_height_100" checked="{{item.checked}}" />
+                    </label>
+                </checkbox-group>
+            </view>
+
+        </view>
+    </view>
+
+    <view bindtap="confirmSelectedContentFn" class="text_center line_height_50 background_yellow_liner color_fff width_100" style="position:fixed;left:0;bottom:0;">
+        <text>确定</text>
+    </view>
+    <view class="height_fixed_60"></view>
+</view>

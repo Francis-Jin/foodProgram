@@ -1,1 +1,131 @@
 /* pages/booking_method/booking_method.wxss */
+
+.init {
+    margin-bottom: 30rpx;
+    margin-right: 30rpx;
+    font-size: 24rpx;
+    padding: 0 20rpx;
+}
+
+.init:nth-child(3n) {
+    margin-right: 0;
+}
+
+.border1 {
+    border: 1rpx solid #3cbab2;
+}
+
+.color1{
+    color: #3cbab2;
+}
+
+.activeBg1{
+    background: #3cbab2;
+    color: #fff;
+}
+
+.border2 {
+    border: 1rpx solid #FE872F;
+}
+
+.color2{
+    color: #FE872F;
+}
+
+.activeBg2{
+    background: #FE872F;
+    color: #fff;
+}
+
+.border3 {
+    border: 1rpx solid #E67755;
+}
+
+.color3 {
+    color: #E67755;
+}
+
+.activeBg3{
+    background: #E67755;
+    color: #fff;
+}
+
+.border4 {
+    border: 1rpx solid #2C83C7;
+}
+
+.color4 {
+    color: #2C83C7;
+}
+
+.activeBg4{
+    background: #2C83C7;
+    color: #fff;
+}
+
+.border5 {
+    border: 1rpx solid #60CA80;
+}
+
+.color5 {
+    color: #60CA80;
+}
+
+.activeBg5{
+    background: #60CA80;
+    color: #fff;
+}
+
+.border6 {
+    border: 1rpx solid #FFAE3A;
+}
+
+.color6 {
+    color: #FFAE3A;
+}
+
+.activeBg6{
+    background: #FFAE3A;
+    color: #fff;
+}
+
+/* 平行四边样式 */
+
+.absolute1 {
+    top: 0;
+    width: 400rpx;
+    text-align: right;
+    height: 100rpx;
+    line-height: 100rpx;
+    background: linear-gradient(to right, #fff 10%, #599998);
+    z-index: 2;
+}
+
+.absolute2 {
+    top:10rpx;
+    width: 520rpx;
+    text-align: right;
+    height: 100rpx;
+    background: linear-gradient(to right, #fff 40%, #4EBD8B);
+}
+
+.outside {
+    position: absolute;
+    left: -100rpx;
+    /* box-sizing: border-box; */
+    padding: 8rpx;
+    transform: skewX(-45deg);
+}
+
+.inside {
+    background: #fff;
+    position: relative;
+    box-sizing: border-box;
+    padding-right: 50rpx;
+    left: -6rpx;
+}
+
+.outside text {
+    display: inline-block;
+    transform: skewX(45deg);
+}

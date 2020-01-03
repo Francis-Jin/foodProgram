@@ -1,4 +1,5 @@
 // pages/spell_list_details/spell_list_details.js
+const util = require('../../utils/util');
 var app = getApp()
 Page({
 
@@ -6,24 +7,31 @@ Page({
      * 页面的初始数据
      */
     data: {
+        userInfo:null,
         imgLists: [1,2],
+        urlBefore: app.globalData.urlBefore,
         lists:[],
         addressLists: [], // 显示用户地址列表
         systemInfo: '', //系统配置信息
         showSpellList: false, //弹起拼单或单独购买弹框
         groupBuyId: '', // 拼单ID
         waysOfPurchasing: '', // 选择购买方式 1：单独购买 2：拼单购买
-        deliveryMode: '', //选择用餐方式 1：自取 2：配送
+        deliveryMode: 2, //选择用餐方式 1：自取 2：配送
         showAddress: false, // 是否选择地址弹窗
-        addressText: '', //显示选择的地址
+        addressText: '选择配送地址', //显示选择的地址
         addressItem: '', //选择的地址Item元素
         messageText: '', // 商家留言信息
         payShow: false, // 是否显示支付方式选择
-        selectedId: '', // 选择支付方式 1：微信支付 2：余额支付
+        selectedId: 1, // 选择支付方式 1：微信支付 2：余额支付
         listGroupBuyByIngLists: [], //正在拼单的列表
         groupPrice: '', //拼单支付金额
 
         makeAppointmentShow: false, //是否显示预约点餐
+
+        // ================================
+        haveMealAddresInfo: null, // 用餐地址选择返回
+        takeMealsAddressId: null, //选择回来的取餐地址ID
+        takeMealsAddress: '选择取餐地址', //选择回来的取餐地址
     },
 
     /**
@@ -31,14 +39,49 @@ Page({
      */
     onLoad: function (options) {
         let that = this
+        let userInfo = wx.getStorageSync('userInfo')
         that.setData({
             foodName: options.foodName,
-            foodId: options.foodId
+            foodId: options.foodId,
+            userInfo: userInfo
+        })
+        let addressItem = wx.getStorageSync('addressItem')
+        let takeMealsAddressItem = wx.getStorageSync('takeMealsAddressItem')
+        this.setData({
+            haveMealAddresInfo: addressItem,
+            takeMealsAddressId: takeMealsAddressItem.id, //选择回来的取餐地址ID
+            takeMealsAddress: takeMealsAddressItem.address, //选择回来的取餐地址
         })
         that.getSysConfFn()
-        that.listGroupBuyByIngFn()
     },
 
+    /** 获取随机广告. */
+    GetAdvertisingFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/dishInfo/getDishInfoByAd.action',
+            method: 'get',
+            success(res) {
+                if (res.code == 200) {
+                    let advertisingInfo = res.data
+                    if (advertisingInfo) {
+                        that.setData({
+                            advertisingInfo: advertisingInfo
+                        })
+                    }
+                }
+            }
+        })
+    },
+
+    /** 跳转支付成功后的广告详情. */
+    toAdvertisementDetailsFn() {
+        let advertisingInfo = this.data.advertisingInfo
+        wx.navigateTo({
+            url: '/pages/advertisement_details/advertisement_details?itemId=' + advertisingInfo.id,
+        })
+    },
+    
     /** 获取拼单列表. */
     listGroupBuyByIngFn() {
         let that = this
@@ -51,8 +94,12 @@ Page({
             success(res) {
                 if (res.code == 200) {
                     if (res.data) {
-                        res.data.forEach(item => {
-                            item.createTime = item.createTime.trim().split(/\s+/)[1]
+                        let systemParamInfo = that.data.systemInfo
+                        let groupTimeLimit = systemParamInfo.groupTimeLimit
+                        res.data.forEach(item=>{
+                            item.createTime = item.createTime.replace(/\-/g, "/")
+                            let Target = new Date(item.createTime).getTime() + (groupTimeLimit * 60 * 1000)
+                            item.createTime = util.formatTime(new Date(Target))
                         })
                         that.setData({
                             lists: res.data
@@ -68,22 +115,37 @@ Page({
         })
     },
 
+    /** 跳转地址选择列表. */
+    selectedAddressFn(e) {
+        // 我的地址
+        let type = e.currentTarget.dataset.type
+        if (type == 1) {
+            wx.navigateTo({
+                url: '/pages/take_meals_address/take_meals_address',
+            })
+        }
+        if (type == 2) {
+            wx.navigateTo({
+                url: '/pages/my_address/my_address?selected=true',
+            })
+        }
+    },
+
     /** 点击加入拼单按钮. */
     waysOfPurchasingFn(e) {
-        console.log(e)
         let item = e.currentTarget.dataset.item
+        let showTime = item.showTime
         let itemUserId = item.userId
+        let price = item.price
         let groupPrice = item.groupPrice
         let groupBuyId = item.id
+        let listDiscount = (price - groupPrice).toFixed(2)
         let userInfoUserId = wx.getStorageSync("userInfo").id
-        if(itemUserId == userInfoUserId){
-            wx.showToast({
-                title: '不可加入自己发起的拼单',
-                icon: 'none'
-            })
+        if(itemUserId == userInfoUserId || showTime == '00:00'){
             return false
         }
         this.setData({
+            listDiscount: listDiscount,
             groupPrice: groupPrice,
             groupBuyId: groupBuyId,
             showSpellList: true
@@ -129,6 +191,8 @@ Page({
                 that.setData({
                     systemInfo: res.data
                 })
+
+                that.listGroupBuyByIngFn()
             }
         })
     },
@@ -195,17 +259,15 @@ Page({
         })
     },
 
-    /** 点击发起拼单按钮. */
+    /** 点击加入拼单按钮. */
     goPayIndentFn() {
         let that = this
         let assembleId = that.data.assembleId // 拼单ID
         let deliveryMode = that.data.deliveryMode // 用餐方式
-        let addressItem = that.data.addressItem // 选择的地址
+        let addressItem = that.data.haveMealAddresInfo // 选择的地址
+        let takeMealsAddressId = that.data.takeMealsAddressId // 选择的地址
         let messageText = that.data.messageText // 留言信息
         let addressText = that.data.addressText // 留言信息
-        console.log(deliveryMode)
-        console.log(messageText)
-        console.log(addressItem)
         if (deliveryMode == '') {
             wx.showToast({
                 title: '请选择用餐方式',
@@ -214,7 +276,14 @@ Page({
             return false
         }
 
-        if (addressItem == '' && deliveryMode == 2) {
+        if (!takeMealsAddressId && deliveryMode == 1) {
+            wx.showToast({
+                title: '请选择自取地址',
+                icon: 'none'
+            })
+            return false
+        }
+        if (!addressItem && deliveryMode == 2) {
             wx.showToast({
                 title: '请选择配送地址',
                 icon: 'none'
@@ -237,7 +306,8 @@ Page({
                 communitySectionId: 0,
                 communityBuildingId: 0,
                 communityBuildingUnitId: 0,
-                address: addressText
+                address: '',
+                locationId: that.data.takeMealsAddressId,
             }
         } else {
             parm = {
@@ -251,7 +321,8 @@ Page({
                 communitySectionId: addressItem.communitySectionId,
                 communityBuildingId: addressItem.communityBuildingId,
                 communityBuildingUnitId: addressItem.communityBuildingUnitId,
-                address: addressText
+                address: addressItem.address + addressItem.doorplate,
+                locationId: 0,
             }
         }
         app.appRequest({
@@ -325,6 +396,7 @@ Page({
                         that.setData({
                             makeAppointmentShow: true
                         })
+                        that.GetAdvertisingFn()
                     },
                     fail(err) {
                         console.log(err)
@@ -334,7 +406,7 @@ Page({
                             showCancel: false,
                             confirmColor: "#5bcbc8",
                             success(res) {
-                                wx.switchTab({
+                                wx.redirectTo({
                                     url: '/pages/order/order',
                                 })
                             }
@@ -348,7 +420,7 @@ Page({
     /** 点击返回首页按钮. */
     toBackIndexFn() {
         wx.setStorageSync('balancePaySuccess', false)
-        wx.switchTab({
+        wx.redirectTo({
             url: '/pages/index/index',
         })
     },
@@ -378,6 +450,7 @@ Page({
             this.setData({
                 makeAppointmentShow: true
             })
+            that.GetAdvertisingFn()
         }
         that.getUserAddressFn()
     },

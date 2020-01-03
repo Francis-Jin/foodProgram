@@ -102,7 +102,7 @@ Page({
         if (res.from == "button") {
             let itemId = res.target.dataset.info;
             return {
-                title: '日权食厨师页面',
+                title: '日权食厨师',
                 path: '/pages/cook_details/cook_details?itemId=' + itemId,
                 success: function(res) {
                     console.log('成功', res)

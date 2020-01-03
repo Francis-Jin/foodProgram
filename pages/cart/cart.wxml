@@ -1,50 +1,34 @@
 <!--pages/cart/cart.wxml-->
+<tabBar current='3' buyNumber="{{cartNumber}}" />
 <view class="container">
-
-    <!-- 顶部 -->
-    <view hidden="true" class="flex z_index_2 bg_fff flex_space_between box_sizing padding_left_right_20 line_height_50 box_shadow border_top topAdmin">
-        <view class="color_5353">
-            <checkbox-group bindtap="checkboxChange">
-                <label class="checkbox">
-                    <checkbox checked="{{checkedAll}}" />
-                    <text class="margin_left_5">全选</text>
-                </label>
-            </checkbox-group>
-        </view>
-        <view class="" bindtap="tapStatusFn">
-            <text wx:if="{{administrationType == 1}}" class="padding_left_10 background_liner padding_right_10 padding_top_5 padding_bottom_5 color_fff font_size_12 border_radius_10">管理</text>
-            <text wx:if="{{administrationType == 2}}" class="padding_left_10 background_red_liner padding_right_10 padding_top_5 padding_bottom_5 color_fff font_size_12 border_radius_10">完成</text>
-        </view>
-    </view>
-    <!-- 顶部占位 -->
-    <view hidden="true" class="height_fixed_50"></view>
-
     <!-- 主要内容部分 -->
     <view class="container">
         <!-- 内容 -->
         <view>
             <!-- 有数据 -->
-            <view wx:if="{{cartLists.length != 0}}">
+            <view wx:if="{{cartLists.length != 0}}" class="box_sizing padding_left_right_20">
 
                 <view class="data_lists">
-                    <view wx:for="{{cartLists}}" wx:key="index" class="item relative box_sizing padding_left_right_20 border_bottom flex padding_top_10 padding_bottom_20 relative margin_bottom_10">
-                        <view class="width_fixed_50">
-                            <checkbox-group data-itemId="{{item.id}}" bindtap="checkGoodsChange" class="text_center line_height_80">
+                    <view wx:for="{{cartLists}}" wx:key="index" class="item relative box_sizing {{index != cartLists.length - 1 ? 'border_bottom' : ''}} flex padding_top_10 padding_bottom_20 relative margin_bottom_10">
+                        <view hidden="true" class="width_fixed_50 relative">
+                            <!-- <checkbox-group data-itemId="{{item.id}}" bindtap="checkGoodsChange" class="text_center line_height_80"> -->
+                            <checkbox-group class="text_center line_height_80">
                                 <label class="checkbox">
                                     <checkbox class="width_height_100" checked="{{item.checked}}" />
                                 </label>
                             </checkbox-group>
+                            <view style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:2;"></view>
                         </view>
                         <view class="flex">
                             <view class="width_fixed_80 height_fixed_80" data-itemId="{{item.id}}" bindtap="toDetailsFn">
                                 <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
                             </view>
                             <view class="margin_left_10">
-                                <view class="margin_top_10 font_size_14 color_5151">
+                                <view class="width_70 font_size_14 color_5151">
                                     <text>{{item.productName}}</text>
                                 </view>
                                 <view class="margin_top_30">
-                                    <text class="margin_right_10 color_e3 del_line"><text class="font_size_12">￥</text>{{item.marketPrice}}</text>
+                                    <text class="margin_right_5 color_a9"><text class="font_size_12">原价￥</text>{{item.marketPrice}}</text>
                                     <text class="color_ff6"><text class="font_size_12">￥</text>{{item.price}}</text>
                                 </view>
                             </view>
@@ -54,7 +38,7 @@
                                     <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="1" bindtap="addReduceFn">
                                         <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
                                     </view>
-                                    <view class="width_fixed_30 height_fixed_30 line_height_30 text_center">
+                                    <view class="width_fixed_20 height_fixed_30 line_height_30 text_center">
                                         <text>{{item.quantity}}</text>
                                     </view>
                                     <view class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="2" bindtap="addReduceFn">
@@ -63,13 +47,128 @@
                                 </view>
                             </view>
                         </view>
-                        <view data-productid="{{item.productId}}" bindtap="deleteGoodFn" style="position:absolute;right:40rpx;top:40rpx;width:60rpx;height:60rpx; line-height:60rpx;" class="text_center">
-                            <text class="iconfont icon-delete color_999" style="font-size:40rpx;"></text>
+                        <view data-productid="{{item.productId}}" bindtap="deleteGoodFn" style="position:absolute;right:40rpx;top:40rpx;width:260rpx;height:60rpx;" class="text_right">
+                            <!-- <text class="iconfont icon-delete color_999" style="font-size:40rpx;"></text> -->
+                            <text class="color_5fc font_size_14">删除</text>
                         </view>
                     </view>
                 </view>
 
+                <!-- 全选全不选 -->
+                <view hidden="true" class="flex box_sizing padding_left_50">
+                    <view data-checked="true" bindtap="checkboxChange" class="width_fixed_80 text_center line_height_30 color_fff border_radius_5 bg_59C margin_right_10">
+                        <text>全部选择</text>
+                    </view>
+                    <view data-checked="false" bindtap="checkboxChange" class="width_fixed_80 text_center line_height_30 color_fff border_radius_5 bg_59C">
+                        <text>全部取消</text>
+                    </view>
+                </view>
+
+                <!-- 显示内容 -->
+                <view class="box_sizing">
+                    <!-- 配送方式选择 -->
+                    <view class="border_radius_20 margin_top_20 padding_bottom_10">
+                        <view class="padding_top_10 padding_bottom_10 border_bottom">
+                            <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/tianchongxing-@2x.png"></image>
+                            <text class="color_5151 font_size_14">选择配送方式</text>
+                        </view>
+                        <view class="margin_top_10 flex flex_space_between box_sizing padding_left_30">
+                            <view class="width_80" data-type="1" bindtap="selectedAddressFn">
+                                <view class="color_5fc">
+                                    <text>到店自取</text>
+                                </view>
+                                <view class="color_9393">
+                                    <text class="underline">{{takeMealsAddress}}>></text>
+                                    <text class="underline color_FF8" style="display:inline-block;">修改</text>
+                                </view>
+                            </view>
+                            <view class="width_20 text_right flex flex_end flex_align_items_center" data-type="1" bindtap="selectedFn">
+                                <image wx:if="{{deliveryMode == 1}}" src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20 vertical_middle"></image>
+                                <text wx:if="{{deliveryMode != 1}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                            </view>
+                        </view>
+                        <view class="flex margin_top_10 flex_space_between box_sizing padding_left_30">
+                            <view class="width_80" data-type="2" bindtap="selectedAddressFn">
+                                <view class="color_5fc">
+                                    <text>快递配送</text>
+                                </view>
+                                <view class="color_9393">
+                                    <text class="underline" wx:if="{{!haveMealAddresInfo}}">选择用餐地址>></text>
+                                    <text class="underline" wx:else>{{haveMealAddresInfo.address + haveMealAddresInfo.doorplate}} >></text>
+                                    <text class="underline color_FF8" style="display:inline-block;">修改</text>
+                                </view>
+                            </view>
+                            <view class="width_20 text_right flex flex_end flex_align_items_center" data-type="2" bindtap="selectedFn">
+                                <image wx:if="{{deliveryMode == 2}}" src="/images/icon/queding@2x.png" style="top:4rpx;" class="width_fixed_20 height_fixed_20 relative"></image>
+                                <text wx:if="{{deliveryMode != 2}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                            </view>
+                        </view>
+                    </view>
+
+                    <view wx:if="{{deliveryMode == 2}}" class="border_radius_20 box_sizing overflow1 margin_top_20">
+                        <view class=" line_height_50 border_bottom">
+                            <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/peisongyue@2x.png"></image>
+                            <text class="color_5151">配送费</text>
+                        </view>
+                        <view class="margin_top_10">
+                            <view class="">
+                                <block wx:for="{{cartLists}}" wx:key="index">
+                                    <view wx:if="{{index == 0}}" class="flex flex_space_between color_666 margin_bottom_10">
+                                        <view class="">
+                                            <text>{{item.productName}} x{{item.quantity}}</text>
+                                        </view>
+                                        <view>
+                                            <text class="font_size_12">￥</text>
+                                            <text>{{systemInfo.deliveryFee + (item.quantity-1) * systemInfo.increaseFee}}</text>
+                                        </view>
+                                    </view>
+                                    <view wx:if="{{index > 0}}" class="flex flex_space_between color_666 margin_bottom_10">
+                                        <view class="">
+                                            <text>{{item.productName}} x{{item.quantity}}</text>
+                                        </view>
+                                        <view>
+                                            <text class="font_size_12">￥</text>
+                                            <text>{{item.quantity * systemInfo.increaseFee}}</text>
+                                        </view>
+                                    </view>
+                                </block>
+
+                            </view>
+                            <view class="margin_top_10 border_top">
+                                <view class="flex line_height_40 flex_space_between color_333">
+                                    <view class="">
+                                        <text>合计</text>
+                                    </view>
+                                    <view>
+                                        <text class="font_size_12">￥</text>
+                                        <text>{{deliveryCost}}</text>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+
+                    <!-- 说明文字 -->
+                    <view wx:if="{{deliveryMode == 2}}" class="line_height_50 font_size_12 color_bab9 box_sizing padding_left_10">
+                        <text>同个地址第一份配送费{{systemInfo.deliveryFee}}元，多份每多一份加{{systemInfo.increaseFee}}元{{systemInfo.maxDeliveryFee}}元封顶</text>
+                    </view>
+
+                    <!-- VIP -->
+                    <view hidden="true" class="border_radius_10 box_sizing padding_left_right_20 text_center padding_top_10 padding_bottom_10 margin_top_20 color_5fc font_size_14 line_height_20">
+                        <view>
+                            <text>立即支付，选择VIP付款</text>
+                        </view>
+                        <view>
+                            <text>享受全网最低价格</text>
+                        </view>
+                    </view>
+
+                    <view class="height_fixed_50"></view>
+                </view>
             </view>
+
+            <!-- 用餐相关选择 -->
+
 
             <!-- 无数据 -->
             <view wx:if="{{cartLists.length == 0}}" class="">
@@ -79,35 +178,34 @@
             </view>
         </view>
         <!-- 底部占位 -->
-        <view class="height_fixed_50"></view>
+        <view class="height_fixed_100"></view>
     </view>
 
 
     <!-- 底部 -->
-    <view class="footer_buy_del bg_fff box_shadow padding_left_20">
+    <view class="footer_buy_del bg_fff box_shadow padding_left_20" style="bottom:{{isIpx?'150':'110'}}rpx">
         <view class="slelected line_height_50 color_5353">
-            <checkbox-group bindtap="checkboxChange">
+            <!-- <checkbox-group bindtap="checkboxChange">
                 <label class="checkbox">
                     <checkbox checked="{{checkedAll}}" />
                     <text class="margin_left_5">全选</text>
                 </label>
-            </checkbox-group>
+            </checkbox-group> -->
+            <view class="color_ff6">
+                <text class="font_size_14 margin_right_10">实付金额</text>
+                <text wx:if="{{deliveryMode == 1 || deliveryMode == ''}}" class="font_size_18">￥{{totalPrice}}</text>
+                <text wx:if="{{deliveryMode == 2}}" class="font_size_18">￥{{expressPageDiscountTotalAll}}</text>
+            </view>
         </view>
         <view class="operation">
             <view class="flex flex_space_between">
-                <view wx:if="{{administrationType == 1}}" class="margin_right_10">
-                    <!-- <view></view> -->
-                    <view class="line_height_50">
-                        <text class="color_5454">总计：</text>
-                        <text class="font_size_12 color_ff6">￥</text>
-                        <text class="font_size_16 font_weight color_ff6">{{totalPrice}}</text>
+                <view class="margin_right_10">
+                    <view class="line_height_50 color_9393">
+                        <text hidden="true" class="font_size_14">省 ￥0</text>
                     </view>
                 </view>
-                <view wx:if="{{administrationType == 1}}" bindtap="toPageFn" class="line_height_50 width_fixed_120 background_liner text_center color_fff">
-                    <text>去结算</text>
-                </view>
-                <view wx:if="{{administrationType == 2}}" bindtap="delCartListsFn" class="line_height_50 width_fixed_120 background_red_liner text_center color_fff">
-                    <text>删除</text>
+                <view bindtap="submitOrderFn" class="line_height_50 width_fixed_120 background_yellow_liner text_center color_fff">
+                    <text>立即支付</text>
                 </view>
             </view>
         </view>
@@ -117,12 +215,12 @@
 
 <!-- 弹出确认删除弹框. -->
 <van-popup show="{{ deleteCartShopShow }}" duration="{{0}}">
-    <view class="border_radius_10 overflow_hidden" style="width:460rpx;">
+    <view class="border_radius_10 bg_fff overflow_hidden" style="width:460rpx;">
         <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
             <text>提示</text>
         </view>
         <view class="font_size_14 color_8484 text_center padding_bottom_20">
-            <text>是否要删除该商品</text>
+            <text>确定要移除该商品？</text>
         </view>
         <view class="flex flex_space_between">
             <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="onCancelDeleteFn">
@@ -131,6 +229,148 @@
             <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_5bc" bindtap="confirmDeleteFn">
                 <text>确定</text>
             </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出支付方式选择. -->
+<van-popup show="{{ payShow }}" bind:close="onPayClose" catchtouchmove="preventdefault" duration="{{0}}">
+    <view class="z_index_3">
+        <view class="border_radius_10 bg_fff overflow_hidden" style="width:500rpx;">
+            <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
+                <text>选择支付方式</text>
+            </view>
+            <view class="wrap">
+                <view class="init padding_top_10 padding_bottom_10 flex flex_space_between box_sizing padding_left_right_20 border_bottom" data-type="1" bindtap="selectedPayFn">
+                    <view class="flex flex_align_items_center">
+                        <view class="line_height_50">
+                            <text class="iconfont icon-logo-wechat font_weight_600 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                            <text class="font_size_14 margin_left_5 color_5353 font_size_12">微信支付</text>
+                        </view>
+                        <view class="margin_left_5">
+                            <view class="flex_align_items_center flex">
+                                <view class="width_fixed_50">
+                                    <text class="font_size_10 color_999">实付金额</text>
+                                </view>
+                                <view class="font_weight">
+                                    <text wx:if="{{deliveryMode == 1 || deliveryMode == ''}}" class="font_size_14 color_5fc font_weight_600">￥{{wxActualPaymentAmount}}</text>
+                                    <!-- <text wx:if="{{deliveryMode == 2}}" class="font_size_14 color_5fc font_weight_600">￥{{(wxActualPaymentAmount * 1 + deliveryCost * 1)}}</text> -->
+                                    <text wx:if="{{deliveryMode == 2}}" class="font_size_14 color_5fc font_weight_600">￥{{expressWxDiscountTotalAll}}</text>
+                                </view>
+                            </view>
+                            <view class="flex_align_items_center flex">
+                                <view class="width_fixed_50">
+                                    <text class="font_size_10 color_999">代金池减免</text>
+                                </view>
+                                <view>
+                                    <text class="font_size_14 color_5fc">￥{{reductionTotalAll}}</text>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="line_height_50">
+                        <text wx:if="{{selectedId != 1}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                        <text wx:if="{{selectedId == 1}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                    </view>
+                </view>
+                <view class="init padding_top_10 padding_bottom_10 flex flex_space_between box_sizing padding_left_right_20" data-type="2" bindtap="selectedPayFn">
+                    <view class="flex flex_align_items_center">
+                        <view class="line_height_50">
+                            <text class="iconfont icon-icon font_weight_100 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                            <text class="font_size_14 margin_left_5 color_5353 font_size_12">VIP 支付</text>
+                        </view>
+                        <view class="margin_left_5">
+                            <view class="flex_align_items_center flex">
+                                <view class="width_fixed_50">
+                                    <text class="font_size_10 color_999">实付金额</text>
+                                </view>
+                                <view>
+                                    <text wx:if="{{deliveryMode == 1 || deliveryMode == ''}}" class="font_size_14 color_5fc font_weight_600">￥{{totalVIPPriceAll}}</text>
+                                    <!-- <text wx:if="{{deliveryMode == 2}}" class="font_size_14 color_5fc font_weight_600">￥{{(totalVIPPriceAll * 1 + deliveryCost * 1)}}</text> -->
+                                    <text wx:if="{{deliveryMode == 2}}" class="font_size_14 color_5fc font_weight_600">￥{{expressVipDiscountTotalAll}}</text>
+                                </view>
+                            </view>
+                            <view class="flex_align_items_center flex">
+                                <view class="width_fixed_50">
+                                    <text class="font_size_10 color_999">VIP 优惠</text>
+                                </view>
+                                <view>
+                                    <text class="font_size_12 color_5fc">￥{{vipDiscountTotalAll}}</text>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="line_height_50">
+                        <text wx:if="{{selectedId != 2}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                        <text wx:if="{{selectedId == 2}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                    </view>
+
+                </view>
+
+            </view>
+            <view class="background_liner text_center line_height_50 color_fff font_size_16" bindtap="confirmAppointFn">
+                <text>确定</text>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 不是VIP时弹出弹框. -->
+<van-popup show="{{ isVipShow }}" catchtouchmove="preventdefault" duration="{{0}}">
+    <view class="border_radius_10 bg_fff overflow_hidden" style="width:460rpx;">
+        <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+            <text>提示</text>
+        </view>
+        <view class="font_size_14 color_8484 text_center padding_bottom_20">
+            <text>真抱歉，只有充值用户才能享受VIP优惠！</text>
+        </view>
+        <view class="flex flex_space_between">
+            <!-- <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="onCancelOrderFn">
+                <text>暂不充值</text>
+            </view> -->
+            <view class="width_100 flex font_weight border_top height_fixed_50 font_size_14 line_height_50 text_center">
+                <view class="width_50 color_999" bindtap="cancelRechargeFn">
+                    <text>取消</text>
+                </view>
+                <view class="width_50 color_5bc" bindtap="confirmCancelFn">
+                    <text>去充值</text>
+                </view>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出预约点餐弹框. -->
+<van-popup show="{{ makeAppointmentShow }}" duration="{{0}}">
+    <view class="relative">
+        <view class="border_radius_10 bg_fff overflow_hidden" style="width:520rpx;">
+            <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+                <text>支付成功</text>
+            </view>
+            <view class="font_size_0 text_center padding_top_10 padding_bottom_10">
+                <image class="width_fixed_60 height_fixed_60" src="/images/icon/success.png"></image>
+            </view>
+            <view class="flex flex_space_between">
+                <view class="width_100 height_fixed_50 font_size_14 line_height_50 text_center color_5bc" bindtap="toBackIndexFn">
+                    <text>返回首页</text>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view bindtap="toAdvertisementDetailsFn" class="flex border_radius_20 overflow_hidden margin_top_20" style="width:520rpx;">
+        <view class="width_40 bg_black box_sizing padding_right_10">
+            <image class="width_height_100" src="{{urlBefore + advertisingInfo.cover}}"></image>
+        </view>
+        <view class="width_40 line_height_20 bg_black">
+            <view class="color_fff margin_top_5 font_size_14 overflow1">{{advertisingInfo.name}}</view>
+            <view class="color_fff font_size_12">限量{{advertisingInfo.stock}}份</view>
+            <view>
+                <text class="font_size_16 margin_right_10 color_FF8">￥{{advertisingInfo.price}}</text>
+                <text class="del_w_line color_fff font_size_12">￥{{advertisingInfo.marketPrice}}</text>
+            </view>
+        </view>
+        <view class="width_30 line_height_70 background_yello2_liner color_fff text_center">
+            <text class="font_size_14">秒抢</text>
         </view>
     </view>
 </van-popup>

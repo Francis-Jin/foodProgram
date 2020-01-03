@@ -1,0 +1,20 @@
+<!--miniprogram_npm/common/head_type/head_type.wxml-->
+
+<view class="width_100 height_fixed_160 relative">
+        <view class="absolute_100">
+            <image class="width_height_100" src="{{urlBefore + hourByNow.cover}}"></image>
+        </view>
+        <view class="absolute_100 z_index_1 flex">
+            <view class="width_40 relative">
+                <view class="width_fixed_90 height_fixed_90 absolute">
+                    <view class="h line" style="transform: rotate({{hourDeg}}deg);"></view>
+                    <view class="m line" style="transform: rotate({{minuteDeg}}deg);"></view>
+                    <view class="s line" style="transform: rotate({{secondDeg}}deg);"></view>
+                    <view class="dot line"></view>
+                </view>
+            </view>
+        </view>
+        <view class="appointment_today" bindtap="toAppointmentTodayFn">
+            <text>今日菜品 >></text>
+        </view>
+    </view>

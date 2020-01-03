@@ -1,12 +1,25 @@
 {
     "pages": [
-        "pages/start/start",
-        "pages/my/my",
         "pages/index/index",
+        "pages/advertisement_details/advertisement_details",
+        "pages/my_address/my_address",
+        "pages/cart/cart",
+        "pages/my/my",
+        "pages/take_add_order/take_add_order",
+        "pages/take_selected_good/take_selected_good",
+        "pages/central_kitchen/central_kitchen",
+        "pages/take_meals/take_meals",
+        "pages/make_an_appointment/make_an_appointment",
+        "pages/take_meals_address/take_meals_address",
+        "pages/add_address/add_address",
+        "pages/booking_method/booking_method",
+        "pages/daren/daren",
+        "pages/customer_service_center/customer_service_center",
+        "pages/appointment_today/appointment_today",
+        "pages/order/order",
+        "pages/start/start",
         "pages/login/login",
         "pages/recharge/recharge",
-        "pages/booking_method/booking_method",
-        "pages/make_an_appointment/make_an_appointment",
         "pages/settlement/settlement",
         "pages/account/account",
         "pages/spell_list_details/spell_list_details",
@@ -14,54 +27,27 @@
         "pages/make_up_list/make_up_list",
         "pages/author/author",
         "pages/inputPassword/inputPassword",
-        "pages/cart/cart",
-        "pages/add_address/add_address",
         "pages/delinvery_indent/delinvery_indent",
         "pages/personal_information/personal_information",
         "pages/authentication/authentication",
         "pages/identity_authentication/identity_authentication",
         "pages/solar_terms/solar_terms",
         "pages/cook_details/cook_details",
-        "pages/my_address/my_address",
         "pages/history/history",
-        "pages/order/order",
         "pages/dietary_knowledge/dietary_knowledge",
         "pages/solar_terms_details/solar_terms_details",
         "pages/order_details/order_details",
         "pages/food_details/food_details",
         "pages/play_video/play_video",
         "pages/single_appoint_details/single_appoint_details",
-        "pages/budget_dt_ detail/budget_dt_ detail"
+        "pages/budget_dt_ detail/budget_dt_ detail",
+        "pages/take_order_details/take_order_details"
     ],
     "window": {
         "backgroundTextStyle": "dark",
         "navigationBarBackgroundColor": "#fff",
         "navigationBarTitleText": "",
         "navigationBarTextStyle": "black"
-    },
-    "tabBar": {
-        "color": "#666666",
-        "selectedColor": "#000000",
-        "list": [
-            {
-                "pagePath": "pages/index/index",
-                "text": "推荐",
-                "iconPath": "images/icon/recommend.png",
-                "selectedIconPath": "images/icon/recommend_active.png"
-            },
-            {
-                "pagePath": "pages/order/order",
-                "text": "订单",
-                "iconPath": "images/icon/cart.png",
-                "selectedIconPath": "images/icon/cart_active.png"
-            },
-            {
-                "pagePath": "pages/my/my",
-                "text": "我的",
-                "iconPath": "images/icon/me.png",
-                "selectedIconPath": "images/icon/me_active.png"
-            }
-        ]
     },
     "usingComponents": {
         "vant-button": "./miniprogram_npm/vant-weapp/button/index",
@@ -76,7 +62,14 @@
         "van-picker": "./miniprogram_npm/vant-weapp/picker/index",
         "van-transition": "./miniprogram_npm/vant-weapp/transition/index",
         "van-area": "./miniprogram_npm/vant-weapp/area/index",
-        "pay-success": "./miniprogram_npm/common/pay_success/pay_success"
+        "van-switch": "./miniprogram_npm/vant-weapp/switch/index",
+        "van-search": "./miniprogram_npm/vant-weapp/search/index",
+        "pay-success": "./miniprogram_npm/common/pay_success/pay_success",
+        "line": "./miniprogram_npm/common/small_big_line/small_big_line",
+        "tabBar": "./miniprogram_npm/common/tabbar/tabbar",
+        "headType": "./miniprogram_npm/common/head_type/head_type",
+        "Calendar": "./miniprogram_npm/common/calendar/calendar",
+        "count_down": "./miniprogram_npm/common/count_down/count_down"
     },
     "sitemapLocation": "sitemap.json"
 }

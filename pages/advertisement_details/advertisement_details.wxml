@@ -1,0 +1,158 @@
+<!--pages/advertisement_details/advertisement_details.wxml-->
+<!--pages/food_details/food_details.wxml-->
+<wxs src="../../wxs/utils.wxs" module="utils"></wxs>
+<view class="container padding_top_20">
+
+    <view class="padding_left_right_10 padding_bottom_30">
+
+        <view class="border_radius_right_left relative bg_fff">
+            <view class="width_100 height_fixed_160 relative">
+                <swiper indicator-dots="{{true}}" class="height_fixed_160" indicator-active-color="#fff" autoplay="{{false}}" circular="{{true}}">
+                    <block>
+                        <swiper-item>
+                            <view class="swiper-item height_fixed_160 relative">
+                                <image class="width_height_100 border_radius_right_left" src="{{urlBefore + info.cover}}"></image>
+                            </view>
+                        </swiper-item>
+                    </block>
+                </swiper>
+            </view>
+
+            <view class="flex flex_space_between box_sizing padding_bottom_10 padding_left_right_20 padding_top_10">
+                <view class="width_50">
+                    <view class="font_size_16 color_666">
+                        <text>{{info.name}}</text>
+                    </view>
+                    <view class="font_size_12 color_999">
+                        <text>{{info.description}}</text>
+                    </view>
+                </view>
+                <view class="width_50 text_right flex flex_space_between">
+                    <view class="flex">
+                        <view>
+                            
+                        </view>
+                    </view>
+                    <view class="relative color_FF8">
+                        <!-- <image class="width_fixed_20 height_fixed_20 vertical_middle" src="/images/icon/share_icon.png"></image> -->
+                        <text class="del_line font_size_16 color_666 relative margin_right_20" style="top:4rpx;"><text class="font_size_12">￥</text> {{info.marketPrice}}</text>
+                        <text class="iconfont icon-fenxiang6  relative" style="font-size:26rpx;top:2rpx;"></text>
+                        <text class="font_size_14 margin_left_10">分享</text>
+                        <button style="position:absolute;width:100%;height:100%;left:0;top:0; z-index:10; opacity:0;" open-type="share"></button>
+                    </view>
+                </view>
+            </view>
+
+            <!-- 底部栏.... -->
+            <view class="box_sizing margin_top_20">
+                <view class="flex flex_space_between border_radius_10 overflow_hidden">
+                    <view class="width_100 flex flex_center">
+                        <view class="width_70 line_height_50 text_center color_fff background_yello2_liner">
+                            <text class="font_size_12">实付金额</text>
+                            <text class="margin_left_5 font_size_18 font_weight">￥<text>{{info.price}}</text></text>
+                            <text class="font_size_12">（省 ￥ {{utils.priceFormat(info.marketPrice-info.price)}}）</text>
+                        </view>
+                        <view class="width_30 flex flex_space_between text_center">
+                            <view class="width_100 background_yello2_liner" bindtap="wxBuyFn">
+                                <view class="line_height_50">
+                                    <text class="color_fff">微信支付</text>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+
+        </view>
+
+        <view class="margin_top_20 border_radius_10 overflow_hidden">
+            <view class="border_bottom box_sizing padding_left_right_20 line_height_50 font_weight font_size_14 color_5fc">
+                <text>产品介绍</text>
+            </view>
+            <view class="box_sizing padding_10">
+                <view wx:if="{{info.intro}}">
+                    <rich-text nodes="{{info.intro}}"></rich-text>
+                </view>
+                <view wx:else class="line_height_30 font_size_10 color_999">
+                    <text>暂无简介</text>
+                </view>
+            </view>
+        </view>
+
+
+    </view>
+
+    <view class="height_fixed_100"></view>
+
+</view>
+<!-- 点击发起拼单弹窗. -->
+<van-popup show="{{ showSpellList }}" position="bottom" custom-style="height: 590rpx;" bind:close="onCloseSpellList">
+    <view class="height_fixed_20"></view>
+    <!-- 主要内容 -->
+    <view class="box_sizing padding_left_right_20 bg_fff padding_top_10 padding_bottom_10 relative overflow_auto" style="height:760rpx;">
+        <!-- 配送方式选择 -->
+        <view class="">
+            <view class=" line_height_50 border_bottom">
+                <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/tianchongxing-@2x.png"></image>
+                <text class="color_5151">选择配送方式</text>
+            </view>
+            <view class="margin_top_10 flex flex_space_between">
+                <view class="width_80" data-type="1" bindtap="selectedAddressFn">
+                    <view class="color_5fc">
+                        <text>到店自取</text>
+                    </view>
+                    <view class="color_9393">
+                        <text class="underline">{{takeMealsAddress}} >></text>
+                    </view>
+                </view>
+                <view class="width_20 text_right" data-type="1" bindtap="selectedFn">
+                    <image wx:if="{{deliveryMode == 1}}" src="/images/icon/queding@2x.png" class="width_fixed_20 height_fixed_20 vertical_middle"></image>
+                    <text wx:if="{{deliveryMode != 1}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                </view>
+            </view>
+            <view class="flex margin_top_10 flex_space_between">
+                <view class="width_80" data-type="2" bindtap="selectedAddressFn">
+                    <view class="color_5fc">
+                        <text>快递配送</text>
+                    </view>
+                    <view class="color_9393">
+                        <text class="underline" wx:if="{{!haveMealAddresInfo}}">选择用餐地址 >></text>
+                        <text class="underline" wx:else>{{haveMealAddresInfo.address + haveMealAddresInfo.doorplate}} >></text>
+                    </view>
+                </view>
+                <view class="width_20 text_right" data-type="2" bindtap="selectedFn">
+                    <image wx:if="{{deliveryMode == 2}}" src="/images/icon/queding@2x.png" style="top:4rpx;" class="width_fixed_20 height_fixed_20 relative"></image>
+                    <text wx:if="{{deliveryMode != 2}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <!-- 发起拼单按钮。 -->
+    <view bindtap="goPayIndentFn" class="text_center line_height_50 color_fff background_liner" style="position:fixed;left:0;bottom:0;width:100%">
+        <text>立即支付</text>
+    </view>
+
+</van-popup>
+
+
+<!-- 弹出预约点餐弹框. -->
+<van-popup show="{{ makeAppointmentShow }}" duration="{{0}}">
+    <view class="border_radius_10 bg_fff overflow_hidden" style="width:460rpx;">
+        <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+            <text>支付成功</text>
+        </view>
+        <view class="font_size_0 text_center padding_bottom_20">
+            <image class="width_fixed_60 height_fixed_60" src="/images/icon/success.png"></image>
+        </view>
+        <view class="flex flex_space_between">
+            <view class="width_100 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="toBackIndexFn">
+                <text>返回首页</text>
+            </view>
+        </view>
+        <!-- <view class="line_height_50 relative height_fixed_50 text_center color_fff background_liner font_size_14">
+            <text>分享好友拼单</text>
+            <button style="position:absolute;width:100%;height:100%;left:0;top:0; z-index:10; opacity:0;" open-type="share"></button>
+        </view> -->
+    </view>
+</van-popup>

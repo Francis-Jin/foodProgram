@@ -10,7 +10,6 @@
 .footer_buy_del {
     position: fixed;
     left: 0;
-    bottom: 0;
     width: 100%;
     box-sizing: border-box;
     display: flex;

@@ -14,6 +14,8 @@ Page({
         count: '',
         isPhoneError: false, //手机号是否错误
         code: '', //验证码
+        takeMealsAddressId: null, //选择回来的取餐地址ID
+        takeMealsAddress: '', //选择回来的取餐地址
     },
 
     /**
@@ -26,6 +28,13 @@ Page({
         })
         wx.setNavigationBarTitle({
             title: selectedId == 1 ? '配送员认证' : '厨师认证'
+        })
+    },
+
+    /** 跳转选择取餐点. */
+    toTakeMealsSelectedFn(){
+        wx.navigateTo({
+            url: '/pages/take_meals_address/take_meals_address',
         })
     },
 
@@ -127,7 +136,7 @@ Page({
             url: "/app/smsCode/sendSmsCode.action",
             method: "post",
             postData: {
-                type: selectedId,
+                type: selectedId == 3 ? 4 : selectedId,
                 phone: phone
             },
             success(res){
@@ -143,6 +152,7 @@ Page({
         let phone = that.data.phone
         let code = that.data.code
         let selectedId = that.data.selectedId
+        let takeMealsAddressId = that.data.takeMealsAddressId
         if(!name){
             wx.showToast({
                 title: '请输入姓名',
@@ -150,6 +160,7 @@ Page({
             })
             return false
         }
+
         if (!phone) {
             wx.showToast({
                 title: '请输入手机号',
@@ -157,6 +168,15 @@ Page({
             })
             return false
         }
+
+        if (selectedId == 3 && !takeMealsAddressId){
+            wx.showToast({
+                title: '请选择取餐点',
+                icon: 'none'
+            })
+            return false 
+        }
+
         if (!code) {
             wx.showToast({
                 title: '请输入验证码',
@@ -173,24 +193,26 @@ Page({
                 userId: wx.getStorageSync('userInfo').id,
                 name: name,
                 phone: phone,
-                code: code
+                code: code,
+                locationId: selectedId == 3 ? takeMealsAddressId : 0
             },
             success(res){
                 if(res.code == 200){
                     // 重新调用登录更新userInfo
-                    app.loginFn()
                     wx.showToast({
-                        title: '认证成功',
+                        title: res.message,
+                        icon: 'none',
                         duration: 2000,
                         mask: true,
                         success: function(res) {
                             setTimeout(function(){
-                                wx.switchTab({
-                                    url: '/pages/my/my',
+                                wx.navigateBack({
+                                    delta: 2
                                 })
                             },2000)
                         }
                     })
+                    that.getUserInfoFn()
                 }else{
                     wx.showToast({
                         title: res.message,
@@ -200,6 +222,23 @@ Page({
             }
         })
     },
+
+    /** 获取用户信息. */
+    getUserInfoFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/userInfo/getUserInfo.action',
+            method: 'get',
+            getParams: {
+                id: wx.getStorageSync('userInfo').id,
+                newUser: 0
+            },
+            success(res) {
+                wx.setStorageSync('userInfo', res.data)
+            }
+        })
+    },
+
     /**
      * 生命周期函数--监听页面初次渲染完成
      */

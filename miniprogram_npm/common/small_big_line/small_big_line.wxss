@@ -1,0 +1,10 @@
+/* miniprogram_npm/common/small_big_line/small_big_line.wxss */
+
+
+
+.line {
+    margin: 40rpx 0;
+    width: 100%;
+    height: 2rpx;
+    background: -webkit-linear-gradient(left, #fff -4%, #D1D1D1 50%, #fff 100%);
+}

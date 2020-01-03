@@ -1,0 +1,27 @@
+<!--pages/take_meals_address/take_meals_address.wxml-->
+<view class="container">
+    <view class="lists box_sizing padding_left_right_20 padding_top_10 padding_bottom_10">
+        <view wx:for="{{lists}}" wx:key="index" data-itemId="{{item.id}}" bindtap="checkGoodsChange" class="address_item box_sizing padding_top_10 padding_bottom_10 flex flex_space_between border_bottom">
+            <view class="width_10 text_center line_height_40">
+                <checkbox-group class="text_center">
+                    <label class="checkbox">
+                        <checkbox checked="{{item.checked}}" />
+                    </label>
+                </checkbox-group>
+            </view>
+            <view class="width_90 font_size_14">
+                <view  class="color_333 margin_bottom_5">
+                    <text>{{item.name}}</text>
+                </view>
+                <view class="color_666">
+                    <text>{{item.address}}</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view bindtap="confirmSelectedFn" class="confirm width_100 background_yellow_liner color_fff text_center line_height_50">
+        <text>确定</text>
+    </view>
+    <view class="height_fixed_60"></view>
+</view>

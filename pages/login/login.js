@@ -17,8 +17,8 @@ Page({
     },
 
     /** 暂不登录. */
-    canleLoginFn(){
-        wx.switchTab({
+    canleLoginFn() {
+        wx.redirectTo({
             url: '/pages/index/index',
         })
     },
@@ -47,15 +47,21 @@ Page({
                         success(res) {
                             wx.hideLoading()
                             if (res.code == 200) {
-                                if (res.data.homeplace){
-                                    wx.redirectTo({
-                                        url: '/pages/solar_terms/solar_terms',
-                                    })
-                                }else{
-                                    wx.redirectTo({
-                                        url: '/pages/author/author',
-                                    })
-                                }
+                                // if (res.data.homeplace){
+                                //     wx.redirectTo({
+                                //         url: '/pages/solar_terms/solar_terms',
+                                //     })
+                                // }else{
+                                //     wx.redirectTo({
+                                //         url: '/pages/author/author',
+                                //     })
+                                // }
+                                wx.redirectTo({
+                                    url: '/pages/index/index',
+                                })
+                                // wx.navigateBack({
+                                //     delta:2
+                                // })
                             } else {
                                 wx.showModal({
                                     title: '提示',

@@ -73,12 +73,31 @@ Page({
                 type: true,
                 text: "问题单",
             }]
+            this.listDeliveryGroupOrderByPersonFn()
             this.setData({
                 selectedActive: type == 2 ? 4 : 2,
                 groupLeaderType: groupLeaderType,
                 topBarLists: topBarLists
             })
         }
+    },
+
+    /** 拨打配送员电话. */
+    callTelFn(e) {
+        console.log(e)
+        let tel = e.currentTarget.dataset.tel
+        wx.makePhoneCall({
+            phoneNumber: tel,
+        })
+    },
+
+    /** 查看订单详情. */
+    toDeailsFn(e) {
+        console.log(e)
+        let orderId = e.currentTarget.dataset.id
+        wx.navigateTo({
+            url: '/pages/order_details/order_details?orderId=' + orderId,
+        })
     },
 
     /** 获取今日日期 */
@@ -104,6 +123,10 @@ Page({
                 rows: that.data.pageSize
             },
             success(res) {
+                // 隐藏导航栏加载框
+                wx.hideNavigationBarLoading();
+                // 停止下拉动作
+                wx.stopPullDownRefresh();
                 if (res.data) {
                     that.setData({
                         groupOrderList: that.data.groupOrderList.concat(res.data)
@@ -125,6 +148,10 @@ Page({
                 rows: that.data.pageSize
             },
             success(res) {
+                // 隐藏导航栏加载框
+                wx.hideNavigationBarLoading();
+                // 停止下拉动作
+                wx.stopPullDownRefresh();
                 if (res.data) {
                     that.setData({
                         lists: that.data.lists.concat(res.data)
@@ -165,6 +192,10 @@ Page({
                 rows:that.data.pageSize
             },
             success(res){
+                // 隐藏导航栏加载框
+                wx.hideNavigationBarLoading();
+                // 停止下拉动作
+                wx.stopPullDownRefresh();
                 if(res.data){
                     that.setData({
                         indentStatisticsLists: that.data.indentStatisticsLists.concat(res.data)
@@ -186,6 +217,10 @@ Page({
                 rows: that.data.pageSize
             },
             success(res) {
+                // 隐藏导航栏加载框
+                wx.hideNavigationBarLoading();
+                // 停止下拉动作
+                wx.stopPullDownRefresh();
                 if (res.data) {
                     that.setData({
                         groupLeaderProblemLists: that.data.groupLeaderProblemLists.concat(res.data)
@@ -480,14 +515,50 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh: function() {
-
+        // 显示顶部刷新图标
+        wx.showNavigationBarLoading();
+        let that = this
+        let id = that.data.selectedActive
+        // 重置数据列表
+        that.setData({
+            page: 1,
+            todayProfitShow: false,
+            groupOrderList: [],
+            lists: [],
+            indentStatisticsLists: [],
+            groupLeaderProblemLists: [],
+        })
+        if (id == 1) {
+            that.groupOrderListFn()
+        } else if (id == 2) {
+            that.listDeliveryGroupOrderByPersonFn()
+        } else if (id == 3) {
+            that.getListDeliveryOrderQuantityFn()
+        } else if (id == 4) {
+            this.getGroupLeaderProblemLists()
+        }
     },
 
     /**
      * 页面上拉触底事件的处理函数
      */
     onReachBottom: function() {
-
+        let that = this
+        let id = that.data.selectedActive
+        let page = that.data.page
+        page++
+        this.setData({
+            page: page
+        })
+        if (id == 1) {
+            that.groupOrderListFn()
+        } else if (id == 2) {
+            that.listDeliveryGroupOrderByPersonFn()
+        } else if (id == 3) {
+            that.getListDeliveryOrderQuantityFn()
+        } else if (id == 4) {
+            this.getGroupLeaderProblemLists()
+        }
     },
 
     /**

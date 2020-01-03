@@ -4,7 +4,9 @@
     <view class="margin_bottom_100  box_shadow border_radius_10 padding_bottom_10 overflow_hidden">
         <view class="box_sizing box_shadow padding_left_right_20 line_height_40 color_ff6">
             <text class="iconfont icon-shenfenxuanze font_weight relative" style="font-size:40rpx;top:6rpx"></text>
-            <text class="font_size_16 margin_left_10">{{selectedId == 1 ? '配送员认证' : '厨师认证'}}</text>
+            <text wx:if="{{selectedId == 1}}" class="font_size_16 margin_left_10">配送员认证</text>
+            <text wx:if="{{selectedId == 2}}" class="font_size_16 margin_left_10">央厨认证</text>
+            <text wx:if="{{selectedId == 3}}" class="font_size_16 margin_left_10">取餐点认证</text>
         </view>
         <view class="">
             <van-cell-group>
@@ -12,11 +14,14 @@
 
                 <van-field value="{{ phone }}" required label="手机号" clearable bind:blur="phoneBlur" error-message="{{isPhoneError?'手机号格式错误': ''}}" placeholder="请输入手机号" bind:change="phoneChange" />
 
+                <van-field wx:if="{{selectedId == 3}}" value="{{ takeMealsAddress }}" required disabled clearable label="取餐点" icon="arrow" placeholder="请选择" bindtap="toTakeMealsSelectedFn"/>
+
                 <van-cell-group border="{{ false }}">
                     <van-field value="{{ code }}" required center clearable label="验证码" bind:change="codeChange" placeholder="验证码" border="{{ false }}" use-button-slot>
                         <van-button slot="button" bindtap="getCode" size="small" color="{{show ? '#e3e3e3' : 'linear-gradient(to right, #fd8828, #fa6d35)'}}">{{ show ? count+'s' : '发送验证码'}}</van-button>
                     </van-field>
                 </van-cell-group>
+
 
             </van-cell-group>
         </view>

@@ -1,4 +1,5 @@
 <!--pages/my/my.wxml-->
+<tabBar current='4' />
 <view class="container padding_bottom_20">
 
     <view class="width_100 height_fixed_160 relative">
@@ -20,7 +21,7 @@
                         <text wx:if="{{roleId == 3}}">{{userInfo.nickname}}</text>
                         <text wx:if="{{roleId != 3}}">{{userInfo.name}}</text>
                         <text wx:if="{{roleId == 4}}" class="margin_left_5 font_size_14">（配送员）</text>
-                        <text wx:if="{{roleId == 5}}" class="margin_left_5 font_size_14">（厨师）</text>
+                        <text wx:if="{{roleId == 5}}" class="margin_left_5 font_size_14">（中央厨房）</text>
                     </view>
                     <view class="font_size_12 box_sizing padding_right_20 margin_top_10 custom_family" style="color:#F3FDF8">
                         <text wx:if="{{roleId == 4}}">{{userInfo.areaName}}</text>
@@ -44,39 +45,144 @@
 
     <!-- 个人账户基本信息 -->
     <view class="flex flex_space_between text_center box_sizing padding_left_right_20 margin_top_10">
-        <view class="color_fff border_radius_10 box_shadow background_liner box_sizing padding_top_20 padding_bottom_10" style="width:40%">
-            <view class="margin_top_15">
-                <text>代金池</text>
+        <view class="color_fff border_radius_10 overflow_hidden box_shadow  box_sizing" style="width:40%">
+            <view class="font_size_14 height_fixed_80  background_liner">
+                <view class="padding_top_20 box_sizing">
+                    <text>代金池</text>
+                </view>
+                <view>
+                    <text class="font_size_20 font_weight_400"><text class="font_size_14 font_weight_400">￥</text>{{userInfo.voucherBalance ? userInfo.voucherBalance : 0}}</text>
+                </view>
             </view>
-            <view class="margin_top_5">
-                <text class="font_size_20 font_weight_600"><text class="font_size_14 font_weight_400">￥</text>{{userInfo.voucherBalance ? userInfo.voucherBalanc : 0}}</text>
-            </view>
-            <view class="margin_top_15">
-                <text>我的余额</text>
-            </view>
-            <view class="margin_top_5">
-                <text class="font_size_20 font_weight_600"><text class="font_size_14 font_weight_400">￥</text>{{userInfo.balance ? userInfo.balance: 0}}</text>
+            <view class="bg_my_vip height_fixed_80 " data-type="4" bindtap="toPageFn">
+                <view class="padding_top_10 box_sizing">
+                    <text>VIP余额</text>
+                </view>
+                <view>
+                    <text class="font_size_20 font_weight_400"><text class="font_size_14 font_weight_400">￥</text>{{userInfo.balance ? userInfo.balance: 0}}</text>
+                </view>
+                <view class="font_size_12">
+                    <text>充值</text>
+                    <text class="iconfont icon-right border_radius__100 bg_fff color_5fc font_weight relative" style="top:-4rpx;font-size:16rpx;padding:4rpx 6rpx;"></text>
+                </view>
             </view>
         </view>
         <view class="color_5353 border_radius_10 box_shadow bg_f9f box_sizing padding_left_right_20 padding_top_20 padding_bottom_10" style="width:56%">
-            <view class="padding_bottom_10 border_bottom" data-type="1" bindtap="toPageFn">
-                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" style="top:-2rpx;" src="/images/icon/ziyuanxhdpi@2x.png"></image>
+            <view class="line_height_40 border_bottom" data-type="1" bindtap="toPageFn">
+                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" src="/images/icon/ziyuanxhdpi@2x.png"></image>
                 <text class="margin_left_10 font_size_12">历史记录</text>
             </view>
-            <view class="margin_top_10 padding_bottom_10 border_bottom" data-type="6" bindtap="toPageFn">
-                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" style="top:-2rpx;" src="/images/icon/authentication.png"></image>
+
+            <!-- <view class="line_height_40 border_bottom" data-type="6" bindtap="toPageFn">
+                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" src="/images/icon/authentication.png"></image>
                 <text class="margin_left_10 font_size_12">预约菜单</text>
-            </view>
-            <view class="margin_top_10 padding_bottom_10 border_bottom" data-type="3" bindtap="toPageFn">
-                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" style="top:-2rpx;" src="/images/icon/address.png"></image>
+            </view> -->
+
+            <view class="line_height_40 border_bottom" data-type="3" bindtap="toPageFn">
+                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" src="/images/icon/address.png"></image>
                 <text class="margin_left_10 font_size_12">我的地址</text>
             </view>
-            <view class="margin_top_10 padding_bottom_10 relative">
-                <text class="iconfont icon-xiaoxi" style="font-size:30rpx; color:#6F6F6F;"></text>
+            <view class="line_height_40 border_bottom" data-type="2" bindtap="toPageFn">
+                <image class="width_fixed_15 height_fixed_15 vertical_middle relative" src="/images/icon/authentication.png"></image>
+                <text class="margin_left_10 font_size_12">身份认证</text>
+            </view>
+            <!-- <view class="line_height_40 relative">
+                <text class="iconfont icon-xiaoxi" style="font-size:26rpx; color:#6F6F6F;"></text>
                 <text class="margin_left_10 font_size_12">订阅消息</text>
                 <view style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:1;opacity:0;">
                     <button class="width_height_100" bindtap="getMessageIdFn"></button>
                 </view>
+            </view> -->
+        </view>
+    </view>
+
+    <!-- 各种入口. -->
+    <view class="box_sizing padding_left_right_20">
+        <!-- 配送员入口 -->
+        <view hidden="true" data-type="5" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">配送员入口</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            </view>
+        </view>
+
+        <!-- 分销商入口 -->
+        <view hidden="true" data-type="8" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">分销商入口</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            </view>
+        </view>
+
+        <!-- 美食达人入口 -->
+        <view hidden="true" data-type="7" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">美食达人入口</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            </view>
+        </view>
+
+        <!-- 取餐点入口 -->
+        <view wx:if="{{roleId == 6}}" data-type="9" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">取餐点入口</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            </view>
+        </view>
+
+        <!-- 中央厨房入口 -->
+        <view wx:if="{{roleId == 5}}" data-type="10" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">中央厨房入口</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            </view>
+        </view>
+
+        <!-- 客服中心 -->
+        <view data-type="0" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">客服中心</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            </view>
+        </view>
+
+        <!-- 收支明细 -->
+        <view data-type="5" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">收支明细</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            </view>
+        </view>
+
+        <!-- 省份认证. -->
+        <view hidden="true" data-type="2" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-shenfenzheng color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">身份认证</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
             </view>
         </view>
     </view>
@@ -85,52 +191,6 @@
     <view wx:if="{{roleId == 3 || roleId == 0}}">
         <!-- 个人金库 -->
         <view class="box_sizing padding_left_right_20">
-
-            <!-- VIP -->
-            <view data-type="4" bindtap="toPageFn" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
-                <view class="flex box_sizing padding_top_10 padding_bottom_10">
-                    <view class="color_5fc line_height_50">
-                        <view class="font_weight_600 font_size_20">
-                            <text>VIP</text>
-                        </view>
-                    </view>
-                    <view class="margin_left_30 line_height_50 font_size_14">
-                        <view class="color_333">
-                            <text>余额：￥{{userInfo.balance ? userInfo.balance : 0}}</text>
-                        </view>
-                    </view>
-                </view>
-                <view class="width_fixed_80 text_center background_liner color_fff line_height_70 box_sizing  font_size_14">
-                    <text class="">充值</text>
-                </view>
-            </view>
-
-            <!-- 代金池 -->
-            <view hidden="true" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
-                <view class="flex box_sizing padding_top_10 padding_bottom_10">
-                    <view class="color_5fc text_center ">
-                        <view class="font_weight_600 font_size_20">
-                            <text class="margin_left_10">代金池</text>
-                        </view>
-                        <view class="margin_top_5">
-                            <text class="margin_left_10">余额￥586</text>
-                        </view>
-                    </view>
-                    <view class="margin_left_30 font_size_14">
-                        <view class="color_333">
-                            <text>本餐品可使用代金池额度</text>
-                        </view>
-                        <view class="margin_top_10 color_666">
-                            <text>￥3</text>
-                        </view>
-                    </view>
-                </view>
-                <!-- <view class="width_20 text_center box_sizing color_bab9 relative">
-                <view class="absolute selected">
-                    <image class="width_fixed_30 height_fixed_30" src="/images/icon/queding@2x.png"></image>
-                </view>
-            </view> -->
-            </view>
 
             <!-- 折扣卡 -->
             <view hidden="true" class="box_shadow flex flex_space_between border_radius_20 overflow1 margin_top_20 box_sizing padding_left_20">
@@ -178,7 +238,7 @@
         </view>
 
         <!-- 矿物元素含量 -->
-        <view class="box_sizing padding_left_right_20 margin_top_20">
+        <view hidden="true" class="box_sizing padding_left_right_20 margin_top_20">
 
             <view class="border_radius_right_left overflow_hidden bg_f6f flex flex_space_between margin_bottom_20">
                 <view class="width_fixed_50 background_bottom_liner padding_top_20 padding_bottom_20">
@@ -258,29 +318,6 @@
 
         </view>
 
-        <view class="box_sizing padding_left_right_20">
-            <!-- 收支明细 -->
-            <view data-type="5" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
-                <view class="">
-                    <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
-                    <text class="margin_left_20 color_5353 font_size_14">收支明细</text>
-                </view>
-                <view class="color_fff font_weight">
-                    <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
-                </view>
-            </view>
-
-            <view data-type="2" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
-                <view class="">
-                    <text class="iconfont icon-shenfenzheng color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
-                    <text class="margin_left_20 color_5353 font_size_14">身份认证</text>
-                </view>
-                <view class="color_fff font_weight">
-                    <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
-                </view>
-            </view>
-        </view>
-
     </view>
 
     <!-- 配送员 -->
@@ -329,7 +366,9 @@
 
     <!-- 厨师 -->
     <view wx:if="{{roleId == 5}}">
-        <text>厨师</text>
+        <!-- <text>厨师</text> -->
     </view>
 
 </view>
+
+<view class="height_fixed_50"></view>

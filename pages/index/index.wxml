@@ -1,5 +1,6 @@
 <!--index.wxml-->
-
+<!-- <count_down countTime="{{countTime}}" color="red" size="60" align="left"></count_down> -->
+<tabBar current='0' buyNumber="{{buyNumber}}" />
 <view class="container">
 
     <view class="width_100 height_fixed_160 relative">
@@ -17,25 +18,234 @@
             </view>
         </view>
         <!-- 点击层 -->
-        <view bindtap="showDirectionFn" style="position:absolute;left:0;bottom:0;height:120rpx;width:100%;z-index:5;"></view>
+        <view hidden="true" bindtap="showDirectionFn" style="position:absolute;left:0;bottom:0;height:120rpx;width:100%;z-index:5;"></view>
         <!-- 展示层 -->
-        <view class="text_center z_index_3 color_8484 text_right" style="width:200rpx; position:absolute;right:32%;bottom:{{directionValue.length>1? '40rpx': '66rpx;'}};min-height:20rpx;">
+        <view hidden="true" class="text_center z_index_3 color_8484 text_right" style="width:250rpx; position:absolute;right:260rpx;bottom:{{directionValue.length>1? '46rpx': '70rpx;'}};min-height:20rpx;">
             <view wx:for="{{directionValue}}" wx:key="index" style="height:28rpx;">
-                <text style="font-size:20rpx">{{item}}</text>
+                <text style="font-size:18rpx">{{item}}</text>
             </view>
         </view>
+        <!-- <view class="menu_btn" bindtap="showMenuFn">
+            <text class="iconfont icon-menu1"></text>
+        </view> -->
+    </view>
+    <!-- 改版，新增部分 -->
+    <view class="newModel box_sizing padding_left_right_20">
+        <view wx:if="{{toDaySSInfo.cover != ''}}" class="flex">
+            <view class="width_10 flex">
+                <view class="width_fixed_30 border_radius_5 padding_top_5 white_pre background_liner text_center">
+                    <view class="width_fixed_20 margin_auto color_fff font_size_14">今日时蔬</view>
+                </view>
+                <view hidden="true" class="flex box_sizing padding_top_10">
+                    <view class="margin_left_5 width_fixed_20 font_size_12 text_center color_666 white_pre">
+                        <text>蔬菜</text>
+                    </view>
+                    <view class="margin_left_5 width_fixed_20 font_size_12 text_center color_666 white_pre">
+                        <text>蔬菜</text>
+                    </view>
+                    <view class="margin_left_5 width_fixed_20 font_size_12 text_center color_666 white_pre">
+                        <text>蔬菜</text>
+                    </view>
+                    <view class="margin_left_5 width_fixed_20 font_size_12 text_center color_666 white_pre">
+                        <text>蔬菜</text>
+                    </view>
+                    <view class="margin_left_5 width_fixed_20 font_size_12 text_center color_666 white_pre">
+                        <text>蔬菜</text>
+                    </view>
+                </view>
+            </view>
+            <view class="width_90">
+                <view class="img width_100 height_fixed_90 bg_f5">
+                    <image class="width_height_100" src="{{urlBefore + toDaySSInfo.cover}}"></image>
+                </view>
+            </view>
+        </view>
+         <!-- 首页主推菜品 -->
+        <view class="margin_top_10">
+            <view wx:for="{{ListIndexRecommendArr}}" wx:key="index" class="item margin_bottom_10 height_fixed_130 relative">
+                <image data-itemId="{{item.id}}" data-dishcategory='{{item.dishCategory}}' data-type="2" bindtap="topPageDetails"
+                class="width_height_100 bg_f5 border_radius_10" mode="aspectFit" src="{{urlBefore + item.cover}}"></image>
+                <view data-itemId="{{item.id}}" data-stock="{{item.stock}}" data-pic="{{urlBefore + item.cover}}" bindtap="addCart" class="text_right width_fixed_150 box_sizing padding_left_right_20 padding_bottom_10" style="position:absolute;right:0;bottom:0;">
+                    <text class="margin_right_10 font_size_24 color_fff font_weight relative" style="top:6rpx;">￥{{item.price}}</text>
+                    <text style="display:inline-block; font-weight:100; padding:6rpx 8rpx;font-size:30rpx;" class="iconfont icon-add3 color_fff background_liner border_radius__100"></text>
+                </view>
+            </view>
+        </view>
+        <!-- 菜单栏 -->
+        <view class="flex flex_end margin_top_10">
+            <view class="flex box_sizing padding_top_5">
+                <view wx:if="{{index < 3}}" wx:for="{{menuLists}}" wx:key="index" data-itemid="{{item.id}}" bindtap="clickMenuListsElementFn"
+                 class="padding_left_right_10 margin_left_10 border_radius_5 line_height_20 height_fixed_20 menu_item font_size_12 {{item.checked ? 'background_yello2_liner color_fff' : 'color_666'}}">
+                    <text>{{item.name}}</text>
+                </view>
+            </view>
+            <view class="relative">
+                <view class="menu_btn" bindtap="showMenuFn">
+                    <text class="iconfont icon-menu1"></text>
+                </view>
+                <!-- 菜单列表 -->
+                <view wx:if="{{isShowMenu}}" class="menu_lists_wrap">
+                    <view class="close_menu" bindtap="closeMenuFn"></view>
+                    <view class="menu_lists box_shadow padding_top_10 padding_bottom_10">
+                        <view wx:for="{{menuLists}}" wx:key="index" data-itemid="{{item.id}}" bindtap="clickMenuListsElementFn" class="item_init {{item.checked ? 'color_FF8' : 'color_999'}} text_center line_height_40 height_fixed_40">
+                            <text>{{item.name}}</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+       
     </view>
 
-    <view class="lists margin_top_20">
-        <view class="lists_wrap flex flex_space_between box_sizing padding_left_right_20">
+
+
+    <view class="lists">
+
+        <!-- 新模块. -->
+        <view hidden="true" class="new_modal_wrap box_sizing padding_left_right_20">
+
+            <!-- 倒计时抢单、拼单 -->
+            <view class="margin_bottom_10">
+
+                <view class="init bg_f5 margin_bottom_10 flex flex_space_between">
+                    <view class="width_60 flex">
+                        <view class="width_fixed_100 height_fixed_60">
+                            <image class="width_height_100 border_radius_5" src="https://food.zhiyanginfo.top/food/upload//product_info_cover/64db6385-9195-460c-bae1-41883d485134.jpg"></image>
+                        </view>
+                        <view class="margin_left_10 box_sizing padding_top_10">
+                            <view class="font_size_14 color_666s">
+                                <text>香辣时蔬饭</text>
+                            </view>
+                            <view class="font_size_14  margin_top_5 color_ff6">
+                                <text>￥6.5</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="width_40 flex flex_space_between">
+                        <view class="width_60 text_center">
+                            <view class="margin_top_10 font_size_14 color_9393">
+                                <text>倒计时</text>
+                            </view>
+                            <view class="font_size_12 margin_top_5 color_ff6">
+                                <text>19'24"00</text>
+                            </view>
+                        </view>
+                        <view class="width_40 bg_FF8 line_height_60 color_fff height_fixed_60 text_center" style="border-radius:0 10rpx 10rpx 0;">
+                            <text class="font_size_12">抢单</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="init bg_f5 margin_bottom_10 flex flex_space_between">
+                    <view class="width_60 flex">
+                        <view class="width_fixed_100 height_fixed_60">
+                            <image class="width_height_100 border_radius_5" src="https://food.zhiyanginfo.top/food/upload//product_info_cover/64db6385-9195-460c-bae1-41883d485134.jpg"></image>
+                        </view>
+                        <view class="margin_left_10 box_sizing padding_top_10">
+                            <view class="font_size_14 color_666s">
+                                <text>香辣时蔬饭</text>
+                            </view>
+                            <view class="font_size_14  margin_top_5 color_ff6">
+                                <text>￥6.5</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="width_40 flex flex_space_between">
+                        <view class="width_60 text_center">
+                            <view class="margin_top_10 font_size_14 color_9393">
+                                <text>倒计时</text>
+                            </view>
+                            <view class="font_size_12 margin_top_5 color_ff6">
+                                <text>19'24"00</text>
+                            </view>
+                        </view>
+                        <view class="width_40 bg_FF8 line_height_60 color_fff height_fixed_60 text_center" style="border-radius:0 10rpx 10rpx 0;">
+                            <text class="font_size_12">抢单</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="init bg_f5 margin_bottom_10 flex flex_space_between">
+                    <view class="width_60 flex">
+                        <view class="width_fixed_100 height_fixed_60">
+                            <image class="width_height_100 border_radius_5" src="https://food.zhiyanginfo.top/food/upload//product_info_cover/64db6385-9195-460c-bae1-41883d485134.jpg"></image>
+                        </view>
+                        <view class="margin_left_10 box_sizing padding_top_10">
+                            <view class="font_size_14 color_666s">
+                                <text>香辣时蔬饭</text>
+                            </view>
+                            <view class="font_size_14  margin_top_5 color_ff6">
+                                <text>￥6.5</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="width_40 flex flex_space_between">
+                        <view class="width_60 text_center">
+                            <view class="margin_top_10 font_size_14 color_9393">
+                                <text>倒计时</text>
+                            </view>
+                            <view class="font_size_12 margin_top_5 color_ff6">
+                                <text>19'24"00</text>
+                            </view>
+                        </view>
+                        <view class="width_40 bg_3cb color_fff height_fixed_60 text_center" style="border-radius:0 10rpx 10rpx 0;">
+                            <view class="margin_top_10">
+                                <text class="font_size_12">发起</text>
+                            </view>
+                            <view>
+                                <text class="font_size_12">拼单</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+
+            </view>
+
+            <view class="width_100 height_fixed_180 border_radius_20 relative">
+                <image class="width_height_100 border_radius_20" src="https://food.zhiyanginfo.top/food/upload//product_info_cover/64db6385-9195-460c-bae1-41883d485134.jpg"></image>
+                <view style="position:absolute;right:40rpx;bottom:20rpx;">
+                    <text class="iconfont icon-add color_4dc" style="font-size:40rpx;"></text>
+                </view>
+                <view class="box_sizing padding_left_20 padding_right_20" style="position:absolute;left:0;bottom:40rpx;background:rgba(248,248,248,.8)">
+                    <view class="font_size_12 color_666 padding_top_5">
+                        <text>原价：</text>
+                        <text>￥<text>12</text></text>
+                    </view>
+                    <view class="font_size_12 color_ff6 padding_bottom_5">
+                        <text>日权食直购：</text>
+                        <text>￥<text class="font_size_18">12</text></text>
+                    </view>
+                </view>
+            </view>
+
+            <!-- 商品. -->
+            <!-- <view class="flex">
+                <view>
+                    <view>
+                        <image></image>
+                    </view>
+                </view>
+            </view> -->
+
+            <!-- 厨师 -->
+            <view class="">
+                <line/>
+                <view class="width_100 font_size_0 height_fixed_120 ">
+                    <image class="width_height_100 border_radius_20" src="https://food.zhiyanginfo.top/food/upload//product_info_cover/64db6385-9195-460c-bae1-41883d485134.jpg"></image>
+                </view>
+                <line/>
+            </view>
+        </view>
+
+        <!-- 第一版模块 旧模块. -->
+        <view class="lists_wrap flex flex_space_between box_sizing margin_top_20 padding_left_right_20">
+
             <view class="left_content box_sizing width_50 padding_right_10">
 
                 <block wx:for="{{listsLeft}}" wx:key="index">
 
                     <view wx:if="{{item.category == 2}}" class="item cs_item border_radius_20 box_shadow overflow_hidden height_fixed_160 relative" data-itemId="{{item.id}}" data-type="1" bindtap="topPageDetails">
-                        <view class="font_size_0">
-                            <image class="max_width_100" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
-                        </view>
+                        <!-- <view class="font_size_0 "> -->
+                        <image class="width_height_100" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
+                        <!-- </view> -->
                         <view class="width_100 text_right flex flex_space_between" style="position:absolute; right:10rpx; bottom:20rpx;">
                             <view class="text_indent_8 font_size_14 color_fff">
                                 <text>{{item.name}}</text>
@@ -47,27 +257,33 @@
                     </view>
 
                     <view wx:if="{{item.category == 1}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden">
-                        <view class="font_size_0 height_fixed_120" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                        <view class="font_size_0 relative height_fixed_120" data-itemId="{{item.id}}" data-dishcategory='{{item.dishCategory}}' data-type="2" bindtap="topPageDetails">
                             <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
+
+                            <!-- 售馨 -->
+                            <view wx:if="{{item.stock == 0 }}" style="position:absolute;left0;top:0;width:100%;height:100%;">
+                                <image class="width_height_100" src="/images/icon/sold_out.png "></image>
+                            </view>
                         </view>
                         <view class="width_100 box_sizing padding_left_right_10">
-                            <view class="font_size_16 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                            <view class="font_size_14 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
                                 <text>{{item.name}}</text>
                             </view>
                             <view class="font_size_12 color_999 overflow1 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
-                                <text>{{item.description}}</text>
+                                <text class="del_line">
+                                    <text class="color_999 font_size_10">￥</text>
+                                <text class="color_999 margin_right_5 font_size_14">{{item.marketPrice}}</text>
+                                </text>
                             </view>
                             <view class="flex flex_space_between padding_bottom_10 relative">
-                                <view class="font_size_12 line_height_30 overflow1">
-                                    <text class="color_999 font_size_10">￥</text>
-                                    <text class="color_999 margin_right_10 font_size_14">{{item.price}}</text>
-                                    <text class="color_ff6 font_size_10">{{item.vipDiscount}}折￥</text>
-                                    <text class="color_ff6 font_size_18">{{item.vipPrice}}</text>
+                                <view class="font_size_12">
+                                    <text class="color_ff6 font_size_12">折后价￥</text>
+                                    <text class="color_ff6 font_size_18">{{item.dishCategory == 2 ? item.price : item.price}}</text>
                                 </view>
-                                <view class="price" data-itemId="{{item.id}}" data-pic="{{urlBefore + item.cover}}" bindtap="addCart">
-                                    <view class="width_fixed_20 height_fixed_20 border_radius__100 line_height_30 margin_right_5">
+                                <view wx:if="{{item.dishCategory != 2}}" class="price flex" data-itemId="{{item.id}}" data-stock="{{item.stock}}" data-pic="{{urlBefore + item.cover}}" bindtap="addCart">
+                                    <view class="width_fixed_20 height_fixed_20 border_radius__100 margin_right_5">
                                         <!-- <image class="width_height_100" src="/images/icon/tianchongxing-@2x.png"></image> -->
-                                        <text class="iconfont icon-add color_4dc" style="font-size:40rpx;"></text>
+                                        <text class="iconfont icon-add {{item.stock > 0 ? 'color_4dc' : 'color_ab'}}" style="font-size:40rpx;"></text>
                                     </view>
                                 </view>
                             </view>
@@ -93,19 +309,14 @@
 
             </view>
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> df3bad91574d8b61be8090abfe683b593ee9c555
             <view class="right_content box_sizing width_50 padding_left_10">
 
                 <block wx:for="{{listsRight}}" wx:key="index">
 
                     <view wx:if="{{item.category == 2}}" class="item cs_item border_radius_20 box_shadow overflow_hidden height_fixed_160 relative" data-itemId="{{item.id}}" data-type="1" bindtap="topPageDetails">
-                        <view class="font_size_0">
-                            <image class="max_width_100" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
-                        </view>
+                        <!-- <view class="font_size_0"> -->
+                        <image class="width_height_100" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
+                        <!-- </view> -->
                         <view class="width_100 text_right flex flex_space_between" style="position:absolute; right:10rpx; bottom:20rpx;">
                             <view class="text_indent_8 font_size_14 color_fff">
                                 <text>{{item.name}}</text>
@@ -117,27 +328,33 @@
                     </view>
 
                     <view wx:if="{{item.category == 1}}" class="item item_foods_one border_radius_20 box_shadow overflow_hidden">
-                        <view class="font_size_0 height_fixed_120" data-itemId="{{item.id}}" data-pic="{{urlBefore + item.cover}}" data-type="2" bindtap="topPageDetails">
+                        <view class="font_size_0 relative height_fixed_120" data-itemId="{{item.id}}" data-dishcategory='{{item.dishCategory}}' data-type="2" bindtap="topPageDetails">
                             <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
+
+                            <!-- 售馨 -->
+                            <view wx:if="{{item.stock == 0 }}" style="position:absolute;left0;top:0;width:100%;height:100%;">
+                                <image class="width_height_100" src="/images/icon/sold_out.png "></image>
+                            </view>
                         </view>
                         <view class="width_100 box_sizing padding_left_right_10">
-                            <view class="font_size_16 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                            <view class="font_size_14 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
                                 <text>{{item.name}}</text>
                             </view>
                             <view class="font_size_12 color_999 overflow1 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
-                                <text>{{item.description}}</text>
+                                <text class="del_line">
+                                    <text class="color_999 font_size_10">￥</text>
+                                <text class="color_999 margin_right_5 font_size_14">{{item.marketPrice}}</text>
+                                </text>
                             </view>
                             <view class="flex flex_space_between padding_bottom_10 relative">
-                                <view class="font_size_12 line_height_30 overflow1">
-                                    <text class="color_999 font_size_10">￥</text>
-                                    <text class="color_999 margin_right_10 font_size_14">{{item.price}}</text>
-                                    <text class="color_ff6 font_size_10">{{item.vipDiscount}}折￥</text>
-                                    <text class="color_ff6 font_size_18">{{item.vipPrice}}</text>
+                                <view class="font_size_12">
+                                    <text class="color_ff6 font_size_12">折后价￥</text>
+                                    <text class="color_ff6 font_size_18">{{item.dishCategory == 2?item.price : item.price}}</text>
                                 </view>
-                                <view class="price" data-itemId="{{item.id}}" data-pic="{{urlBefore + item.cover}}" bindtap="addCart">
-                                    <view class="width_fixed_20 height_fixed_20 border_radius__100 line_height_30 margin_right_5">
+                                <view wx:if="{{item.dishCategory != 2}}" class="price flex" data-itemId="{{item.id}}" data-stock="{{item.stock}}" data-pic="{{urlBefore + item.cover}}" bindtap="addCart">
+                                    <view class="width_fixed_20 height_fixed_20 border_radius__100 margin_right_5">
                                         <!-- <image class="width_height_100" src="/images/icon/tianchongxing-@2x.png"></image> -->
-                                        <text class="iconfont icon-add color_4dc" style="font-size:40rpx;"></text>
+                                        <text class="iconfont icon-add {{item.stock > 0 ? 'color_4dc' : 'color_ab'}}" style="font-size:40rpx;"></text>
                                     </view>
                                 </view>
                             </view>
@@ -170,7 +387,7 @@
     </view>
 
 
-    <view class="cart">
+    <view hidden="true" class="cart">
         <view class="cart_icon box_shadow" data-type="pay" bindtap="topPageDetails">
             <image class="width_fixed_50 height_fixed_50" src="/images/icon/cart_1.png "></image>
             <view class="buy_number" wx:if="{{buyNumber != 0}}">
@@ -180,7 +397,7 @@
     </view>
 
     <!-- 加入购物车小球 -->
-    <view class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;">
+    <view hidden="true" class="good_box" hidden="{{hide_good_box}}" style="left: {{bus_x}}px; top: {{bus_y}}px;">
         <image src="{{addPic}}"></image>
     </view>
 
@@ -188,9 +405,12 @@
 
 </view>
 
+<!-- 底部高度 -->
+<view class="height_fixed_50"></view>
+
 <!-- 膳食方向选择 -->
 <van-popup show="{{ show }}" position="bottom" custom-style="height: 600rpx" bind:close="onClose">
-    <view class="flex flex_space_between height_fixed_50 line_height_50 text_center border_bottom">
+    <view class="flex flex_space_between bg_fff height_fixed_50 line_height_50 text_center border_bottom">
         <view class="width_fixed_50 text_center color_5bc" bindtap="onClose">
             <text>取消</text>
         </view>
@@ -216,8 +436,8 @@
 <!-- 弹出输入关键字 -->
 <van-popup show="{{ otherShow }}" bind:close="onClose" duration="{{0}}">
     <view>
-        <view class="">
-            <view class="border_radius_10 overflow_hidden" style="width:500rpx;">
+        <view class="bg_fff">
+            <view class="border_radius_10 bg_fff overflow_hidden" style="width:500rpx;">
                 <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
                     <text>输入关键字</text>
                 </view>
@@ -235,7 +455,7 @@
 <!-- 弹出领优惠弹框 -->
 <view wx:if="{{isShowDiscountModal}}" class="discountModal">
 
-    <view class="content">
+    <view class="content bg_fff">
         <view class="font_size_0 border_radius_20 overflow_hidden relative" style="width:400rpx;height:500rpx;">
             <image class="width_height_100" src="/images/imgs/20.jpg"></image>
             <view class="discountModalText number_family text_center">
@@ -259,7 +479,7 @@
 </view>
 
 <!-- 弹出引导层 -->
-<view wx:if="{{guideMongoliaShowStatus}}" class="guideMongolia">
+<view wx:if="{{guideMongoliaShowStatus}}" catchtouchmove='preventdefault' class="guideMongolia">
     <view class="guideContent" style="top:{{isIpx ? '20%' : '22%'}}">
         <image class="width_height_100" src="/images/icon/yd_2.png "></image>
     </view>

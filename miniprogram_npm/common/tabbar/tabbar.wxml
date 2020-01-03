@@ -1,0 +1,19 @@
+<!--miniprogram_npm/common/tabbar/tabbar.wxml-->
+<view class="tabbar_box {{isIpx?'isIpx':''}}">
+    <view class="tabbar_item cart_relative" wx:for="{{list}}" wx:for-index="i" wx:key='i' data-index="{{i}}" bindtap='jump'>
+        <view wx:if="{{i != 2}}">
+            <image style="width:50rpx;height:50rpx;" src="{{current == i ? item.selectedIconPath : item.iconPath }}"></image>
+            <view wx:if="{{i == 3 && buyNumber != 0 }}" class="cartNum">{{buyNumber}}</view>
+        </view>
+        <text wx:if="{{i != 2}}" style="color: {{current == i ? '#000000' : '#000000'}}">{{item.text}}</text>
+        <view wx:if="{{i == 2}}" class="yuyue">
+            <!-- <image src="../../../images/icon/about.png"></image> -->
+            <view class="dz">
+                <text>预订</text>
+            </view>
+        </view>
+    </view>
+</view>
+
+<Calendar isShowDate="{{isShowDate}}" />
+

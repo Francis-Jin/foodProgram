@@ -1,7 +1,7 @@
 // pages/make_an_appointment/make_an_appointment.js
 var app = getApp()
 let h = []
-for (let i = 0; i <= 23; i++) {
+for (let i = 6; i <= 21; i++) {
     if (i < 10) {
         i = '0' + i
     }
@@ -9,14 +9,8 @@ for (let i = 0; i <= 23; i++) {
     h.push(i)
 }
 
-let m = []
-for (let i = 0; i <= 59; i++) {
-    if (i < 10) {
-        i = '0' + i
-    }
-    i = i + ''
-    m.push(i)
-}
+let m = ['00', '10', '20', '30', '40', '50']
+
 Page({
 
     /**
@@ -25,32 +19,42 @@ Page({
     data: {
         showPaySuccessStatus: false, // 支付成功回显弹窗
         urlBefore: app.globalData.urlBefore,
-        addressLists: [], // 显示用户地址列表
         systemInfo: '', //系统配置信息
         showSpellList: false, //弹起拼单或单独购买弹框
         waysOfPurchasing: '', // 选择购买方式 1：单独购买 2：拼单购买
         assembleMode: '', //选择配送或自取时间 1：早餐 2：午餐 3：晚餐
-        deliveryMode: '', //选择用餐方式 1：自取 2：配送
-        showAddress: false, // 是否选择地址弹窗
-        addressText: '', //显示选择的地址
-        addressItem: '', //选择的地址Item元素
+        deliveryMode: 2, //选择用餐方式 1：自取 2：配送
         messageText: '', // 商家留言信息
         payShow: false, // 是否显示支付方式选择
         selectedId: '', // 选择支付方式 1：微信支付 2：余额支付
         showTime: false, //是否显示时间选择器
         bookTime: '', //明日日期
+        haveMealAddresInfo: null,
         selectedTime: '', // 用餐时间
-        HaveMealsLists: [], // 早餐、午餐、晚餐数据列表
         totalPriceAll: 0, // 总价
         totalPriceAllModal: 0, //弹框总价计算，自取，配送
-        bookId: '', // 传参ID
+        bookId: 0, // 传参ID
+        isVipShow: '', // 是否是VIP
+        messageArr: [],
+        selectedMessageArr: [],
+        collocation: [],
+        foodIngredient: [],
+        takeMealsAddressId: null,
+        takeMealsAddress: '选择取餐地址', //选择回来的取餐地址
         columns: [{
                 values: h,
-                className: 'column1'
+                className: 'column1',
+                defaultIndex: 0
             },
             {
                 values: m,
-                className: 'column2'
+                className: 'column2',
+                defaultIndex: 3
+            },
+            {
+                values: ['可预约'],
+                className: 'column3',
+                defaultIndex: 0
             }
         ],
 
@@ -62,55 +66,100 @@ Page({
     onLoad: function(options) {
         let that = this
         let type = options.type
-        let titleText = ''
         that.setData({
-            assembleMode: type
+            selectedDateValue: options.selectedDateValue,
+            selectedWordId: options.selectedWordId,
+            symptomId: options.symptomId
         })
-
-        if (type == 1) {
-            titleText = '早餐预约'
-        } else if (type == 2) {
-            titleText = '午餐预约'
-        } else {
-            titleText = '晚餐预约'
-        }
-        wx.setNavigationBarTitle({
-            title: titleText,
+        let addressItem = wx.getStorageSync('addressItem')
+        let takeMealsAddressItem = wx.getStorageSync('takeMealsAddressItem')
+        this.setData({
+            haveMealAddresInfo: addressItem,
+            takeMealsAddressId: takeMealsAddressItem.id, //选择回来的取餐地址ID
+            takeMealsAddress: takeMealsAddressItem.address, //选择回来的取餐地址
         })
-        that.getBookDishInfoByTomorrowFn()
+        // 食材+搭配商品
+        that.getListFoodIngredientByBookTimeFn()
+        // 推荐单点
+        that.getListDishInfoByRecommendFn()
+        // 获取商家定义留言信息
+        that.getMessageDataFn()
+        // 获取配菜信息
+        that.getGarnishDataFn()
+        // 获取基础米饭、服务费
+        that.getJichuMiFanFn()
+        
     },
 
-    /** 点击头部返回首页. */
-    backOrderListsFn() {
-        wx.switchTab({
-            url: '/pages/index/index',
-        })
-    },
-
-    /** 获取预约单列表. */
-    getBookDishInfoByTomorrowFn() {
+    /** 获取随机广告. */
+    GetAdvertisingFn() {
         let that = this
-        let assembleMode = that.data.assembleMode
         app.appRequest({
-            url: '/app/dishInfo/getBookDishInfoByTomorrow.action',
+            url: '/app/dishInfo/getDishInfoByAd.action',
             method: 'get',
             success(res) {
                 if (res.code == 200) {
-                    let dataArr = res.data.details
-                    let totalPriceAll = that.data.totalPriceAll
-                    if (dataArr) {
-                        dataArr.forEach(item => {
-                            item.quantity = 1
-                            if (item.category == assembleMode) {
-                                totalPriceAll += item.bookPrice * 1
-                            }
-                        })
+                    let advertisingInfo = res.data
+                    if (advertisingInfo) {
                         that.setData({
-                            bookId: res.data.id,
-                            bookTime: res.data.bookTime,
-                            totalPriceAll: totalPriceAll,
-                            totalPriceAllModal: totalPriceAll,
-                            HaveMealsLists: dataArr
+                            advertisingInfo: advertisingInfo
+                        })
+                    }
+                }
+            }
+        })
+    },
+
+    /** 跳转支付成功后的广告详情. */
+    toAdvertisementDetailsFn() {
+        let advertisingInfo = this.data.advertisingInfo
+        wx.navigateTo({
+            url: '/pages/advertisement_details/advertisement_details?itemId=' + advertisingInfo.id,
+        })
+    },
+    
+    /** 跳转预约早餐. */
+    toAppointmentTodayFn(e) {
+        wx.navigateTo({
+            url: '/pages/appointment_today/appointment_today?isToDay=false&selectedDate=' + this.data.selectedDateValue + '&category=1',
+        })
+    },
+
+    /** 获取基础米饭、服务费 */
+    getJichuMiFanFn(){
+        let that = this
+        app.appRequest({
+            url: '/app/dishInfo/getJichuMiFan.action',
+            method: 'get',
+            success(res){
+                if(res.code == 200){
+                    if(res.data){
+                        res.data.name = res.data.name.split(',')
+                        that.setData({
+                            jiChuMiFanInfo: res.data
+                        })
+                        that.allPrcieCalculationFn()
+                    }
+                }
+            }
+        })
+    },
+
+    /** 获取配菜数据. */
+    getGarnishDataFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/recommend/listBookVegetables.action',
+            method: 'get',
+            getParams: {
+                bookTime: that.data.selectedDateValue
+            },
+            success(res) {
+                if (res.code == 200) {
+                    if (res.data) {
+                        res.data.forEach(item => item.checked = false)
+                        that.setData({
+                            garnishInfo: res.data
                         })
                     }
                 } else {
@@ -123,105 +172,299 @@ Page({
         })
     },
 
-    /** 数量加减. */
-    addReduceFn(e) {
+    /** 点击选择配菜. */
+    clickGarnishItemFn(e) {
+        let that = this;
+        let Item = e.currentTarget.dataset.item;
+        let garnishInfo = that.data.garnishInfo;
+        let newGarnishInfo = garnishInfo.filter(item => item.checked)
+        if (!Item.checked && newGarnishInfo.length > 1) {
+            wx.showToast({
+                title: '只能选择2个配菜',
+                icon: 'none'
+            })
+            return false
+        }
+        garnishInfo.forEach(item => {
+            if (item.ingredientId == Item.ingredientId) {
+                item.checked = !item.checked
+            }
+        })
+        that.setData({
+            garnishInfo: garnishInfo
+        })
+        that.allPrcieCalculationFn()
+    },
+
+    /** 获取留言数据. */
+    getMessageDataFn(){
         let that = this
-        let _type = e.currentTarget.dataset.type
-        let item = e.currentTarget.dataset.itemid
-        let itemId = item.dishId
-        let HaveMealsLists = that.data.HaveMealsLists
-        let assembleMode = that.data.assembleMode
-        let thisItem = HaveMealsLists.filter(item => item.dishId == itemId)[0]
-        let totalPriceAll = 0
-        if (_type == 1) {
-            // 减
-            if (thisItem.quantity == 0) {
-                wx.showToast({
-                    title: '不可以在减少了哟',
-                    icon: 'none'
-                })
-            } else {
-                thisItem.quantity--
-                    HaveMealsLists.forEach(item => {
-                        if (item.dishId == itemId) {
-                            item.quantity = thisItem.quantity
-                        }
+        app.appRequest({
+            url: '/app/dishInfo/listBookLabel.action',
+            method: 'get',
+            getParams: {
+                bookTime: that.data.selectedDateValue
+            },
+            success(res) {
+                wx.hideLoading()
+                if (res.code == 200) {
+                    if(res.data){
+                        res.data.forEach(item => { item.checked = false })
+                        that.setData({
+                            messageArr: res.data
+                        })
+                    }
+                } else {
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
                     })
-                setTimeout(function() {
-                    HaveMealsLists.forEach(item => {
-                        if (item.category == assembleMode) {
-                            totalPriceAll += item.bookPrice * item.quantity
-                        }
+                }
+            }
+        }) 
+    },
+
+    /** 点击选择留言信息. */
+    selectedMessageFn(e){
+        let that = this
+        let Item = e.currentTarget.dataset.item
+        let messageArr = that.data.messageArr
+        messageArr.forEach(item=>{
+            if(item.id == Item.id) item.checked = !item.checked
+        })
+        let newArr = messageArr.filter(item=>item.checked)
+        let strArr = []
+        newArr.forEach(item=>{strArr.push(item.name)})
+        console.log(strArr)
+        that.setData({
+            messageArr: messageArr,
+            selectedMessageArr: strArr
+        })
+        
+    },
+
+    /** 换一组. */
+    anotherGroupFn() {
+        let that = this
+
+        wx.showLoading({
+            title: '加载中',
+        })
+        app.appRequest({
+            url: '/app/dishInfo/changeListFoodIngredientByBookTime.action',
+            method: 'get',
+            getParams: {
+                bookTime: that.data.selectedDateValue
+            },
+            success(res) {
+                wx.hideLoading()
+                if (res.code == 200) {
+                    if (res.data.foodIngredient) {
+                        let foodIngredient = res.data.foodIngredient
+                        that.setData({
+                            foodIngredient: foodIngredient,
+                        })
+                    }
+                } else {
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
+                    })
+                }
+            }
+        })
+    },
+
+    /** 跳转地址选择列表. */
+    selectedAddressFn(e) {
+        // 我的地址
+        let type = e.currentTarget.dataset.type
+        if (type == 1) {
+            wx.navigateTo({
+                url: '/pages/take_meals_address/take_meals_address',
+            })
+        }
+        if (type == 2) {
+            wx.navigateTo({
+                url: '/pages/my_address/my_address?selected=true',
+            })
+        }
+    },
+
+    /** 获取预约食材与菜品. */
+    getListFoodIngredientByBookTimeFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/dishInfo/listFoodIngredientByBookTime.action',
+            method: 'get',
+            getParams: {
+                bookTime: that.data.selectedDateValue,
+                organsId: that.data.selectedWordId,
+                symptomId: that.data.symptomId
+                // bookTime: '2019-12-04',
+                // organsId: 1
+            },
+            success(res) {
+                if (res.code == 200) {
+                    if (res.data.foodIngredient && res.data.dishInfo) {
+                        let foodIngredient = res.data.foodIngredient
+                        let collocation = res.data.dishInfo.details
+                        collocation.forEach(item => {
+                            item.quantity = 0
+                            item.isRecommend = 0
+                        })
+                        that.setData({
+                            foodIngredient: foodIngredient,
+                            collocation: collocation,
+                            bookId: res.data.dishInfo.id
+                        })
+                    }
+                } else {
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
+                    })
+                }
+            }
+        })
+    },
+
+    /** 获取推荐单点数据. */
+    getListDishInfoByRecommendFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/dishInfo/listDishInfoByRecommend.action',
+            method: 'get',
+            success(res) {
+                console.log(res)
+                if (res.code == 200) {
+                    let arr = res.data
+                    arr.forEach(item => {
+                        item.quantity = 0
+                        item.dishId = item.id
+                        item.isRecommend = 1
                     })
                     that.setData({
-                        totalPriceAll: totalPriceAll,
-                        HaveMealsLists: HaveMealsLists
+                        listDishInfoByRecommendArr: arr
                     })
-                }, 200)
+                }
             }
-        } else {
-            // 加
-            thisItem.quantity++
-                HaveMealsLists.forEach(item => {
-                    if (item.dishId == itemId) {
-                        item.quantity = thisItem.quantity
+        })
+    },
+
+
+    /** 数量加减. */
+    addReduceFn(e) {
+        // dp:搭配，dd:单点，1:减少，2:增加
+        let that = this
+        let status = e.currentTarget.dataset.status
+        let type = e.currentTarget.dataset.type
+        let Item = e.currentTarget.dataset.item
+        let itemQuantity = Item.quantity
+        // 搭配数据
+        let collocation = that.data.collocation
+        // 推荐单点数据
+        let listDishInfoByRecommendArr = that.data.listDishInfoByRecommendArr
+
+        // 减少
+        if (type == 1) {
+            if (itemQuantity == 0) {
+                wx.showToast({
+                    title: '不可减少了哟',
+                    icon: 'none'
+                })
+                return false
+            }
+            if (status == 'dp') {
+                itemQuantity--
+                collocation.forEach(item => {
+                    if (Item.dishId == item.dishId) {
+                        item.quantity = itemQuantity
                     }
                 })
-            setTimeout(function() {
-                HaveMealsLists.forEach(item => {
-                    if (item.category == assembleMode) {
-                        totalPriceAll += item.bookPrice * item.quantity
+
+                that.setData({
+                    collocation: collocation
+                })
+            }
+
+            if (status == 'dd') {
+                itemQuantity--
+                listDishInfoByRecommendArr.forEach(item => {
+                    if (Item.id == item.id) {
+                        item.quantity = itemQuantity
+                    }
+                })
+
+                that.setData({
+                    listDishInfoByRecommendArr: listDishInfoByRecommendArr
+                })
+            }
+        }
+
+        // 增加
+        if (type == 2) {
+
+            if (status == 'dp') {
+                itemQuantity++
+                collocation.forEach(item => {
+                    if (Item.dishId == item.dishId) {
+                        console.log(item)
+                        item.quantity = itemQuantity
+                    }
+                })
+
+                that.setData({
+                    collocation: collocation
+                })
+            }
+
+            if (status == 'dd') {
+                itemQuantity++
+                listDishInfoByRecommendArr.forEach(item => {
+                    if (Item.id == item.id) {
+                        item.quantity = itemQuantity
                     }
                 })
                 that.setData({
-                    totalPriceAll: totalPriceAll,
-                    HaveMealsLists: HaveMealsLists
+                    listDishInfoByRecommendArr: listDishInfoByRecommendArr
                 })
-            }, 200)
+            }
         }
+
+        that.allPrcieCalculationFn()
+    },
+    
+    /** 价格计算. */
+    allPrcieCalculationFn(){
+        // 计算总价
+        let that = this
+        let garnishInfo = that.data.garnishInfo
+        let collocation = that.data.collocation
+        let jiChuMiFanInfo = that.data.jiChuMiFanInfo // 基础米饭、服务费
+        let listDishInfoByRecommendArr = that.data.listDishInfoByRecommendArr
+        let arrColl = collocation.filter(item => item.quantity > 0)
+        let arrRecom = listDishInfoByRecommendArr.filter(item => item.quantity > 0)
+        let newGarnishArr = garnishInfo.filter(item=>item.checked)
+        let totalPriceAll = 0
+        if (newGarnishArr.length > 0) totalPriceAll = jiChuMiFanInfo.price
+        arrColl.forEach(item => {
+            totalPriceAll += item.quantity * item.bookPrice
+        })
+        listDishInfoByRecommendArr.forEach(item => {
+            totalPriceAll += item.quantity * item.bookPrice
+        })
+        newGarnishArr.forEach(item=>{
+            totalPriceAll += item.price
+        })
+        that.setData({
+            totalPriceAll: totalPriceAll.toFixed(2)
+        })
     },
 
     /** 点击立即预约按钮. */
     waysOfPurchasingFn() {
         let that = this
-        let totalPriceAll = that.data.totalPriceAll
-        if (totalPriceAll == 0) {
-            wx.showToast({
-                title: '请选择商品',
-                icon: 'none'
-            })
-            return false
-        }
-        let HaveMealsLists = that.data.HaveMealsLists
-        let assembleMode = that.data.assembleMode
-        let quantityAll = 0
-        HaveMealsLists.forEach(item => {
-            if (assembleMode == item.category) {
-                quantityAll += item.quantity
-            }
-        })
-        let arr = HaveMealsLists.filter(item => item.category == assembleMode)
-        let totalPriceAllModal = that.data.totalPriceAllModal
-        let deliveryMode = that.data.deliveryMode // 1自取，2 配送
-        let maxDeliveryFee = that.data.maxDeliveryFee // 配送最大
-        let deliveryFee = that.data.deliveryFee // 基础配送费
-        let increaseFee = that.data.increaseFee // 多一份增加配送费
-        let modalPriceAll = deliveryFee + (quantityAll - 1) * increaseFee
-        if (modalPriceAll > maxDeliveryFee) {
-            modalPriceAll = maxDeliveryFee
-        }
-        if (deliveryMode == 2) {
-            totalPriceAllModal = totalPriceAll + modalPriceAll
-        } else {
-            totalPriceAllModal = totalPriceAll
-        }
-        this.setData({
-            totalPriceAllModal: totalPriceAllModal,
-            modalPriceAll: modalPriceAll,
-            modalFoodArr: arr,
-            quantityAll: quantityAll,
-            showSpellList: true
-        })
     },
 
     /** 关闭立即预约弹框. */
@@ -238,14 +481,60 @@ Page({
         })
     },
 
+    /** 选择时间改变时. */
+    onChangeSelectedTimeFn(e) {
+        console.log(e)
+        let that = this
+        let {
+            picker,
+            value,
+            index
+        } = e.detail
+        let selectedDateValue = that.data.selectedDateValue
+        let newDate = selectedDateValue + ' ' + value[0] + ':' + value[1] + ':' + '00'
+        app.appRequest({
+            url: '/app/sysConf/getDeliveryTimeStatus.action',
+            method: 'get',
+            getParams: {
+                deliveryTime: newDate
+            },
+            success(res) {
+                let columnVal=[]
+                if (res.message == '该时段可选') {
+                    columnVal = ['可预约']
+                    that.setData({
+                        selectedTime: value[0] + ':' + value[1]
+                    })
+                } else {
+                    columnVal = ['该时段已约满']
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
+                    })
+                    that.setData({
+                        selectedTime: ''
+                    })
+                }
+
+                picker.setColumnValues(2, columnVal);
+            }
+        })
+    },
+
     /** 确认选择的时间并隐藏弹窗. */
     confirmSelectedTimeFn(e) {
         let that = this
-        let time = e.detail.value
-        that.setData({
-            selectedTime: time[0] + ':' + time[1],
-            showTime: false
-        })
+        let selectedTime = that.data.selectedTime
+        if (selectedTime) {
+            that.setData({
+                showTime: false
+            })
+        } else {
+            wx.showToast({
+                title: '请重新选择',
+                icon: 'none'
+            })
+        }
     },
 
     /** 选择用餐方式. */
@@ -268,21 +557,6 @@ Page({
         })
     },
 
-    /** 弹出地址选择框. */
-    addressShowFn() {
-        this.setData({
-            showAddress: true
-        })
-    },
-
-    /** 关闭地址选择框. */
-    onCloseAddressFn() {
-        this.setData({
-            showTime: false,
-            showAddress: false
-        })
-    },
-
     /** 获取配置信息. */
     getSysConfFn() {
         let that = this
@@ -300,52 +574,6 @@ Page({
         })
     },
 
-    /** 获取用户地址列表. */
-    getUserAddressFn() {
-        let that = this
-        app.appRequest({
-            url: "/app/userAddress/list.action",
-            method: 'get',
-            getParams: {
-                userId: wx.getStorageSync("userInfo").id
-            },
-            success(res) {
-                if (res.data) {
-                    res.data.forEach(item => {
-                        item.checked = false
-                    })
-                    that.setData({
-                        addressLists: res.data
-                    })
-                }
-            }
-        })
-    },
-
-    /** 选择配送地址 */
-    selectedAddresFn(e) {
-        let itemId = e.currentTarget.dataset.itemid
-        let addressLists = this.data.addressLists
-        let addressText = this.data.addressText
-        let userPhone = this.data.userPhone
-        let addressItem = ''
-        addressLists.forEach(item => {
-            if (item.id == itemId) {
-                item.checked = true
-                addressText = item.address + item.doorplate
-                addressItem = item
-                userPhone = item.phone
-            } else {
-                item.checked = false
-            }
-        })
-        this.setData({
-            addressText: addressText,
-            addressLists: addressLists,
-            showAddress: false,
-            addressItem: addressItem
-        })
-    },
 
     /** 跳转到添加地址页面. */
     addAddressFn() {
@@ -362,24 +590,49 @@ Page({
         })
     },
 
-    /** 点击确认预约按钮. */
+    /** 点击预约下单按钮. */
     goPayIndentFn() {
         let that = this
         let deliveryMode = that.data.deliveryMode // 用餐方式
-        let bookTime = that.data.bookTime // 用餐日期
+        let bookTime = that.data.selectedDateValue // 用餐日期
         let selectedTime = that.data.selectedTime // 用餐时间
-        let addressItem = that.data.addressItem // 选择的地址
+        let addressItem = that.data.haveMealAddresInfo // 选择的地址
         let messageText = that.data.messageText // 留言信息
-        let HaveMealsLists = that.data.HaveMealsLists //明日菜单列表
-        let addressText = that.data.addressText // 选择的地址文字
         let assembleMode = that.data.assembleMode //1:早餐 2：午餐 3：晚餐
         let bookId = that.data.bookId // 传参ID
+        let selectedMessageArr = that.data.selectedMessageArr
+        let takeMealsAddressId = that.data.takeMealsAddressId // 取餐地址Id
+        let listDishInfoByRecommendArr = that.data.listDishInfoByRecommendArr // 推荐单点
+        let collocation = that.data.collocation // 搭配口味
+        let foodIngredient = that.data.garnishInfo //食材
+        let jiChuMiFanInfo = that.data.jiChuMiFanInfo // 基础米饭、服务费
+        let HaveMealsLists = []
+        let arr1 = listDishInfoByRecommendArr.filter(item => item.quantity > 0)
+        let arr2 = collocation.filter(item => item.quantity > 0)
+        let arr3 = []
+        foodIngredient.forEach(item => {
+            if (item.checked) arr3.push(item.ingredientId)
+        })
+        HaveMealsLists = HaveMealsLists.concat(arr1).concat(arr2)
+        // 默认先添加基础米饭和服务费
         let dishInfoArr = []
+        if (arr3.length > 0) {
+            dishInfoArr.push({
+                dishId: jiChuMiFanInfo.id,
+                quantity: 1,
+                isRecommend: 1,
+                ingredientId: arr3.join()
+            })
+        }
+        let getDinnerTimeStr = ''
+        getDinnerTimeStr = bookTime + ' ' + selectedTime + ':00'
         let getDinnerTime = bookTime + 'T' + selectedTime + ':00'
+
         getDinnerTime = new Date(getDinnerTime)
-        if (deliveryMode == '') {
+
+        if (HaveMealsLists.length == 0 && dishInfoArr.length == 0) {
             wx.showToast({
-                title: '请选择用餐方式',
+                title: '请添加商品',
                 icon: 'none'
             })
             return false
@@ -393,7 +646,24 @@ Page({
             return false
         }
 
-        if (addressItem == '' && deliveryMode == 2) {
+
+        if (deliveryMode == '') {
+            wx.showToast({
+                title: '请选择配送方式',
+                icon: 'none'
+            })
+            return false
+        }
+
+        if (!takeMealsAddressId && deliveryMode == 1) {
+            wx.showToast({
+                title: '请选择取餐地址',
+                icon: 'none'
+            })
+            return false
+        }
+
+        if (!addressItem && deliveryMode == 2) {
             wx.showToast({
                 title: '请选择配送地址',
                 icon: 'none'
@@ -401,17 +671,15 @@ Page({
             return false
         }
 
-        wx.showLoading({
-            title: '加载中',
-        })
         HaveMealsLists.forEach(item => {
-            if (item.category == assembleMode) {
-                dishInfoArr.push({
-                    dishId: item.dishId,
-                    quantity: item.quantity
-                })
-            }
+            dishInfoArr.push({
+                dishId: item.dishId,
+                quantity: item.quantity,
+                isRecommend: item.isRecommend,
+                ingredientId: item.isRecommend == 0 ? arr3.join() : ''
+            })
         })
+
         let parm
         if (deliveryMode == 1) {
             parm = {
@@ -426,10 +694,13 @@ Page({
                 communitySectionId: 0,
                 communityBuildingId: 0,
                 communityBuildingUnitId: 0,
-                address: addressText,
+                address: '',
                 bookId: bookId,
                 getDinnerTime: getDinnerTime,
-                dinnerCategory: assembleMode
+                getDinnerTimeStr: getDinnerTimeStr,
+                dinnerCategory: 2,
+                locationId: !takeMealsAddressId ? 0 : takeMealsAddressId,
+                bookLabel: selectedMessageArr.join()
             }
         } else {
             parm = {
@@ -444,23 +715,76 @@ Page({
                 communitySectionId: addressItem.communitySectionId,
                 communityBuildingId: addressItem.communityBuildingId,
                 communityBuildingUnitId: addressItem.communityBuildingUnitId,
-                address: addressText,
+                address: addressItem.address + addressItem.doorplate,
                 bookId: bookId,
                 getDinnerTime: getDinnerTime,
-                dinnerCategory: assembleMode
+                getDinnerTimeStr: getDinnerTimeStr,
+                dinnerCategory: 2,
+                locationId: !takeMealsAddressId ? 0 : takeMealsAddressId,
+                bookLabel: selectedMessageArr.join()
+
             }
         }
+
+        this.setData({
+            parm: parm,
+            payShow: true
+        })
+
+        
+
+    },
+
+    /** 确认生成订单. */
+    saveOrderFn(){
+        let that = this
+        let selectedId = that.data.selectedId
+        let totalPriceAll = that.data.totalPriceAll
+        let userInfo = wx.getStorageSync('userInfo')
+        let vipBalance = userInfo.balance ? userInfo.balance : 0
+        wx.showLoading({
+            title: '加载中',
+        })
         app.appRequest({
             url: '/app/orderInfo/saveBookOrderInfo.action',
             method: 'post',
-            postData: parm,
+            postData: that.data.parm,
             success(res) {
                 wx.hideLoading()
                 if (res.code == 200) {
+                    let orderId = res.message
                     that.setData({
-                        orderId: res.message,
-                        payShow: true
+                        orderId: orderId
                     })
+                    if (selectedId == 1){
+                        that.wxPayFn()
+                        that.setData({
+                            payShow: false
+                        })
+                    }else{
+                        if (userInfo.vip == 0) {
+                            that.setData({
+                                isVipShow: true
+                            })
+                        } else {
+                            
+                            if (vipBalance > totalPriceAll){
+                                wx.navigateTo({
+                                    url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
+                                })
+                            }else{
+                                // 会员充值
+                                wx.navigateTo({
+                                    url: '/pages/recharge/recharge',
+                                })
+                            }
+
+                            that.setData({
+                                payShow: false
+                            })
+                            
+                        }
+                    }
                 } else {
                     wx.showToast({
                         title: res.message,
@@ -469,7 +793,20 @@ Page({
                 }
             },
         })
+    },
 
+    /** 取消时间选择. */
+    onCloseAddressFn() {
+        this.setData({
+            showTime: false
+        })
+    },
+
+    /** 取消支付. */
+    onPayClose() {
+        this.setData({
+            payShow: false
+        })
     },
 
     /** 支付方式选择. */
@@ -480,19 +817,24 @@ Page({
         })
     },
 
+    /** 点击去充值按钮. */
+    confirmCancelFn() {
+        wx.navigateTo({
+            url: '/pages/recharge/recharge?vipPay=true',
+        })
+    },
+
+    /** 取消充值. */
+    cancelRechargeFn() {
+        this.setData({
+            isVipShow: false
+        })
+    },
+
     /** 点击支付方式弹框确认按钮. */
     confirmAppointFn() {
         let that = this
-        let selectedId = that.data.selectedId
-        let orderId = that.data.orderId
-        if (selectedId == 1) {
-            that.wxPayFn()
-        }
-        if (selectedId == 2) {
-            wx.navigateTo({
-                url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
-            })
-        }
+        that.saveOrderFn()
     },
 
     /** 微信支付. */
@@ -517,8 +859,9 @@ Page({
                         that.setData({
                             payShow: false,
                             showSpellList: false,
-                            showPaySuccessStatus: true
+                            makeAppointmentShow: true
                         })
+                        that.GetAdvertisingFn()
                     },
                     fail(err) {
                         console.log(err)
@@ -528,7 +871,7 @@ Page({
                             showCancel: false,
                             confirmColor: "#5bcbc8",
                             success(res) {
-                                wx.switchTab({
+                                wx.redirectTo({
                                     url: '/pages/order/order',
                                 })
                             }
@@ -571,11 +914,10 @@ Page({
         })
     },
 
-
-    /** 返回首页. */
-    backIndexFn() {
+    /** 点击返回首页按钮. */
+    toBackIndexFn() {
         wx.setStorageSync('balancePaySuccess', false)
-        wx.switchTab({
+        wx.redirectTo({
             url: '/pages/index/index',
         })
     },
@@ -597,13 +939,16 @@ Page({
             that.setData({
                 payShow: false,
                 showSpellList: false,
-                showPaySuccessStatus: true
+                makeAppointmentShow: true
             })
+            that.GetAdvertisingFn()
         }
+        that.setData({
+            userInfo: wx.getStorageSync('userInfo')
+        })
         that.getSysConfFn()
-        that.getUserAddressFn()
+        console.log(that.data.haveMealAddresInfo)
     },
-
     /**
      * 生命周期函数--监听页面隐藏
      */

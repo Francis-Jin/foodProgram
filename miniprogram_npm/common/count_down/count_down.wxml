@@ -1,2 +1,7 @@
 <!--miniprogram_npm/common/count_down/count_down.wxml-->
-<text>miniprogram_npm/common/count_down/count_down.wxml</text>
+
+<view class="count_down">
+    <view class="time" style="text-align:{{align}};color:{{color}};font-size:{{size}}rpx;font-weight:bold;">
+        <text>{{showTime}}</text>
+    </view>
+</view>

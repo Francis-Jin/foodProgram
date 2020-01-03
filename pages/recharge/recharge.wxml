@@ -10,7 +10,7 @@
 
     <view class="margin_top_20">
         <view class="flex flex_space_between parentBox">
-            <view data-index="{{index}}" bindtap="slectedChoneZhiFn" wx:if="{{index < 3}}" wx:for="{{priceArr}}" wx:key="index" class="{{item.checked ? 'active' : ''}} item width_30 height_fixed_60 text_center line_height_60 color_ff6">
+            <view data-index="{{index}}" bindtap="slectedChoneZhiFn" wx:if="{{index < 1}}" wx:for="{{priceArr}}" wx:key="index" class="{{item.checked ? 'active' : ''}} item width_100 height_fixed_60 text_center line_height_60 color_ff6">
                 <text>{{item.price}}元</text>
             </view>
         </view>
@@ -21,7 +21,7 @@
         </view> -->
     </view>
 
-    <view class="margin_top_20 weui-cell inputValue padding_top_10 padding_bottom_10 padding_left_10 box_sizing weui-cell_input">
+    <view hidden="true" class="margin_top_20 weui-cell inputValue padding_top_10 padding_bottom_10 padding_left_10 box_sizing weui-cell_input">
         <input class="" maxlength="5" cursor-spacing="20" bindblur="inputBlurFn" type="number" value="{{inputVal}}" bindinput="rechargeAmountInputFn" placeholder="输入其他金额" />
     </view>
 

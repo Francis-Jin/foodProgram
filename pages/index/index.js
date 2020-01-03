@@ -8,6 +8,9 @@ Page({
      * 页面的初始数据
      */
     data: {
+        isShowMenu: false,
+        menuLists: [],
+        countTime:'2019-11-04 12:59:00',
         userInfo: '',
         hourDeg: 0,
         minuteDeg: 0,
@@ -15,28 +18,33 @@ Page({
         urlBefore: app.globalData.urlBefore,
         listsLeft: [],
         listsRight: [],
+        listsAll: [],
         page: 1, //默认从第一页开始
-        pageSize: 10, //每页获取数量
+        pageSize: 20, //每页获取数量
         buyNumber: 0, //购物车数量
         directionValue: [],
         show: false,
         columns: [],
-        isShowDiscountModal:false, //新用户首次进入弹出
+        isShowDiscountModal: false, //新用户首次进入弹出
         otherShow: false, //选择其他时弹框
         otherValue: '', // 选择其他输入的关键字
         selectedCode: '', //膳食方向code
+        isClickMenu: false, // 是否点击了菜单
 
         guideMongoliaShowStatus: false, //是否显示引导蒙层
         // 加入购物车动画小球
         hide_good_box: true,
         bus_x: 0,
-        bus_y: 0
+        bus_y: 0,
+        // 今日时蔬图片
+        toDaySSInfo: '',
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
+        console.log(wx.getStorageSync('userInfo'))
         var _windowHeight = wx.getSystemInfoSync().windowHeight;
 
         // 目标终点元素 - 购物车的位置坐标
@@ -47,9 +55,8 @@ Page({
 
         let that = this
         wx.getSystemInfo({
-            success: function (res) {
+            success: function(res) {
                 //model中包含着设备信息
-                console.log(res)
                 var model = res.model
                 console.log(model.search('iPhone X') != -1)
                 if (model.search('iPhone X') != -1) {
@@ -69,12 +76,12 @@ Page({
         })
         let newUser = wx.getStorageSync('userInfo').newUser
         let voucherAmount = wx.getStorageSync('userInfo').voucherAmount
-        if (newUser == 1 && voucherAmount > 0){
+        if (newUser == 1 && voucherAmount > 0) {
             this.setData({
                 isShowDiscountModal: true
             })
         }
-        if (newUser == 1 && voucherAmount == 0){
+        if (newUser == 1 && voucherAmount == 0) {
             this.setData({
                 guideMongoliaShowStatus: true
             })
@@ -85,6 +92,141 @@ Page({
         this.getTwelveHourByNow()
         this.getDataLists()
         this.getDietOrientationFn()
+        this.getDishCategoryFn()
+        this.getToDaySSData()
+        this.getListIndexRecommendFn()
+    },
+
+    /** 获取首页菜品推荐. */
+    getListIndexRecommendFn(){
+        let that = this
+        app.appRequest({
+            url: '/app/recommend/listIndexRecommend.action',
+            method: 'get',
+            success(res){
+                if(res.code == 200){
+                    if(res.data){
+                        that.setData({
+                            ListIndexRecommendArr: res.data 
+                        })
+                    }
+                }
+            }
+        })
+    },
+
+    /** 获取今日时蔬数据. */
+    getToDaySSData(){
+        let that = this
+        app.appRequest({
+            url: '/app/recommend/toDayVegetables.action',
+            method: 'get',
+            success(res){
+                if(res.code==200){
+                    if(res.data){
+                        that.setData({
+                            toDaySSInfo: res.data 
+                        })
+                    }
+                }else{
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
+                    })
+                }
+            }
+        })
+    },
+
+    /** 获取菜单分类列表. */
+    getDishCategoryFn(){
+        let that = this
+        app.appRequest({
+            url: '/app/recommend/dishCategory.action',
+            method: 'get',
+            success(res) {
+                if(res.code == 200){
+                    if(res.data){
+                        res.data.forEach(item=>item.checked = false)
+                        that.setData({
+                            menuLists: res.data
+                        })
+                    }
+                }else{
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
+                    })
+                }
+            }
+        })
+    },
+
+    /** 点击菜单列表. */
+    clickMenuListsElementFn(e){
+        let that = this
+        let itemId = e.currentTarget.dataset.itemid
+        let menuLists = that.data.menuLists
+        menuLists.forEach(item=>{
+            if(itemId == item.id){
+                item.checked = true
+            }else{
+                item.checked = false
+            }
+        })
+        that.setData({
+            page: 1,
+            isClickMenu: true,
+            listsAll: [],
+            listsLeft: [],
+            listsRight: [],
+            menuClassId: itemId,
+            isShowMenu:false,
+            menuLists: menuLists
+        })
+        that.getClassShopDataFn()
+    },
+
+    /** 根据菜单分类获取商品数据. */
+    getClassShopDataFn(){
+        let that = this
+        app.appRequest({
+            url: '/app/recommend/listByCategory.action',
+            method: 'get',
+            getParams: {
+                'dishCategory': that.data.menuClassId,
+                'page': that.data.page,
+                'rows': that.data.pageSize
+            },
+            success(res) {
+                if (res.data) {
+                    let listsAll = that.data.listsAll.concat(res.data)
+                    let listsLeft = listsAll.filter((item, index) => (index + 1) % 2 == 1)
+                    let listsRight = listsAll.filter((item, index) => (index + 1) % 2 == 0)
+                    that.setData({
+                        listsAll: listsAll,
+                        listsLeft: listsLeft,
+                        listsRight: listsRight
+                    })
+                }
+            }
+        })
+    },
+
+
+
+    /** 点击显示菜单 */
+    showMenuFn(){
+        this.setData({
+            isShowMenu: true
+        })
+    },
+
+    /** 隐藏菜单. */
+    closeMenuFn(){
+        this.setData({
+            isShowMenu: false
+        })
     },
 
     /** 关闭引导蒙层. */
@@ -120,12 +262,9 @@ Page({
             method: 'get',
             success(res) {
                 let lists = res.data
-                res.data.forEach(item => {
-                    item.checked = false
-                })
+                let selectedCode = []
                 if (wx.getStorageSync("userInfo").userDietOrientation) {
                     let value = []
-                    let selectedCode = []
                     wx.getStorageSync("userInfo").userDietOrientation.forEach(item => {
                         value.push(item.dietOrientationName)
                         selectedCode.push(item.dietOrientationId)
@@ -137,6 +276,15 @@ Page({
                     })
                     wx.setStorageSync('selectedCode', selectedCode.join())
                 }
+                res.data.forEach(item => {
+                    selectedCode.forEach(subItem => {
+                        if(item.code == subItem){
+                            item.checked = true
+                        }else{
+                            item.checked = false
+                        }
+                    })
+                })
                 that.setData({
                     columns: lists,
                     dietOrientationLists: res.data
@@ -158,7 +306,7 @@ Page({
         let userInfo = wx.getStorageSync("userInfo")
         if (!userInfo) {
             wx.redirectTo({
-                url: '/pages/start/start?isLogin=true',
+                url: '/pages/login/login?isLogin=true',
             })
             return false
         }
@@ -245,7 +393,7 @@ Page({
         let userInfo = wx.getStorageSync("userInfo")
         if (!userInfo) {
             wx.redirectTo({
-                url: '/pages/start/start?isLogin=true',
+                url: '/pages/login/login?isLogin=true',
             })
             return false
         }
@@ -267,6 +415,7 @@ Page({
             },
             success(res) {
                 that.setData({
+                    listsAll: [],
                     listsLeft: [],
                     listsRight: [],
                     page: 1,
@@ -297,20 +446,19 @@ Page({
     },
 
     /** 关闭领优惠弹框. */
-    closeDiscountModal(){
+    closeDiscountModal() {
         this.setData({
-            guideMongoliaShowStatus:true,
-            isShowDiscountModal:false
+            guideMongoliaShowStatus: true,
+            isShowDiscountModal: false
         })
     },
 
     /** 添加购物车 */
     addCart(e) {
-        console.log(e)
         let that = this
         let itemId = e.currentTarget.dataset.itemid
+        let stock = e.currentTarget.dataset.stock
         let addPic = e.currentTarget.dataset.pic
-        console.log(addPic)
         that.setData({
             addPic: addPic,
             itemId: itemId
@@ -318,10 +466,16 @@ Page({
         let userInfo = wx.getStorageSync("userInfo")
         if (!userInfo) {
             wx.redirectTo({
-                url: '/pages/start/start?isLogin=true',
+                url: '/pages/login/login?isLogin=true',
             })
             return false
         }
+
+        if (stock < 1) return false
+
+        that.requestAddCart()
+
+        return false;
         // 如果good_box正在运动，不能重复点击
         if (!this.data.hide_good_box) return;
         this.finger = {};
@@ -346,11 +500,11 @@ Page({
 
         this.linePos = app.bezier([this.busPos, topPoint, this.finger], 30);
         this.startAnimation();
-        
+
     },
 
     /** 加入购物车动画. */
-    startAnimation: function () {
+    startAnimation: function() {
         var index = 0,
             that = this,
             bezier_points = that.linePos['bezier_points'];
@@ -360,7 +514,7 @@ Page({
             bus_y: that.finger['y']
         })
         index = bezier_points.length;
-        this.timer = setInterval(function () {
+        this.timer = setInterval(function() {
             index--;
             // 设置球的位置
             that.setData({
@@ -379,7 +533,7 @@ Page({
     },
 
     /** 请求加入购物车. */
-    requestAddCart(){
+    requestAddCart() {
         let that = this
         app.appRequest({
             url: "/app/shoppingCart/saveShoppingCart.action",
@@ -390,10 +544,10 @@ Page({
                 createUser: wx.getStorageSync("userInfo").id
             },
             success(res) {
-                // wx.showToast({
-                //     title: res.message,
-                //     icon: 'none'
-                // })
+                wx.showToast({
+                    title: '已加入',
+                    icon: 'none'
+                })
                 that.getCartBuyNumberFn()
             }
         })
@@ -402,18 +556,20 @@ Page({
     /** 获取购物车数量 */
     getCartBuyNumberFn() {
         let that = this
-        app.appRequest({
-            url: "/app/shoppingCart/countTotal.action",
-            method: 'get',
-            getParams: {
-                userId: wx.getStorageSync("userInfo").id
-            },
-            success(res) {
-                that.setData({
-                    buyNumber: res.data
-                })
-            }
-        })
+        if (wx.getStorageSync("userInfo")) {
+            app.appRequest({
+                url: "/app/shoppingCart/countTotal.action",
+                method: 'get',
+                getParams: {
+                    userId: wx.getStorageSync("userInfo").id
+                },
+                success(res) {
+                    that.setData({
+                        buyNumber: res.data
+                    })
+                }
+            })
+        }
 
     },
 
@@ -450,14 +606,22 @@ Page({
     topPageDetails(e) {
         let _type = e.currentTarget.dataset.type
         let _itemId = e.currentTarget.dataset.itemid
+        let dishCategory = e.currentTarget.dataset.dishcategory
         if (_type === '1') {
             wx.navigateTo({
                 url: '/pages/cook_details/cook_details?itemId=' + _itemId,
             })
         } else if (_type === '2') {
-            wx.navigateTo({
-                url: '/pages/food_details/food_details?itemId=' + _itemId,
-            })
+            if (dishCategory != 2){
+                wx.navigateTo({
+                    url: '/pages/food_details/food_details?itemId=' + _itemId,
+                })
+            }else{
+                wx.navigateTo({
+                    url: '/pages/advertisement_details/advertisement_details?itemId=' + _itemId,
+                })
+            }
+            
         } else if (_type === '3') {
             wx.navigateTo({
                 url: '/pages/solar_terms_details/solar_terms_details?itemId=' + _itemId,
@@ -487,11 +651,13 @@ Page({
             },
             success(res) {
                 if (res.data) {
-                    let listsLeft = res.data.filter((item, index) => (index + 1) % 2 == 1)
-                    let listsRight = res.data.filter((item, index) => (index + 1) % 2 == 0)
+                    let listsAll = that.data.listsAll.concat(res.data)
+                    let listsLeft = listsAll.filter((item, index) => (index + 1) % 2 == 1)
+                    let listsRight = listsAll.filter((item, index) => (index + 1) % 2 == 0)
                     that.setData({
-                        listsLeft: that.data.listsLeft.concat(listsLeft),
-                        listsRight: that.data.listsLeft.concat(listsRight)
+                        listsAll: listsAll,
+                        listsLeft: listsLeft,
+                        listsRight: listsRight
                     })
                 }
                 // 隐藏导航栏加载框
@@ -538,10 +704,13 @@ Page({
         // 显示顶部刷新图标
         wx.showNavigationBarLoading();
         this.setData({
+            isClickMenu: false,
+            listsAll: [],
             listsLeft: [],
             listsRight: [],
             page: 1
         })
+        this.getToDaySSData()
         this.getDataLists()
     },
 
@@ -550,12 +719,20 @@ Page({
      */
     onReachBottom: function() {
         let that = this
+        // let selectedCode = that.data.selectedCode
+        // if (selectedCode){
+        let isClickMenu = that.data.isClickMenu
         let page = that.data.page
         page++
         this.setData({
             page: page
         })
-        that.getDataLists()
+        if (!isClickMenu){
+            that.getDataLists()
+        }else{
+            that.getClassShopDataFn()
+        }
+        // }
     },
 
     /**

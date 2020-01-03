@@ -14,10 +14,10 @@
     <view class="margin_top_20 box_shadow border_radius_10 box_sizing padding_left_right_20 overflow_hidden">
         <view class="line_height_40">
             <text class="font_size_16 color_5151 margin_right_20">{{info.name}}</text>
-            <text class="color_eded font_size_14">{{info.startDate}}~{{info.nextStartDate}}</text>
+            <text class="color_999 font_size_14">{{info.startDate}}~{{info.nextStartDate}}</text>
         </view>
         <view class="color_5151 padding_bottom_10 font_size_12 line_height_20">
-            <text>{{info.effect}}</text>
+            <rich-text nodes="{{info.intro}}"></rich-text>
         </view>
     </view>
 </view>

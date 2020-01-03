@@ -14,8 +14,8 @@
     <view wx:if="{{selectedActive == 1}}" class="content_wrap box_sizing padding_left_right_20">
         <view wx:if="{{groupOrderList.length > 0}}">
             <block wx:for="{{groupOrderList}}" wx:key="index">
-                <view class="box_shadow border_radius_20 overflow_hidden margin_bottom_20 box_sizing padding_left_right_20">
-                    <view class="line_height_50 flex flex_space_between border_bottom" data-id="{{item.id}}" bindtap="toDeailsFn">
+                <view class="margin_bottom_20">
+                    <view class="flex flex_space_between" data-id="{{item.orderId}}" bindtap="toDeailsFn">
                         <view class="color_4dc font_size_14">
                             <text class="margin_right_5">订单号：</text>
                             <text>{{item.orderId}}</text>
@@ -24,29 +24,32 @@
                             <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle relative" style="top:-6rpx;" src="/images/icon/more.png"></image>
                         </view>
                     </view>
-                    <view class="margin_top_20 padding_bottom_20 border_bottom flex flex_space_between">
+                    <view class="flex flex_space_between">
                         <view class="width_70">
-                            <view class="margin_bottom_10">
+                            <view class="margin_bottom_10" data-tel="{{item.phone}}" bindtap="callTelFn">
                                 <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle" src="/images/icon/tel.png"></image>
-                                <text class="margin_left_10 color_5353 font_size_14">{{item.name}}</text>
-                                <text class="margin_left_10 color_5353 font_size_14">{{item.phone}}</text>
+                                <text class="margin_left_10 color_5353 font_size_12">{{item.name}}</text>
+                                <text class="margin_left_10 color_5353 font_size_12">{{item.phone}}</text>
                             </view>
                             <view class="flex">
                                 <view class="width_40">
                                     <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle" src="/images/icon/dizhi@2x.png"></image>
-                                    <text class="margin_left_10 color_5353 font_size_14">地 址：</text>
+                                    <text class="margin_left_10 color_5353 font_size_12">地 址：</text>
                                 </view>
                                 <view class="">
-                                    <text class="color_5353 font_size_14">{{item.address}}</text>
+                                    <text class="color_5353 font_size_12">{{item.address}}</text>
+                                </view>
+                            </view>
+                            <view class="margin_top_10 box_sizing padding_left_20">
+                                <view wx:for="{{item.details}}" wx:for-item="subItem" wx:for-index="index2" wx:key="index2" class="font_size_12 color_666">
+                                    <text>{{subItem.name}} x{{subItem.quantity}}</text>
                                 </view>
                             </view>
                         </view>
                         <view class="width_30 relative">
-
                             <view class="width_100 font_size_14 color_5151 text_center line_height_40 bg_f9" style="position:absolute;left:0;top:50%;margin-top:-40rpx;">
                                 <text>{{item.statusName}}</text>
                             </view>
-
                         </view>
                     </view>
                     <view class="margin_top_20 color_5151 padding_bottom_20 border_bottom flex flex_wrap">
@@ -54,8 +57,8 @@
                             <text>{{nameItem.deliveryUserName}}</text>
                         </view>
                     </view>
-
                 </view>
+                <line/>
             </block>
         </view>
         <view wx:else class="text_center color_999 line_height_100 margin_top_100">
@@ -68,8 +71,8 @@
     <view wx:if="{{selectedActive == 2}}" class="box_sizing padding_left_right_20">
         <view wx:if="{{lists.length > 0}}">
             <block wx:for="{{lists}}" wx:key="index">
-                <view class="box_shadow border_radius_20 overflow_hidden margin_bottom_20 box_sizing padding_left_right_20">
-                    <view class="line_height_50 flex flex_space_between border_bottom" data-id="{{item.id}}" bindtap="toDeailsFn">
+                <view class="margin_bottom_20">
+                    <view class="flex flex_space_between" data-id="{{item.orderId}}" bindtap="toDeailsFn">
                         <view class="color_4dc font_size_14">
                             <text class="margin_right_5">订单号：</text>
                             <text>{{item.orderId}}</text>
@@ -78,20 +81,25 @@
                             <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle relative" style="top:-6rpx;" src="/images/icon/more.png"></image>
                         </view>
                     </view>
-                    <view class="margin_top_20 padding_bottom_20 border_bottom flex flex_space_between">
+                    <view class="flex flex_space_between">
                         <view class="width_70">
-                            <view class="margin_bottom_10">
+                            <view class="margin_bottom_10" data-tel="{{item.phone}}" bindtap="callTelFn">
                                 <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle" src="/images/icon/tel.png"></image>
-                                <text class="margin_left_10 color_5353 font_size_14">{{item.name}}</text>
-                                <text class="margin_left_10 color_5353 font_size_14">{{item.phone}}</text>
+                                <text class="margin_left_10 color_5353 font_size_12">{{item.name}}</text>
+                                <text class="margin_left_10 color_5353 font_size_12">{{item.phone}}</text>
                             </view>
                             <view class="flex">
                                 <view class="width_40">
                                     <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle" src="/images/icon/dizhi@2x.png"></image>
-                                    <text class="margin_left_10 color_5353 font_size_14">地 址：</text>
+                                    <text class="margin_left_10 color_5353 font_size_12">地 址：</text>
                                 </view>
                                 <view class="">
-                                    <text class="color_5353 font_size_14">{{item.address}}</text>
+                                    <text class="color_5353 font_size_12">{{item.address}}</text>
+                                </view>
+                            </view>
+                            <view class="margin_top_10 box_sizing padding_left_30">
+                                <view wx:for="{{item.details}}" wx:for-item="subItem" wx:for-index="index2" wx:key="index2" class="font_size_12 color_666">
+                                    <text>{{subItem.name}} x{{subItem.quantity}}</text>
                                 </view>
                             </view>
                         </view>
@@ -107,12 +115,12 @@
                             </view>
                         </view>
                     </view>
-                    <view class="margin_top_20 padding_bottom_20">
+                    <view class="margin_top_20">
                         <!-- <view class="margin_bottom_10">
                         <image class="width_fixed_20 height_fixed_20 border_radius__100 vertical_middle relative" style="top:-4rpx;" src="/images/icon/time.png"></image>
                         <text class="margin_left_10 color_5353 font_size_14">配送时间：</text>
                         <text class="margin_left_10 color_5353 font_size_14">2 ：03</text>
-                    </view> -->
+                        </view> -->
                         <view wx:if="{{item.status == 3 || item.status == 4}}" class="color_5151  flex flex_space_between font_size_14 line_height_20 border_radius_5">
                             <view class="width_50 flex flex_space_between">
                                 <view wx:if="{{item.status == 3}}" data-orderid="{{item.orderId}}" data-item="取餐" bindtap="personAppointFn" class="jd_item active width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
@@ -132,6 +140,7 @@
                     </view>
 
                 </view>
+                <line/>
             </block>
         </view>
         <view wx:else class="text_center color_999 line_height_100 margin_top_100">
@@ -207,7 +216,7 @@
                         </view>
                         <view class="margin_top_20 padding_bottom_20 border_bottom flex flex_space_between">
                             <view class="width_70">
-                                <view class="margin_bottom_10">
+                                <view class="margin_bottom_10" data-tel="{{item.phone}}" bindtap="callTelFn">
                                     <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle relative" style="top:-4rpx;" src="/images/icon/tel.png"></image>
                                     <text class="margin_left_10 color_5353 font_size_14">{{item.name}}</text>
                                     <text class="margin_left_10 color_5353 font_size_14">{{item.phone}}</text>
@@ -274,7 +283,7 @@
 
 <!-- 弹出确认配送员 -->
 <van-popup show="{{appointShow }}" bind:close="onClose" duration="{{0}}">
-    <view>
+    <view class="bg_fff">
         <view wx:if="{{appointName != '出错' && appointName != '处理'}}" class="border_radius_10 overflow_hidden" style="width:500rpx;">
             <view class="line_height_100 text_center color_5151">
                 <text wx:if="{{selectedActive == 1}}">是否指派</text>
@@ -305,7 +314,7 @@
 
 <!-- 弹出当日收益 -->
 <van-popup show="{{ todayProfitShow }}" overlay="{{false}}" position="bottom" custom-style="height: {{selectedActive == 1 ? '800rpx' : '400rpx'}} " duration="{{500}}">
-    <view class="popupContent">
+    <view class="popupContent bg_fff">
         <view class="box_shadow border_top height_fixed_60 box_sizing text_center padding_top_10 padding_bottom_10" bindtap="onClose">
             <view>
                 <text class="iconfont icon-double-arrow-bottom color_dede"></text>

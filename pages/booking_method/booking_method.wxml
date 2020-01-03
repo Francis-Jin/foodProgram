@@ -1,59 +1,77 @@
 <!--pages/booking_method/booking_method.wxml-->
 <!-- 页面主要内容 -->
-<view class="flex flex_space_between line_height_40 topBack bg_fff" style="{{ isIpx ? 'padding-top:90rpx' : 'padding-top:40rpx'}}">
-    <view class="width_30 box_sizing padding_left_10 color_333" bindtap="backOrderListsFn">
-        <text class="iconfont icon-left2"></text>
+<headType/>
+<!-- 主要内容 -->
+<view class="container">
+    <!-- <view class="height_fixed_60 relative">
+        <view class="outside absolute1">
+            <view class="inside color_999">
+                <text>定制午、晚餐</text>
+            </view>
+        </view>
+        <view class="outside absolute2" bindtap="toAppointmentTodayFn">
+            <view class="margin_top_10 font_size_12 color_fff box_sizing padding_right_20">
+                <text>定制</text>
+            </view>
+            <view class="box_sizing font_size_12 color_fff padding_right_20">
+                <text>早餐</text>
+            </view>
+        </view>
+    </view> -->
+    <view class="flex margin_top_20 box_sizing padding_left_right_20 flex_center line_height_40">
+        <view bindtap="toAppointmentTodayFn" class="width_fixed_120 font_size_14 text_center border_radius_20 color_fff background_liner">
+            <text>预订早餐</text>
+        </view>
+        <view class=" margin_left_30 width_fixed_120 font_size_14 border_radius_20 bg_f5 text_center color_666">
+            <text>预订午、晚餐</text>
+        </view>
     </view>
-    <view class="width_30 text_center font_size_16 font_weight">
-        <text>预约点餐</text>
-    </view>
-    <view class="width_30"></view>
-</view>
-<view class="height_fixed_70"></view>
 
-<view class="container box_sizing padding_left_right_20 padding_top_20">
-
-    <view>
-        <!-- 明日早餐 -->
-        <view class="box_shadow border_radius_10 margin_bottom_20" data-type="1" bindtap="toPageFn">
-            <view class="flex flex_space_between box_sizing padding_left_right_20">
-                <view class="height_fixed_50 line_height_50">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/breakfast.png"></image>
-                    <text class="margin_left_10 color_5353 font_size_14">明日早餐</text>
+    <!-- 分类列表. -->
+    <view class="box_sizing padding_left_right_20">
+        <view class="item">
+            <view class="height_fixed_50 line_height_50 color1 font_weight">
+                <text>膳食功效选择</text>
+            </view>
+            <view class="flex  flex_wrap">
+                <view data-item="{{item}}" data-type="1" bindtap="selectedThisItem" wx:for="{{firstBookWordLists}}" wx:key="index" class="border1 {{item.active == true ? 'activeBg1' : ''}} init color1 {{item.name.length > 6 ? '' : 'line_height_40'}}  width_fixed_80 height_fixed_40 border_radius_5 text_center ">
+                    <text style="margin-top: {{item.name.length > 6 ? 8 : 0}}rpx;display:inline-block;">{{item.name}}</text>
                 </view>
-                <view class="height_fixed_50 line_height_50">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image>
+            </view>
+        </view>
+        <view class="text_center padding_top_10 padding_bottom_10" bindtap="showMoreFn">
+            <view class="color_999">
+                <text>高级选项</text>
+            </view>
+            <view>
+                <image style="width:30rpx; height:30rpx;" src="/images/icon/more@2x.png"></image>
+            </view>
+        </view>
+
+        <!-- 更多数据. -->
+        <view wx:if="{{isShowMore}}" class="moreSection">
+            <view class="item" wx:for="{{moreBookWordLists}}" wx:key="index">
+                <view class="height_fixed_50 line_height_50 color{{item.colorIndex}} font_weight">
+                    <text>{{item.name}}</text>
+                </view>
+                <view class="flex  flex_wrap">
+                    <view data-item="{{subItem}}" data-type="2" bindtap="selectedThisItem" wx:for="{{item.fiveInternalOrgansSymptoms}}" wx:for-item="subItem" wx:for-index="index2" wx:key="index2" class="border{{item.colorIndex}} {{subItem.active == true ? 'activeBg' + item.colorIndex : ''}} init color{{item.colorIndex}}  {{subItem.name.length > 6 ? '' : 'line_height_40'}}  width_fixed_80 height_fixed_40 border_radius_5 text_center ">
+                        <text style="margin-top: {{subItem.name.length > 6 ? 8 : 0}}rpx;display:inline-block;">{{subItem.name}}</text>
+                    </view>
                 </view>
             </view>
         </view>
 
-        <!-- 明日午餐 -->
-        <view class="box_shadow border_radius_10 margin_bottom_20" data-type="2" bindtap="toPageFn">
-            <view class="flex flex_space_between box_sizing padding_left_right_20">
-                <view class="height_fixed_50 line_height_50">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/lunch.png"></image>
-                    <text class="margin_left_10 color_5353 font_size_14">明日午餐</text>
-                </view>
-                <view class="height_fixed_50 line_height_50">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image>
-                </view>
-            </view>
-        </view>
-
-        <!-- 明日晚餐 -->
-        <view class="box_shadow border_radius_10 margin_bottom_20" data-type="3" bindtap="toPageFn">
-            <view class="flex flex_space_between box_sizing padding_left_right_20">
-                <view class="height_fixed_50 line_height_50">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/dinner.png"></image>
-                    <text class="margin_left_10 color_5353 font_size_14">明日晚餐</text>
-                </view>
-                <view class="height_fixed_50 line_height_50">
-                    <image class="width_fixed_20 height_fixed_20 vertical_middle relative" style="top:-6rpx;" src="/images/icon/right@2x.png"></image>
-                </view>
-            </view>
-        </view>
-
     </view>
 
+    <!-- 底部固定高度. -->
+    <view class="height_fixed_120"></view>
 
+    <!-- 下一步 -->
+    <view class="bg_fff padding_top_20 padding_bottom_20" style="position:fixed;width:100%;left:0;bottom:0;" bindtap="toPageFn">
+        <!-- <view class="bg_fff padding_top_20 padding_bottom_20" bindtap="toPageFn"> -->
+        <view class="width_50 height_fixed_50 line_height_50 margin_auto border_radius_20 text_center color_fff background_yello2_liner">
+            <text>下一步</text>
+        </view>
+    </view>
 </view>

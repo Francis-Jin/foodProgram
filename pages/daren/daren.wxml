@@ -1,0 +1,153 @@
+<!--pages/daren/daren.wxml-->
+<!--pages/delinvery_indent/delinvery_indent.wxml-->
+
+<!-- 1是组长 2组员 -->
+
+<view class="container">
+    <view class="height_fixed_70"></view>
+    <view class="top_bar bg_fff box_shadow flex text_center flex_space_between line_height_50 box_shadow overflow_hidden box_sizing padding_left_right_20" style="border-radius: 0 0 40rpx 40rpx;">
+        <view wx:for="{{topBarLists}}" wx:key="index" data-item="{{item}}" bindtap="onSwitchTabFn" class="item width_50 {{selectedActive == item.id ? 'active' : ''}} font_size_14">
+            <text class="relative text">{{item.text}}</text>
+        </view>
+    </view>
+
+    <!-- content 团队接单-->
+    <view class="content_wrap box_sizing padding_left_right_20">
+        <view class="background_liner text_center height_fixed_70 border_radius_10 color_fff flex flex_space_between">
+            <view class="width_50">
+                <view class="font_size_14 margin_top_20">
+                    <text wx:if="{{selectedActive == 1}}">今日佣金</text>
+                    <text wx:if="{{selectedActive == 2}}">总佣金</text>
+                </view>
+                <view class="font_size_16 font_weight">
+                    <text>126.89</text>
+                </view>
+            </view>
+            <view class="width_50">
+                <view class="font_size_14 margin_top_20">
+                    <text wx:if="{{selectedActive == 1}}">今日销售单数</text>
+                    <text wx:if="{{selectedActive == 2}}">总销售单数</text>
+                </view>
+                <view class="font_size_16 font_weight">
+                    <text>17</text>
+                </view>
+            </view>
+        </view>
+
+        <!-- 内容 -->
+        <view class="content_wrap margin_top_20">
+            <view class="item">
+                <view class="line_height_40">
+                    <text>2019年10月10日</text>
+                </view>
+
+                <view class="flex flex_space_between">
+                    <view class="width_60 font_size_14">
+                        <view class="init flex flex_space_between width_100 color_666">
+                            <view class="width_70">
+                                <text>香辣时蔬饭</text>
+                                <text>x3</text>
+                            </view>
+                            <view class="width_20">
+                                <text>+2.3</text>
+                            </view>
+                        </view>
+                        <view class="init flex flex_space_between width_100 color_666">
+                            <view class="width_70">
+                                <text>香辣时蔬饭</text>
+                                <text>x3</text>
+                            </view>
+                            <view class="width_20">
+                                <text>+2.3</text>
+                            </view>
+                        </view>
+                        <view class="init flex flex_space_between width_100 color_666">
+                            <view class="width_70">
+                                <text>香辣时蔬饭</text>
+                                <text>x3</text>
+                            </view>
+                            <view class="width_20">
+                                <text>+2.3</text>
+                            </view>
+                        </view>
+                        <view class="init flex flex_space_between width_100 color_666">
+                            <view class="width_70">
+                                <text>香辣时蔬饭</text>
+                                <text>x3</text>
+                            </view>
+                            <view class="width_20">
+                                <text>+2.3</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="width_40 relative">
+                        <view class="height_fixed_100 width_80 text_center">
+                            <view class="height_fixed_30 border_radius_5 font_size_14 line_height_30 bg_f5 color_9393">
+                                <text>销售：17单</text>
+                            </view>
+                            <view class="height_fixed_30 border_radius_5 font_size_14 line_height_30 margin_top_10 background_yellow_liner color_fff">
+                                <text>佣金：￥33.6</text>
+                            </view>
+                        </view>
+                    </view> 
+                </view>
+
+            </view>
+        </view>
+        <!-- <view class="text_center color_999 line_height_100 margin_top_100">
+            <text>暂无数据</text>
+        </view> -->
+        <view class="height_fixed_80"></view>
+    </view>
+
+
+</view>
+
+<!-- 当日收益按钮 -->
+<view bindtap="todayProfitShowFn" class="profitBtn bg_fff box_shadow text_center padding_top_10 padding_bottom_10">
+    <view style="transform:rotate(-180deg)">
+        <text class="iconfont icon-double-arrow-bottom color_dede"></text>
+    </view>
+    <view class="font_size_14 color_5151">
+        <text>提现</text>
+    </view>
+</view>
+
+
+<!-- 弹出当日收益 -->
+<van-popup show="{{ todayProfitShow }}" overlay="{{false}}" position="bottom" custom-style="height: {{selectedActive == 10 ? '800rpx' : '400rpx'}} " duration="{{500}}">
+    <view class="popupContent bg_fff">
+        <view class="box_shadow border_top height_fixed_60 box_sizing text_center padding_top_10 padding_bottom_10" bindtap="onClose">
+            <view>
+                <text class="iconfont icon-double-arrow-bottom color_dede"></text>
+            </view>
+            <view class="font_size_14 color_5151">
+                <text>提现</text>
+            </view>
+        </view>
+        <view class="flex flex_space_between margin_top_10" style="height:240rpx;">
+            <view class="width_50 box_sizing padding_top_30">
+                <view class="bg_f9 border_radius_5 height_fixed_60 box_sizing padding_top_10 text_indent_24 width_fixed_120 margin_auto">
+                    <view class="font_size_14 color_5151">
+                        <text wx:if="{{selectedActive == 1}}">今日收益：</text>
+                        <text wx:if="{{selectedActive == 2}}">总收益：</text>
+                    </view>
+                    <view class="margin_top_5 font_size_16 font_weight color_ff6">
+                        <text>￥</text>
+                        <text>5678</text>
+                    </view>
+                </view>
+                <view class="text_center font_size_14 color_999">
+                    <text>已提现 ￥126.56</text>
+                </view>
+            </view>
+            <view class="width_50 box_sizing padding_top_30">
+                <view class="background_yellow_liner border_radius_5 line_height_60 text_center width_fixed_120 margin_auto">
+                    <view class="font_size_16 color_fff">
+                        <text>取现</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</van-popup>

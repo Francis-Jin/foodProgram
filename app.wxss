@@ -7,6 +7,9 @@
 .van-picker__cancel, .van-picker__confirm {
     color: #5fc5e0 !important;
 }
+page{
+    font-size: 30rpx;
+}
 
 view{
     margin: 0;

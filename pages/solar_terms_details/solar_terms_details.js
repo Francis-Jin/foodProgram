@@ -28,6 +28,7 @@ Page({
                 id: id
             },
             success(res) {
+                res.data.intro = res.data.intro.replace(/\<img/gi, `<img style="max-width:100%;height:auto"`)
                 that.setData({
                     info: res.data
                 })

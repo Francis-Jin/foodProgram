@@ -17,6 +17,9 @@ Page({
         showUpdateType: false, // 是否显示更新密码或忘记密码发送验证码模块
         isPhoneError: false, //手机号是否错误
         code: '', //验证码
+        phoneThree: '', // 手机号前三位
+        phoneFour: '', // 手机号后四位
+        cancelOrderShow: false, // 是否显示去充值弹窗
     },
 
     /**
@@ -28,6 +31,8 @@ Page({
         this.setData({
             safePassword: safePassword,
             phone: phone,
+            phoneThree: phone.substring(0,3),
+            phoneFour: phone.substring(phone.length - 4),
             orderId: options.orderId
         })
         wx.setNavigationBarTitle({
@@ -76,6 +81,13 @@ Page({
                 phone: phone
             })
         }
+    },
+
+    /** 点击去充值按钮. */
+    confirmCancelFn(){
+        wx.navigateTo({
+            url: '/pages/recharge/recharge?vipPay=true',
+        })
     },
 
     /** 验证码输入改变时设置输入的值  */
@@ -192,6 +204,7 @@ Page({
             return false
         }
         if (safePassword == '') {
+            // 设置密码
             app.appRequest({
                 url: '/app/userInfo/saveUserInfoSafePassword.action',
                 method: 'post',
@@ -264,6 +277,10 @@ Page({
                             wx.navigateBack({
                                 detal: 1
                             })
+                        } else if (res.code == 201) {
+                            that.setData({
+                                cancelOrderShow: true
+                            })
                         } else {
                             wx.showToast({
                                 title: res.message,
@@ -287,6 +304,15 @@ Page({
                 newUser: wx.getStorageSync('userInfo').newUser
             },
             success(res) {
+                let safePassword = res.data.safePassword
+                let phone = res.data.phone
+                that.setData({
+                    safePassword: safePassword,
+                    phone: phone,
+                    code: '',
+                    phoneThree: phone.substring(0, 3),
+                    phoneFour: phone.substring(phone.length - 4)
+                })
                 wx.setStorageSync('userInfo', res.data)
             }
         })
@@ -310,7 +336,9 @@ Page({
      * 生命周期函数--监听页面隐藏
      */
     onHide: function() {
-
+        this.setData({
+            cancelOrderShow: false
+        })
     },
 
     /**

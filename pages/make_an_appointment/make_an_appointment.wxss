@@ -28,7 +28,7 @@
 .paySuccess .success {
     position: absolute;
     left: 50%;
-    top: 100rpx;
+    top: 38%;
     width: 460rpx;
     margin-left: -230rpx;
     background: #fff;
@@ -50,4 +50,61 @@
     color: #515151;
     line-height: 100rpx;
     border-radius: 20rpx;
+}
+
+/* 平行四边样式 */
+
+.absolute1 {
+    top: 0;
+    width: 400rpx;
+    text-align: right;
+    height: 100rpx;
+    line-height: 100rpx;
+    background: linear-gradient(to right, #fff 10%, #599998);
+    z-index: 2;
+}
+
+.absolute2 {
+    top:10rpx;
+    width: 520rpx;
+    text-align: right;
+    height: 100rpx;
+    background: linear-gradient(to right, #fff 40%, #4EBD8B);
+}
+
+.outside {
+    position: absolute;
+    left: -100rpx;
+    /* box-sizing: border-box; */
+    padding: 8rpx;
+    transform: skewX(-45deg);
+}
+
+.inside {
+    background: #fff;
+    position: relative;
+    box-sizing: border-box;
+    padding-right: 50rpx;
+    left: -6rpx;
+}
+
+.outside text {
+    display: inline-block;
+    transform: skewX(45deg);
+}
+
+.sectionMessage .item{
+    border: 1rpx solid #ff6100;
+    margin-right: 20rpx;
+    margin-bottom:20rpx;
+    color: #ff6100;
+}
+
+.sectionMessage .item.active{
+    color: #fff;
+    background: linear-gradient(60deg, #fd8828, #fa6d35);
+}
+
+.sectionMessage .item:nth-child(4n){
+    margin-right: 0;
 }

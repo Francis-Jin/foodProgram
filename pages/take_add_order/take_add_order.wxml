@@ -1,0 +1,32 @@
+<!--pages/take_add_order/take_add_order.wxml-->
+<view class="container box_sizing padding_left_right_20">
+
+
+    <!-- 内容 -->
+    <view class="content">
+        <view wx:if="{{selectedLists.length > 0}}" class="lists">
+            <view wx:for="{{selectedLists}}" wx:key="index" class="item">
+                <van-cell-group border="{{false}}">
+                    <van-field value="{{item.name}}" disabled clearable label="菜品名称" />
+                    <van-field border="{{false}}" clearable label="补货数量" type="number" placeholder="请输入补货数量" data-itemid="{{item.id}}" bind:input="bindInputNumberFn" />
+                </van-cell-group>
+                <line/>
+            </view>
+        </view>
+
+        <view wx:else class="flex flex_space_between line_height_50 border_bottom color_666" bindtap="selectedReplenishmentFoodFn">
+            <view>
+                <text>选择需要补货的菜品/食材</text>
+            </view>
+            <view>
+                <text class="iconfont icon-right"></text>
+            </view>
+        </view>
+
+    </view>
+
+    <view bindtap="confirmAddTakeOrderFn" class="text_center line_height_50 background_yellow_liner color_fff width_100" style="position:fixed;left:0;bottom:0;">
+        <text>添加</text>
+    </view>
+    <view class="height_fixed_60"></view>
+</view>

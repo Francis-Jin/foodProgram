@@ -14,10 +14,12 @@ Page({
         isAddAndEdit: false,
         isPhoneError: false,
         objectMultiArray: [],
+        selectedIndex: [0,0,0,0],
         addressId: '',
         // 地址选择数据
         showAddress: false,
         columns: "",
+        isdefaultAddress: false, //是否设置为默认地址
     },
 
     /** 地址联动. */
@@ -28,18 +30,33 @@ Page({
             index
         } = e.detail;
         if (index == 0) {
-            picker.setColumnValues(1, value[0].child);
-            picker.setColumnValues(2, value[0].child[0].child);
+            if (value[0].child) picker.setColumnValues(1, value[0].child);
+            if (value[0].child[0].child) picker.setColumnValues(2, value[0].child[0].child);
+            if (value[0].child[0].child[0].child) picker.setColumnValues(3, value[0].child[0].child[0].child);
         }
         if (index == 1) {
-            picker.setColumnValues(2, value[1].child);
+            if (value[1].child) picker.setColumnValues(2, value[1].child);
+            if (value[1].child[0].childd) picker.setColumnValues(3, value[1].child[0].child);
+        }
+        if(index == 2){
+            if (value[2].child) picker.setColumnValues(3, value[2].child);
         }
     },
 
+    /** 默认地址设置改变时 */
+    switch1Change(e){
+        let isdefaultAddress = e.detail.value
+        this.setData({
+            isdefaultAddress: isdefaultAddress
+        })
+    },
+
+    /** 确认选择地址. */
     onConfirm(e) {
-        console.log(e)
         let that = this
         let d = e.detail.value
+        let selectedIndex = e.detail.index
+        console.log(selectedIndex)
         let code = []
         let addressSelectedText = ''
         d.forEach(item => {
@@ -48,7 +65,6 @@ Page({
                 addressSelectedText += item.name
             }
         })
-        console.log(code.length)
        if(code.length<3){
            wx.showModal({
                title: '提示',
@@ -66,18 +82,60 @@ Page({
        }else{
            that.setData({
                code: code,
+               selectedIndex: selectedIndex,
                showAddress: false,
                addressSelectedText: addressSelectedText
            })
        }
-        
 
+    },
 
+    /** 获取默认地址，全局存储. */
+    getDefaultAddress() {
+        if (wx.getStorageSync("userInfo").id) {
+            app.appRequest({
+                url: "/app/userAddress/getDefaultAddress.action",
+                method: 'get',
+                getParams: {
+                    userId: wx.getStorageSync("userInfo").id
+                },
+                success(res) {
+                    if (res.code == 200) {
+                        wx.setStorageSync('addressItem', res.data)
+                    }
+                }
+            })
+        }
     },
 
     /** 显示上拉框. */
     showAddressPickerFn() {
-        this.setData({
+        let that = this
+        let selectedIndex = that.data.selectedIndex
+        let citys = that.data.citys
+        let arr = [{
+                values: citys,
+                className: 'column1',
+                defaultIndex: selectedIndex[0]
+            },
+            {
+                values: citys[selectedIndex[0]].child,
+                className: 'column2',
+                defaultIndex: selectedIndex[1]
+            },
+            {
+                values: citys[selectedIndex[0]].child[selectedIndex[1]].child,
+                className: 'column3',
+                defaultIndex: selectedIndex[2]
+            },
+            {
+                values: citys[selectedIndex[0]].child[selectedIndex[1]].child[selectedIndex[2]].child,
+                className: 'column4',
+                defaultIndex: selectedIndex[3]
+            }
+        ]
+        that.setData({
+            columns: arr,
             showAddress: true
         })
     },
@@ -93,7 +151,6 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
-        console.log(options)
         let type = options.type
         let addressId = options.addressId
         if (type == 'edit') {
@@ -102,13 +159,23 @@ Page({
             let userPhone = options.userPhone
             let addressSelectedText = options.addressSelectedText
             let doorpValue = options.doorpValue
+            let isDefault = options.isDefault
             let code = options.code
+            let selectIndex = options.selectIndex
+            if(selectIndex){
+                selectIndex = options.selectIndex.split(',')
+                selectIndex.length < 4 ? selectIndex.push('0') : selectIndex
+            }else{
+                selectIndex = [0,0,0,0]
+            }
             this.setData({
                 type: type,
+                selectedIndex: selectIndex,
                 addressId: addressId,
                 isAddAndEdit: true,
                 userName: userName,
                 userPhone: userPhone,
+                isdefaultAddress: isDefault == 1 ? true : false,
                 addressSelectedText: addressSelectedText,
                 doorpValue: doorpValue,
                 code: code.split(',')
@@ -169,24 +236,21 @@ Page({
                     },
                     {
                         values: citys[0].child[0].child,
-                        className: 'column2',
+                        className: 'column3',
+                        defaultIndex: 0
+                    }, 
+                    {
+                        values: citys[0].child[0].child[0].child,
+                        className: 'column4',
                         defaultIndex: 0
                     }
                 ]
                 that.setData({
+                    citys: citys,
                     columns: arr
                 })
 
             }
-        })
-    },
-
-    bindMultiPickerChange(e) {
-        let objectMultiArray = this.data.objectMultiArray
-        let value = e.detail.value
-        let text = objectMultiArray[0][value[0]].name + objectMultiArray[1][value[1]].name + objectMultiArray[2][value[2]].name
-        this.setData({
-            addressSelectedText: text
         })
     },
 
@@ -217,7 +281,6 @@ Page({
 
     /** 手机号失去焦点时. */
     phoneBlur(e) {
-        console.log(e)
         let phone = e.detail.value
         let r = /^1[3456789]\d{9}$/
         if (!(r.test(phone))) {
@@ -240,9 +303,10 @@ Page({
         })
     },
 
-    /** 点击添加按钮 */
+    /** 点击确定添加按钮 */
     addAddressFn() {
         let that = this
+        let selectedIndex = that.data.selectedIndex
         if (!that.data.userName) {
             wx.showToast({
                 title: '请输入姓名',
@@ -284,10 +348,13 @@ Page({
                     phone: that.data.userPhone,
                     address: that.data.addressSelectedText,
                     doorplate: that.data.doorpValue,
-                    communitySectionId: that.data.code[0] ? that.data.code[0] : 0,
-                    communityBuildingId: that.data.code[1] ? that.data.code[1] : 0,
-                    communityBuildingUnitId: that.data.code[2] ? that.data.code[2] : 0,
-                    createUser: wx.getStorageSync("userInfo").id
+                    communityId: that.data.code[0] ? that.data.code[0] : 0,
+                    communitySectionId: that.data.code[1] ? that.data.code[1] : 0,
+                    communityBuildingId: that.data.code[2] ? that.data.code[2] : 0,
+                    communityBuildingUnitId: that.data.code[3] ? that.data.code[3] : 0,
+                    createUser: wx.getStorageSync("userInfo").id,
+                    selectIndex: selectedIndex.join(),
+                    isDefault: that.data.isdefaultAddress ? 1 : 0
                 },
                 success(res) {
                     wx.showToast({
@@ -313,10 +380,13 @@ Page({
                     phone: that.data.userPhone,
                     address: that.data.addressSelectedText,
                     doorplate: that.data.doorpValue, 
-                    communitySectionId: that.data.code[0] ? that.data.code[0] : 0,
-                    communityBuildingId: that.data.code[1] ? that.data.code[1] : 0,
-                    communityBuildingUnitId: that.data.code[2] ? that.data.code[2] : 0,
-                    createUser: wx.getStorageSync("userInfo").id
+                    communityId: that.data.code[0] ? that.data.code[0] : 0,
+                    communitySectionId: that.data.code[1] ? that.data.code[1] : 0,
+                    communityBuildingId: that.data.code[2] ? that.data.code[2] : 0,
+                    communityBuildingUnitId: that.data.code[3] ? that.data.code[3] : 0,
+                    createUser: wx.getStorageSync("userInfo").id,
+                    selectIndex: selectedIndex.join(),
+                    isDefault: that.data.isdefaultAddress ? 1 : 0
                 },
                 success(res) {
                     wx.showToast({
@@ -333,6 +403,8 @@ Page({
                 }
             })
         }
+
+        this.getDefaultAddress()
     },
 
     /**

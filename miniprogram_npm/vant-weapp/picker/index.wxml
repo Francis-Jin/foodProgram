@@ -51,7 +51,7 @@
     />
     <view
       class="van-picker__frame van-hairline--top-bottom"
-      style="height: {{ itemHeight }}px"
+      style="height: {{ itemHeight }}px; border-top:2rpx solid #5fc5e0;border-bottom:2rpx solid #5fc5e0"
     />
   </view>
   <template is="toolbar" wx:if="{{ toolbarPosition === 'bottom' }}" data="{{ showToolbar, cancelButtonText, title, confirmButtonText }}"></template>

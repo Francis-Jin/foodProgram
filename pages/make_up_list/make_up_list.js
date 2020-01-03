@@ -17,11 +17,11 @@ Page({
         assembleMode: '', //选择拼团方式 1：2人拼团 2：多人拼团
         deliveryMode: '', //选择用餐方式 1：自取 2：配送
         showAddress: false, // 是否选择地址弹窗
-        addressText: '', //显示选择的地址
+        addressText: '选择配送地址', //显示选择的地址
         addressItem: '', //选择的地址Item元素
         messageText: '', // 商家留言信息
         payShow: false, // 是否显示支付方式选择
-        selectedId: '', // 选择支付方式 1：微信支付 2：余额支付
+        selectedPayId: 1, // 选择支付方式 1：微信支付 2：余额支付
         listGroupBuyByIngLists: [], //正在拼单的列表
 
         twoPrice: 0, //两人拼金额，
@@ -96,12 +96,18 @@ Page({
     /** 购买方式. */
     waysOfPurchasingFn(e) {
         let type = e.currentTarget.dataset.type
+        let userInfo = wx.getStorageSync("userInfo")
+        if (!userInfo) {
+            wx.redirectTo({
+                url: '/pages/login/login?isLogin=true',
+            })
+            return false
+        }
         if (type == 1) {
             wx.navigateBack({
                 detal: 1
             })
         } else {
-
             this.setData({
                 showSpellList: true
             })
@@ -117,8 +123,19 @@ Page({
 
     /** 选择拼团方式. */
     selectedAssembleFn(e) {
+        let that = this
         let type = e.currentTarget.dataset.type
+        let info = that.data.info
+        let twoPrice = that.data.twoPrice
+        let morePrice = that.data.morePrice
+        let listDiscount
+        if(type == 1){
+            listDiscount = (info.price - twoPrice).toFixed(2)
+        }else{
+            listDiscount = (info.price - morePrice).toFixed(2)
+        }
         this.setData({
+            listDiscount: listDiscount,
             assembleMode: type
         })
     },
@@ -229,8 +246,6 @@ Page({
         let addressItem = that.data.addressItem // 选择的地址
         let messageText = that.data.messageText // 留言信息
         let addressText = that.data.addressText // 留言信息
-        console.log(deliveryMode)
-        console.log(addressItem)
         if(assembleMode == ''){
             wx.showToast({
                 title: '请选择拼单方式',
@@ -310,26 +325,21 @@ Page({
         
     },
 
-    /** 支付方式选择. */
-    selectedPayFn(e) {
-        let type = e.currentTarget.dataset.type
-        this.setData({
-            selectedId: type
-        })
-    },
+    // /** 支付方式选择. */
+    // selectedPayFn(e) {
+    //     let type = e.currentTarget.dataset.type
+    //     this.setData({
+    //         selectedId: type
+    //     })
+    // },
 
     /** 点击支付方式弹框确认按钮. */
     confirmAppointFn() {
         let that = this
-        let selectedId = that.data.selectedId
+        let selectedPayId = that.data.selectedPayId
         let orderId = that.data.orderId
-        if (selectedId == 1) {
+        if (selectedPayId == 1) {
             that.wxPayFn()
-        }
-        if (selectedId == 2) {
-            wx.navigateTo({
-                url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
-            })
         }
         that.setData({
             payShow: false,
@@ -368,7 +378,7 @@ Page({
                             showCancel: false,
                             confirmColor: "#5bcbc8",
                             success(res) {
-                                wx.switchTab({
+                                wx.redirectTo({
                                     url: '/pages/order/order',
                                 })
                             }
@@ -381,6 +391,13 @@ Page({
 
     /** 跳转到拼单详情 */
     toPageFn(){
+        let userInfo = wx.getStorageSync("userInfo")
+        if (!userInfo) {
+            wx.redirectTo({
+                url: '/pages/login/login?isLogin=true',
+            })
+            return false
+        }
         wx.navigateTo({
             url: '/pages/spell_list_details/spell_list_details?foodId=' + this.data.foodId + "&foodName=" + this.data.info.name,
         })
@@ -389,7 +406,7 @@ Page({
     /** 点击返回首页按钮. */
     toBackIndexFn() {
         wx.setStorageSync('balancePaySuccess', false)
-        wx.switchTab({
+        wx.redirectTo({
             url: '/pages/index/index',
         })
     },
@@ -425,7 +442,7 @@ Page({
             addressItem: '', //选择的地址Item元素
             messageText: '', // 商家留言信息
             payShow: false, // 是否显示支付方式选择
-            selectedId: '', // 选择支付方式 1：微信支付 2：余额支付
+            selectedPayId: 1, // 选择支付方式 1：微信支付 2：余额支付
         })
         let balancePaySuccess = wx.getStorageSync('balancePaySuccess')
         if (balancePaySuccess) {
@@ -470,7 +487,19 @@ Page({
     /**
      * 用户点击右上角分享
      */
-    onShareAppMessage: function() {
-
+    onShareAppMessage: function(e) {
+        if (e.from == "button") {
+            return {
+                title: '快来加入我的拼单^_^',
+                path: '/pages/make_up_list/make_up_list?foodId=' + this.data.foodId,
+                success: function () {
+                    wx.showToast({
+                        title: '分享成功'
+                    })
+                },
+                fail: function () {
+                }
+            }
+        }
     }
 })

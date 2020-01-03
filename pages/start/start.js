@@ -32,10 +32,10 @@ Page({
             url: '/app/sysConf/getSysConf.action',
             method: 'get',
             success(res) {
-                console.log(res.data.welcome.split(',')[0])
                 that.setData({
                     text: res.data.welcome.split(',')
                 })
+                wx.setStorageSync('systemParamInfo', res.data)
                 setTimeout(function() {
                     that.bindload();
                 }, 100)
@@ -97,7 +97,7 @@ Page({
     // 跳转至首页
     goIndex: function() {
         if (this.data.index == 'true') {
-            wx.switchTab({
+            wx.redirectTo({
                 url: '/pages/index/index'
             })
         } else {
@@ -115,7 +115,7 @@ Page({
             } else {
                 console.log(this.data.isLogin)
                 if (!this.data.isLogin){
-                    wx.switchTab({
+                    wx.redirectTo({
                         url: '/pages/index/index',
                     })
                 }else{

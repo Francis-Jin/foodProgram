@@ -88,7 +88,7 @@
 <!-- 弹出确认配送员 -->
 <van-popup show="{{appointShow }}" bind:close="onClose" duration="{{0}}">
     <view>
-        <view wx:if="{{appointName != '出错' && appointName != '处理'}}" class="border_radius_10 overflow_hidden" style="width:500rpx;">
+        <view wx:if="{{appointName != '出错' && appointName != '处理'}}" class="border_radius_10 bg_fff overflow_hidden" style="width:500rpx;">
             <view class="line_height_100 text_center color_5151">
                 <text wx:if="{{selectedActive == 1}}">是否指派</text>
                 <text wx:if="{{selectedActive == 2}}">是否</text>
@@ -98,7 +98,7 @@
                 <text>确定</text>
             </view>
         </view>
-        <view wx:if="{{appointName == '出错' || appointName == '处理'}}" class="">
+        <view wx:if="{{appointName == '出错' || appointName == '处理'}}" class="bg_fff">
 
             <view class="border_radius_10 overflow_hidden" style="width:500rpx;">
                 <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">

@@ -1,50 +1,194 @@
 // pages/booking_method/booking_method.js
+var app = getApp();
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-
+        firstBookWordLists: [],
+        moreBookWordLists: [],
+        isShowMore: false, //是否显示更多数据
+        selectedElNum: 0, // 选中个数
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
+        console.log(options)
         let that = this
-        wx.getSystemInfo({
-            success: function(res) {
-                //model中包含着设备信息
-                console.log(res)
-                var model = res.model
-                console.log(model.search('iPhone X') != -1)
-                if (model.search('iPhone X') != -1) {
+        that.setData({
+            selectedDateValue: options.date
+        })
+        that.getBookWordfn()
+    },
+
+    /** 跳转预约早餐. */
+    toAppointmentTodayFn(e) {
+        wx.navigateTo({
+            url: '/pages/appointment_today/appointment_today?isToDay=false&selectedDate=' + this.data.selectedDateValue + '&category=1',
+        })
+    },
+
+    /** 页面跳转下一步. */
+    toPageFn(e) {
+        let that = this
+        let type = e.currentTarget.dataset.type
+        let selectedDateValue = that.data.selectedDateValue
+        let firstBookWordLists = that.data.firstBookWordLists
+        let moreBookWordLists = that.data.moreBookWordLists
+        let arr1 = firstBookWordLists.filter(item => item.active)
+        let selectedArrId = []
+        let symptomId = []
+        arr1.forEach(item=>{
+            selectedArrId.push(item.fiveInternalOrgansId)
+            symptomId.push(item.id)
+        })
+        moreBookWordLists.forEach(item=>{
+            item.fiveInternalOrgansSymptoms.forEach(subitem => {
+                if(subitem.active){
+                    selectedArrId.push(subitem.fiveInternalOrgansId),
+                    symptomId.push(subitem.id)
+                }
+            })
+        })
+        if(selectedArrId.length == 0) {
+            wx.showToast({
+                title: "请选择功能",
+                icon: 'none'
+            })
+            return false
+        }
+        wx.navigateTo({
+            url: '/pages/make_an_appointment/make_an_appointment?selectedDateValue=' + selectedDateValue + '&selectedWordId=' + selectedArrId.join() + '&symptomId=' + symptomId.join(),
+        })
+    },
+
+
+    /** 获取预约词语. */
+    getBookWordfn() {
+        // /app/dishInfo/bookWord.action
+        let that = this
+        app.appRequest({
+            url: "/app/dishInfo/bookWord.action",
+            method: 'get',
+            success(res) {
+                if (res.code == 200) {
+                    let colorIndex = 1
+                    res.data.high.forEach(item => {
+                        colorIndex++
+                        if (colorIndex > 6) {
+                            colorIndex = 1
+                        }
+                        item.colorIndex = colorIndex
+                        item.fiveInternalOrgansSymptoms.forEach(subitem => {
+                            subitem.active = false
+                        })
+                    })
+                    res.data.base.forEach(item => {
+                        item.active = false
+                    })
                     that.setData({
-                        isIpx: true
+                        firstBookWordLists: res.data.base,
+                        moreBookWordLists: res.data.high
                     })
                 } else {
-                    that.setData({
-                        isIpx: false
+                    wx.showToast({
+                        title: res.message,
+                        icon: 'none'
                     })
                 }
             }
         })
     },
 
-    /** 点击头部返回订单列表. */
-    backOrderListsFn() {
-        wx.switchTab({
-            url: '/pages/index/index',
+    /** 点击显示更多数据. */
+    showMoreFn() {
+        let that = this
+        let isShowMore = that.data.isShowMore
+        that.setData({
+            isShowMore: !isShowMore
         })
     },
 
-    /** 页面跳转. */
-    toPageFn(e) {
+    /** 点击选择元素. */
+    selectedThisItem(e) {
+        let that = this
+        let _item = e.currentTarget.dataset.item
         let type = e.currentTarget.dataset.type
-        wx.navigateTo({
-            url: '/pages/make_an_appointment/make_an_appointment?type=' + type,
+        let firstBookWordLists = that.data.firstBookWordLists
+        let moreBookWordLists = that.data.moreBookWordLists
+        let arrLength = firstBookWordLists.filter(item => item.active).length
+        let subArrLength = 0
+        moreBookWordLists.forEach(item => {
+            subArrLength += item.fiveInternalOrgansSymptoms.filter(subitem => subitem.active).length
         })
+        let allLength = arrLength + subArrLength
+        that.setData({
+            selectedElNum: allLength
+        })
+
+        let selectedElNum = that.data.selectedElNum
+
+        if (selectedElNum > 1) {
+            
+            firstBookWordLists.forEach(item => {
+                if (_item.id == item.id && item.active) {
+                    item.active = false
+                }
+            })
+
+            that.setData({
+                firstBookWordLists: firstBookWordLists
+            })
+
+            moreBookWordLists.forEach(item => {
+                item.fiveInternalOrgansSymptoms.forEach(subitem => {
+                    if (_item.id == subitem.id && subitem.active) {
+                        subitem.active = false
+                    }
+                })
+            })
+
+            that.setData({
+                moreBookWordLists: moreBookWordLists
+            })
+
+            wx.showToast({
+                title: '最多选择两个',
+                icon: 'none'
+            })
+
+            return false
+        } else {
+
+            if (type == 1) {
+                firstBookWordLists.forEach(item => {
+                    if (_item.id == item.id) {
+                        item.active = !item.active
+                    }
+                })
+
+                that.setData({
+                    firstBookWordLists: firstBookWordLists
+                })
+            }
+            if (type == 2) {
+                moreBookWordLists.forEach(item => {
+                    item.fiveInternalOrgansSymptoms.forEach(subitem => {
+                        if (_item.id == subitem.id) {
+                            subitem.active = !subitem.active
+                        }
+                    })
+                })
+                that.setData({
+                    moreBookWordLists: moreBookWordLists
+                })
+
+            }
+        }
+
     },
 
     /**

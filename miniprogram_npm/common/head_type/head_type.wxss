@@ -1,0 +1,84 @@
+/* miniprogram_npm/common/head_type/head_type.wxss */
+@import '../../../style/public.wxss';
+
+.cs_item {
+    background: linear-gradient(to bottom, #eef6fa 80%, #484747);
+}
+
+.absolute {
+    left: 50%;
+    top: 50%;
+    /* background: red; */
+    margin-left: -76rpx;
+    margin-top: -118rpx;
+}
+
+.line {
+    position: absolute;
+}
+
+.item {
+    margin-bottom: 40rpx;
+}
+
+.item_foods_one .tip {
+    background: #f9f9f9;
+    padding: 0 20rpx;
+    border-radius: 30rpx;
+}
+
+.h {
+    width: 4rpx;
+    height: 50rpx;
+    background-color: #fff;
+    left: 84rpx;
+    top: 36rpx;
+    border-radius: 10rpx;
+    transform-origin: bottom;
+}
+
+.m {
+    width: 2rpx;
+    height: 60rpx;
+    background-color: #fff;
+    left: 84rpx;
+    top: 26rpx;
+    border-radius: 10rpx;
+    transform-origin: bottom;
+}
+
+.s {
+    width: 1rpx;
+    height: 80rpx;
+    background-color: #f00;
+    left: 86rpx;
+    top: 6rpx;
+    border-radius: 10rpx;
+    transform-origin: bottom;
+}
+
+.dot {
+    left: 76rpx;
+    top: 76rpx;
+    width: 20rpx;
+    height: 20rpx;
+    border-radius: 50%;
+    background: #fff;
+    z-index: 2;
+}
+
+.appointment_today{
+    position: absolute;
+    right: 10rpx;
+    bottom:0;
+    width: 350rpx;
+    height: 60rpx;
+    color:#fff;
+    font-size: 24rpx;
+    line-height: 60rpx;
+    text-align: right;
+    box-sizing: border-box;
+    padding-right: 30rpx;
+    z-index: 10;
+    background: linear-gradient(to right,#FFF 12%,#FEC940);
+}

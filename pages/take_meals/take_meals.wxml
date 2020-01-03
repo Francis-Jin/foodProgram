@@ -1,0 +1,100 @@
+<!--pages/take_meals/take_meals.wxml-->
+
+<view class="container">
+    <view class="height_fixed_60"></view>
+    <view class="top_bar bg_fff box_shadow flex text_center flex_space_between line_height_50 box_shadow overflow_hidden box_sizing padding_left_right_20" style="border-radius: 0 0 40rpx 40rpx;">
+        <view wx:for="{{topBarLists}}" wx:key="index" data-item="{{item}}" bindtap="onSwitchTabFn" class="item width_50 {{selectedActive == item.id ? 'active' : ''}} font_size_14">
+            <text class="relative text">{{item.text}}</text>
+        </view>
+    </view>
+
+    <!-- 搜索框 -->
+    <view wx:if="{{selectedActive == 1 || selectedActive == 2}}" class="search">
+        <van-search placeholder="输入取餐号搜索订单" bind:search="searchDataFn" />
+    </view>
+    <!-- content 即时订单 已完成订单-->
+    <view wx:if="{{selectedActive == 1 || selectedActive == 2}}" class="content_wrap box_sizing padding_left_right_20">
+        <view wx:if="{{lists.length > 0}}">
+            <view wx:for="{{lists}}" wx:key="index" class="item box_sizing padding_left_right_20">
+                <view class="flex flex_space_between font_size_14 line_height_40">
+                    <view class="color_5bc">
+                        <text>取餐号：{{item.takeMealCode}}</text>
+                    </view>
+                    <view class="color_FF8">
+                        <text wx:if="{{item.deliveryMode == 1}}">到店自取</text>
+                        <text wx:else>快递配送</text>
+                    </view>
+                </view>
+                <view class="line_height_20 font_size_14 color_333 margin_bottom_10">
+                    <text>下单时间：{{item.createTime}}</text>
+                </view>
+                <view class="relative">
+                    <view wx:for="{{item.orderDetailList}}" wx:key="index2" wx:for-item="subItem" wx:for-index="index2" class="init font_size_12 color_999">
+                        <text>{{subItem.productName}} X{{subItem.quantity}}</text>
+                    </view>
+                    <view class="price" style="position:absolute;right:0;bottom:0;">
+                        <text class="font_size_14 color_666">总计：</text>
+                        <text class="font_size_16 color_FF8">￥{{item.orderAmount}}</text>
+                    </view>
+                </view>
+                <view class="flex flex_end margin_top_10 line_height_30 color_5151 font_size_14 text_center">
+                    <view class="width_fixed_80 border_radius_20 {{item.locationStatus == 1 ? 'background_liner color_fff' : 'bg_e3'}} margin_right_10" data-orderid="{{item.id}}" data-status="{{item.locationStatus}}" data-type="1" bindtap="clickModalFn">
+                        <text>已备好</text>
+                    </view>
+                    <view class="width_fixed_80 {{item.locationStatus == 2 ? 'background_liner color_fff' : 'bg_e3'}}  border_radius_20" data-orderid="{{item.id}}" data-status="{{item.locationStatus}}" data-type="2" bindtap="clickModalFn">
+                        <text>已取餐</text>
+                    </view>
+                </view>
+                <line/>
+            </view>
+        </view>
+        <view wx:if="{{lists.length < 1}}" class="text_center color_999 line_height_100">
+            <text>暂无数据</text>
+        </view>
+    </view>
+
+    <!-- content 库存 -->
+    <view wx:if="{{selectedActive == 3}}" class="content_wrap box_sizing padding_left_right_20">
+        <view class="section">
+        
+            <view wx:if="{{lists.length > 0}}" class="lists">
+            <view wx:for="{{lists}}" wx:key="index" class="item" data-itemid="{{item.id}}" bindtap="toTakeOrderDetailsFn">
+                <view class="font_size_16 color_FF8 padding_bottom_10">
+                    <text>日权食{{item.locationName}}</text>
+                </view>
+                <view class="font_size_14 color_5151 margin_bottom_10">
+                    <text>上报时间：{{item.createTime}}</text>
+                </view>
+                <view class="font_size_14 color_5151">
+                    <text>补货数量：{{item.quantity}}个</text>
+                </view>
+                <line/>
+            </view>
+        </view>
+
+         <view wx:if="{{lists.length < 1}}" class="text_center color_999 line_height_100">
+            <text>暂无数据</text>
+        </view>
+        
+        </view>
+
+        <view style="position:fixed;left:0;bottom:0;" class="width_100 bg_fff padding_bottom_20">
+
+            <view class="" bindtap="addTakeOrderFn">
+                <view class="width_fixed_50 height_fixed_50 margin_auto">
+                    <image class="width_height_100" src="/images/icon/add_icon.png "></image>
+                </view>
+            </view>
+
+            <!-- <view class="margin_top_20">
+                <view class="width_fixed_200 height_fixed_50 background_yello2_liner color_fff text_center line_height_50 border_radius_10 margin_auto">
+                    <text>上报央厨</text>
+                </view>
+            </view> -->
+
+        </view>
+        <view class="height_fixed_60"></view>
+
+    </view>
+
+</view>

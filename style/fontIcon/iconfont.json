@@ -146,6 +146,13 @@
       "unicode_decimal": 58899
     },
     {
+      "icon_id": "736851",
+      "name": "menu",
+      "font_class": "menu",
+      "unicode": "e6f5",
+      "unicode_decimal": 59125
+    },
+    {
       "icon_id": "809934",
       "name": "time",
       "font_class": "icon-time",
@@ -165,6 +172,13 @@
       "font_class": "shou",
       "unicode": "e650",
       "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "853592",
+      "name": "menu",
+      "font_class": "menu1",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
     },
     {
       "icon_id": "887801",
@@ -242,6 +256,13 @@
       "font_class": "gouwuche3",
       "unicode": "e63b",
       "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "1190400",
+      "name": "menu",
+      "font_class": "menu2",
+      "unicode": "e8bd",
+      "unicode_decimal": 59581
     },
     {
       "icon_id": "1191716",
@@ -578,6 +599,13 @@
       "font_class": "fenxiang5",
       "unicode": "e60f",
       "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "9371325",
+      "name": "分享",
+      "font_class": "fenxiang6",
+      "unicode": "e75e",
+      "unicode_decimal": 59230
     },
     {
       "icon_id": "9512641",

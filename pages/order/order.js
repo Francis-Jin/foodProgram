@@ -8,11 +8,19 @@ Page({
     data: {
         page: 1,
         pageSize: 10,
+        urlBefore: app.globalData.urlBefore,
         orderLists: [],
-        payShow: false, // 是否显示支付方式选择弹框
+        userInfo: null,
         selectedId: '', //支付方式选择的id （1：微信支付，2：余额支付）
+        payShow: false, // 是否显示支付方式选择弹框
 
         makeAppointmentShow: false, //是否显示预约点餐
+        isVipShow: false, // 是否是vip,不是时弹出提示框
+
+        wxActualPaymentAmount: '', // 微信实际支付金额
+        totalVIPPriceAll: '', // VIP实际支付金额
+        reductionTotalAll: '', // 代金池减免额度总计
+        vipDiscountTotalAll: '', // vip优惠总计金额
     },
 
     /**
@@ -20,13 +28,43 @@ Page({
      */
     onLoad: function(options) {
         let userInfo = wx.getStorageSync('userInfo')
-        if(!userInfo){
+        this.setData({
+            userInfo: userInfo
+        })
+        if (!userInfo) {
             wx.redirectTo({
-                url: '/pages/start/start?isLogin=true',
+                url: '/pages/login/login?isLogin=true',
             })
+            return false
         }
     },
 
+    /** 获取随机广告. */
+    GetAdvertisingFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/dishInfo/getDishInfoByAd.action',
+            method: 'get',
+            success(res) {
+                if (res.code == 200) {
+                    let advertisingInfo = res.data
+                    if (advertisingInfo) {
+                        that.setData({
+                            advertisingInfo: advertisingInfo
+                        })
+                    }
+                }
+            }
+        })
+    },
+
+    /** 跳转支付成功后的广告详情. */
+    toAdvertisementDetailsFn() {
+        let advertisingInfo = this.data.advertisingInfo
+        wx.navigateTo({
+            url: '/pages/advertisement_details/advertisement_details?itemId=' + advertisingInfo.id,
+        })
+    },
     /**
      * 生命周期函数--监听页面显示
      */
@@ -34,7 +72,8 @@ Page({
         this.setData({
             page: 1,
             pageSize: 10,
-            payShow:false,
+            payShow: false,
+            isVipShow: false,
             orderLists: []
         })
         let balancePaySuccess = wx.getStorageSync('balancePaySuccess')
@@ -42,8 +81,15 @@ Page({
             this.setData({
                 makeAppointmentShow: true
             })
+            this.GetAdvertisingFn()
         }
-        this.getOrderLists()
+        let userInfo = wx.getStorageSync('userInfo')
+        this.setData({
+            userInfo: userInfo
+        })
+        if (wx.getStorageSync('userInfo')) {
+            this.getOrderLists()
+        }
     },
 
     /** 获取用户订单列表. */
@@ -93,21 +139,54 @@ Page({
         let that = this
         let selectedId = that.data.selectedId
         let orderId = that.data.orderId
+        let userInfo = that.data.userInfo
+        if (!selectedId) {
+            wx.showToast({
+                title: '选择支付方式',
+                icon: 'none'
+            })
+            return false
+        }
         if (selectedId == 1) {
+            that.setData({
+                payShow: false
+            })
             that.wxPayFn()
         }
         if (selectedId == 2) {
-            wx.navigateTo({
-                url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
-            })
+            if (userInfo.vip == 0) {
+                console.log("不是VIP")
+                that.setData({
+                    isVipShow: true
+                })
+            } else {
+                that.setData({
+                    payShow: false
+                })
+                wx.navigateTo({
+                    url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
+                })
+            }
         }
-        that.setData({
-            payShow: false
+
+    },
+
+    /** 点击去充值按钮. */
+    confirmCancelFn() {
+        wx.navigateTo({
+            url: '/pages/recharge/recharge?vipPay=true',
+        })
+    },
+
+    /** 取消充值. */
+    cancelRechargeFn() {
+        this.setData({
+            isVipShow: false
         })
     },
 
     /** 隐藏支付方式选择. */
-    onPayClose(){
+    onPayClose() {
         this.setData({
             payShow: false
         })
@@ -116,9 +195,39 @@ Page({
     /** 显示支付方式选择. */
     payOrder(e) {
         let that = this
-        let orderId = e.currentTarget.dataset.id
-        let category = e.currentTarget.dataset.category
+        let Item = e.currentTarget.dataset.item
+        if (Item.status != 1) {
+            return false
+        }
+        let wxActualPaymentAmount = 0
+        let totalVIPPriceAll = 0
+        let orderId = Item.id
+        let category = Item.category
+        let couponDeduct = Item.couponDeduct
+        let reductionTotalAll = 0
+        let deliveryMode = Item.deliveryMode
+        if (category == 2) {
+            reductionTotalAll = Item.groupDeduct.toFixed(2)
+            wxActualPaymentAmount = (Item.orderAmount - Item.groupDeduct).toFixed(2)
+            that.setData({
+                selectedId: 1
+            })
+        } else {
+            if (deliveryMode == 1){
+                totalVIPPriceAll = (Item.productAmount - Item.vipDeduct).toFixed(2)
+                wxActualPaymentAmount = (Item.productAmount - Item.deductAmount).toFixed(2)
+            }else{
+                totalVIPPriceAll = ((Item.productAmount + Item.expressFee) - Item.vipDeduct).toFixed(2)
+                wxActualPaymentAmount = ((Item.productAmount + Item.expressFee) - Item.deductAmount).toFixed(2)
+            }
+            reductionTotalAll = Item.deductAmount.toFixed(2)
+        }
+        let vipDiscountTotalAll = Item.vipDeduct.toFixed(2)
         that.setData({
+            wxActualPaymentAmount: wxActualPaymentAmount,
+            reductionTotalAll: reductionTotalAll,
+            totalVIPPriceAll: totalVIPPriceAll,
+            vipDiscountTotalAll: vipDiscountTotalAll,
             categoryPay: category,
             orderId: orderId,
             payShow: true
@@ -145,8 +254,9 @@ Page({
                     paySign: str.paySign,
                     success(res) {
                         that.setData({
-                            makeAppointmentShow: true 
+                            makeAppointmentShow: true
                         })
+                        that.GetAdvertisingFn()
                     },
                     fail(err) {
                         that.setData({
@@ -156,7 +266,13 @@ Page({
                             title: '提示',
                             content: '支付失败',
                             showCancel: false,
-                            confirmColor: "#5bcbc8"
+                            confirmColor: "#5bcbc8",
+                            success() {
+                                that.setData({
+                                    orderLists: []
+                                })
+                                that.getOrderLists()
+                            }
                         })
                     }
                 })
@@ -167,7 +283,7 @@ Page({
     /** 点击返回首页按钮. */
     toBackIndexFn() {
         wx.setStorageSync('balancePaySuccess', false)
-        wx.switchTab({
+        wx.redirectTo({
             url: '/pages/index/index',
         })
     },

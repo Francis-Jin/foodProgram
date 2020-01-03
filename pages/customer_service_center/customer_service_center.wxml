@@ -1,0 +1,30 @@
+<!--pages/customer_service_center/customer_service_center.wxml-->
+<view class="container">
+    <view class="height_fixed_100">
+        <image class="width_height_100" src="/images/imgs/kefu_top.png"></image>
+    </view>
+    <view class="box_sizing padding_left_right_20">
+        <view class="background_liner border_radius_10 height_60 line_height_60 text_center color_fff">
+            <text>客服中心</text>
+        </view>
+
+        <view class="flex box_sizing padding_left_30 padding_top_20 padding_bottom_20 padding_right_20 box_shadow border_radius_10 margin_top_20">
+            <view class="width_60">
+                <image class="width_fixed_20 height_fixed_20 vertical_middle" src="/images/icon/meishidaren@2x (1).png"></image>
+                <text class="margin_left_10">客服电话</text>
+            </view>
+            <view class="width_40 text_right" data-tel="15985193511" bindtap="callTelFn">
+                <text>15985193511</text>
+            </view>
+        </view>
+
+        <view class="margin_top_20 text_center">
+            <view class="margin_auto"  data-src='{{urlBefore + imgSrc}}' bindtap='previewImage'>
+                <image style="width:400rpx;height:400rpx;" src="{{urlBefore + imgSrc}}"></image>
+            </view>
+            <view class="font_size_14 color_666">
+                <text>扫描二维码，关注“日权食”</text>
+            </view>
+        </view>
+    </view>
+</view>

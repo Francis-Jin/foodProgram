@@ -21,10 +21,18 @@
 
             <van-field value="{{ doorpValue }}" clearable label="门牌号" size="large" placeholder="例：1号门" bind:change="addressChange" />
 
+            <view class="flex height_fixed_50 line_height_50 flex_space_between box_sizing padding_left_right_20">
+                <view class="font_size_18 color_f21">
+                    <text>设置为默认地址</text>
+                </view>
+                <view>
+                    <switch color="#FA7132" checked="{{isdefaultAddress}}" bindchange="switch1Change"/>
+                </view>
+            </view>
         </van-cell-group>
     </view>
 
-    <view class="text_center width_70 margin_auto color_999">
+    <view class="text_center font_size_14 margin_auto color_999">
         <text>本服务只针对花果园M区，请填写范围内地址</text>
     </view>
 

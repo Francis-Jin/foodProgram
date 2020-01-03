@@ -4,9 +4,16 @@
     <view class="box_sizing padding_left_right_20 padding_top_10 padding_bottom_10 relative">
         <!-- 有地址列表 -->
         <view wx:if="{{addressLists.length > 0}}">
-            <view wx:for="{{addressLists}}" wx:key="index" class="address_item flex flex_space_between margin_bottom_10 border_bottom">
-                <view class="width_90 padding_bottom_10">
-                    <view class="color_333 margin_bottom_5">
+            <view wx:for="{{addressLists}}" wx:key="index" class="address_item box_sizing flex flex_space_between margin_bottom_10 border_bottom">
+                <view wx:if="{{isSelectedAddress}}" class="width_fixed_50">
+                    <checkbox-group data-itemId="{{item.id}}" bindtap="checkGoodsChange" class="text_center line_height_40">
+                        <label class="checkbox">
+                            <checkbox class="width_height_100" checked="{{item.checked}}" />
+                        </label>
+                    </checkbox-group>
+                </view>
+                <view class="width_60 padding_bottom_10 box_sizing padding_right_10">
+                    <view class="color_333 margin_bottom_5 relative">
                         <text class="margin_right_30">{{item.name}}</text>
                         <text>{{item.phone}}</text>
                     </view>
@@ -14,8 +21,14 @@
                         <text>{{item.address + item.doorplate}}</text>
                     </view>
                 </view>
-                <view class="width_10 text_right line_height_40" data-item='{{item}}' data-type="edit" bindtap="addAddressFn">
-                    <text class="iconfont icon-ue60ewrite3 color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                <view class="width_40 padding_bottom_10">
+                    <view class="line_height_30 text_right box_sizing padding_right_10" data-item='{{item}}' data-type="edit" bindtap="addAddressFn">
+                        <text class="iconfont icon-ue60ewrite3 color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
+                    </view>
+                    <view class="text_right">
+                        <text wx:if="{{item.isDefault == 1}}" class="font_size_12 color_999 margin_right_10">默认地址</text>
+                        <switch  style='zoom:.7;' color="#FA7132" checked="{{item.isDefault}}" data-item="{{item}}" bindchange="switch1Change"/>
+                    </view>
                 </view>
             </view>
         </view>
@@ -25,9 +38,19 @@
             <text>暂无地址，前去添加</text>
         </view>
 
+        <!-- 添加地址btn -->
+        <view data-type="add" data-addstatus="true" bindtap="addAddressFn" class="text_center color_999 margin_top_20">
+            <view>
+                <text class="iconfont icon-add3" style="font-size:60rpx;font-weight:100;"></text>
+            </view>
+            <view class="font_size_14">
+                <text>添加地址</text>
+            </view>
+        </view>
+
         <view class="height_fixed_50"></view>
     </view>
-    <view data-type="add" bindtap="addAddressFn" class="background_yellow_liner text_center color_fff" style="position:fixed;left:0;bottom:0;width:100%;height:100rpx;line-height:100rpx;">
-        <text>添加地址</text>
+    <view wx:if="{{myAdd != 'true' && isSelectedAddress && addressLists.length > 0}}" data-type="add" bindtap="addAddressFn" class="background_yellow_liner text_center color_fff" style="position:fixed;left:0;bottom:0;width:100%;height:100rpx;line-height:100rpx;">
+        <text>确定</text>
     </view>
 </view>

@@ -1,0 +1,203 @@
+/* miniprogram_npm/common/calendar/calendar.wxss */
+
+
+/* 预约日期时间选择. */
+.seletedDateAndTime{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.8);
+    z-index: 20;
+}
+
+.content_wrap{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    background: #fff;
+    border-radius: 40rpx 40rpx 0 0;
+}
+
+
+.van-picker__columns{
+    background: red;
+}
+.selectedTimeWrap .van-picker__columns,
+.selectedTimeWrap .van-picker-column{
+    height: 300rpx !important;
+}
+
+/* 
+* 日历组件start
+*/
+
+.title_btn{
+    display: flex;
+    justify-content: space-between;
+}
+
+.title_btn .init{
+    width: 160rpx;
+    text-align: center;
+    color: #5fc5e0;
+    line-height: 80rpx;
+    height: 80rpx;
+}
+
+.headdate {
+    height: 30px;
+    background-color: white;
+    width: 14.2%;
+    text-align: center;
+    line-height: 30px;
+    color: #333;
+    font-size: 28rpx;
+}
+
+.headbox {
+    display: flex;
+    box-sizing: border-box;
+    padding: 0 10rpx 20rpx;
+}
+
+.success-qk {
+    text-indent: 40rpx;
+    color: #666;
+    font-size: 38rpx;
+    padding-top: 46rpx;
+    padding-bottom: 29rpx;
+}
+
+.mouthhead_box {
+    height: 60rpx;
+    line-height: 60rpx;
+    display: flex;
+    justify-content: center;
+}
+
+.toYearMonth {
+    width: 50%;
+    text-indent: 40rpx;
+    color: #666;
+    text-align: center;
+    font-size: 32rpx;
+    font-weight: bold;
+}
+
+.mouthhead {
+    width: 20%;
+    display: none;
+    background: red;
+    text-align: right;
+}
+
+.daybox {
+    box-sizing: border-box;
+    padding: 0 10rpx;
+}
+
+.day {
+    width: 14.2%;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+    top: 0;
+    margin-top: -10rpx;
+    overflow: hidden;
+    color: #333;
+    font-size: 28rpx;
+}
+
+.isToday{
+    position: absolute;
+    left: 0;
+    bottom:0;
+    width: 100%;
+    text-align: center;
+    color: #0dc5a9;
+    font-size: 20rpx;
+}
+
+.day text {
+    font-weight: 500;
+}
+
+.day .y-rec {
+    color: #3f86ff;
+}
+
+.day .n-rec {
+    color: #fd8d7e;
+    position: relative;
+}
+
+.day .prevNext {
+    color: #cfcfcd;
+}
+
+.day.selectedActive{
+    background: linear-gradient(120deg, #48cbae 40%, #5fc5e0 60%);
+    color:#fff;
+    border-radius: 100%;
+}
+
+.day .n-rec::before {
+    content: "";
+    position: absolute;
+    display: block;
+    left: 50%;
+    bottom: -30rpx;
+    width: 14rpx;
+    height: 14rpx;
+    margin-left: -7rpx;
+    background: blue;
+    border-radius: 100%;
+}
+
+
+
+.healthStatus {
+    height: 90rpx;
+    line-height: 90rpx;
+    background: #f5f5f5;
+    text-indent: 62rpx;
+}
+
+.healthStatus text {
+    margin-right: 80rpx;
+    position: relative;
+    color: #666;
+}
+
+.healthStatus text::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: -34rpx;
+    top: 6rpx;
+    width: 26rpx;
+    height: 26rpx;
+    border-radius: 100%;
+}
+
+.healthStatus text:nth-child(1)::before {
+    background: #fd8d7e;
+}
+
+.healthStatus text:nth-child(2)::before {
+    background: #0dc5a9;
+}
+
+.healthStatus text:nth-child(3)::before {
+    background: #4186ff;
+}
+
+/* 
+* 日历组件end
+*/

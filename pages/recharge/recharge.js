@@ -9,8 +9,8 @@ Page({
         urlBefore: app.globalData.baseApi,
         isShowPaySuccess: false,
         priceArr: [{
-            price: 50,
-            checked: false
+            price: 99,
+            checked: true
         }, {
             price: 100,
             checked: false
@@ -27,8 +27,9 @@ Page({
             price: 800,
             checked: false
         }],
-        RechargeAmount: 0,
+        RechargeAmount: 99,
         inputVal: '',
+        vipPay: false
     },
 
     /** 点击选择金额. */
@@ -85,6 +86,13 @@ Page({
     toRechargeFn() {
         let that = this
         let RechargeAmount = that.data.RechargeAmount
+        if(RechargeAmount < 1){
+            wx.showToast({
+                title: '请选择金额或输入金额',
+                icon: 'none'
+            })
+            return false
+        }
         wx.showLoading({
             title: '加载中',
         })
@@ -122,12 +130,22 @@ Page({
                     signType: str.signType,
                     paySign: str.paySign,
                     success(res) {
+                        that.getUserInfoFn()
                         wx.showToast({
                             title: '充值成功',
-                        })
-                        that.getUserInfoFn()
-                        wx.switchTab({
-                            url: '/pages/index/index',
+                            success(){
+                                setTimeout(function(){
+                                    if (that.data.vipPay) {
+                                        wx.navigateBack({
+                                            detal: 1
+                                        })
+                                    } else {
+                                        wx.redirectTo({
+                                            url: '/pages/index/index',
+                                        })
+                                    }
+                                },2000)
+                            }
                         })
                     },
                     fail(err) {
@@ -164,7 +182,11 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
-
+        let that = this
+        let vipPay = options.vipPay
+        that.setData({
+            vipPay: vipPay
+        })
     },
 
     /**

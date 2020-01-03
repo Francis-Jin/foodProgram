@@ -1,0 +1,133 @@
+<!--pages/central_kitchen/central_kitchen.wxml-->
+
+<!--pages/take_meals/take_meals.wxml-->
+
+<view class="container">
+    <view class="height_fixed_60"></view>
+    <view class="top_bar bg_fff box_shadow flex text_center flex_space_between line_height_50 box_shadow overflow_hidden box_sizing padding_left_right_20" style="border-radius: 0 0 40rpx 40rpx;">
+        <view wx:for="{{topBarLists}}" wx:key="index" data-item="{{item}}" bindtap="onSwitchTabFn" class="item width_50 {{selectedActive == item.id ? 'active' : ''}} font_size_14">
+            <text class="relative text">{{item.text}}</text>
+        </view>
+    </view>
+    <!-- content 警示单-->
+    <view wx:if="{{selectedActive == 1}}" class="content_wrap box_sizing padding_left_right_20">
+        <view class="lists flex flex_wrap">
+            <view wx:for="{{lists}}" wx:key="index" data-num="{{item.num}}" data-locationid="{{item.id}}" bindtap="warningClickFn" class="{{item.num > 0 ? 'color_fff background_yellow_liner' : 'color_999  bg_f9'}} item_init box_sizing padding_left_10 padding_right_10 text_center height_fixed_140 border_radius_10">
+                <view class="line_height_50">
+                    <text>{{item.name}}</text>
+                </view>
+                <view class="margin_top_20">
+                    <text>{{item.address}}</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <!-- content 备货单 -->
+    <view wx:if="{{selectedActive == 4}}" class="content_wrap box_sizing padding_left_right_20">
+        <view class="lists">
+            <view class="item flex height_fixed_50 padding_bottom_10 padding_top_10 border_bottom">
+                <view class="width_20">
+                    <image class="width_height_100"></image>
+                </view>
+                <view class="width_50">
+                    <view class="line_height_50">
+                        <text>皮蛋瘦肉粥</text>
+                    </view>
+                </view>
+                <view class="width_30 text_center font_size_16 line_height_50 color_FF8 bg_f9">
+                    <text>总缺货 237个</text>
+                </view>
+            </view>
+            <view class="item flex height_fixed_50 padding_bottom_10 padding_top_10 border_bottom">
+                <view class="width_20">
+                    <image class="width_height_100"></image>
+                </view>
+                <view class="width_50">
+                    <view class="line_height_50">
+                        <text>皮蛋瘦肉粥</text>
+                    </view>
+                </view>
+                <view class="width_30 text_center font_size_16 line_height_50 color_FF8 bg_f9">
+                    <text>总缺货 237个</text>
+                </view>
+            </view>
+        </view>
+
+    </view>
+
+    <!-- content 预约单 -->
+    <view wx:if="{{selectedActive == 3}}" class="content_wrap box_sizing padding_left_right_20">
+        <view class="section">
+            <view wx:if="{{lists.length > 0}}" class="lists">
+                <view wx:for="{{lists}}" wx:key="index" class="item flex height_fixed_50 padding_bottom_20 padding_top_20 border_bottom">
+                    <view class="width_20">
+                        <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
+                    </view>
+                    <view class="width_50">
+                        <view class="box_sizing padding_left_10 padding_top_5">
+                            <text>{{item.name}}</text>
+                        </view>
+                    </view>
+                    <view class="width_30 text_center font_size_16 line_height_50 color_FF8 bg_f9">
+                        <text>{{item.quantity}}份</text>
+                    </view>
+                </view>
+            </view>
+            <view wx:if="{{lists.length < 1}}" class="text_center color_999 line_height_100">
+                <text>暂无数据</text>
+            </view>
+
+        </view>
+
+        <view hidden="true" style="position:fixed;left:0;bottom:0;" class="width_100 bg_fff padding_bottom_20">
+
+            <view class="">
+                <view class="width_fixed_50 height_fixed_50 margin_auto">
+                    <image class="width_height_100" src="/images/icon/add_icon.png "></image>
+                </view>
+            </view>
+
+            <view class="margin_top_20">
+                <view class="width_fixed_200 height_fixed_50 background_yello2_liner color_fff text_center line_height_50 border_radius_10 margin_auto">
+                    <text>生成进货单</text>
+                </view>
+            </view>
+
+        </view>
+        <view class="height_fixed_150"></view>
+
+    </view>
+
+    <!-- content 历史记录 -->
+    <view wx:if="{{selectedActive == 2}}" class="content_wrap box_sizing padding_left_right_20">
+        <view wx:if="{{lists.length > 0}}" class="lists">
+            <view wx:for="{{lists}}" wx:key="index" class="item relative">
+                <view data-itemid="{{item.id}}" bindtap="toTakeOrderDetailsFn">
+                    <view class="font_size_16 color_FF8 padding_bottom_10">
+                        <text>{{item.locationName}}</text>
+                    </view>
+                    <view class="font_size_14 color_5151 margin_bottom_10">
+                        <text>上报时间：{{item.createTime}}</text>
+                    </view>
+                    <view class="font_size_14 color_5151">
+                        <text>补货数量：{{item.quantity}}个</text>
+                    </view>
+                </view>
+                <!-- 状态 -->
+                <view data-item="{{item}}" bindtap="solveTakeOrderFn" class="status height_fixed_30" style="position:absolute;right:0;top:50%; margin-top: -40rpx;">
+                    <view class="width_fixed_80 font_size_14  {{item.status==0? 'background_yellow_liner color_fff' : 'color_999'}} text_center line_height_30 border_radius_20">
+                        <text wx:if="{{item.status != 0}}">已处理</text>
+                        <text wx:else>未处理</text>
+                    </view>
+                </view>
+                <line/>
+            </view>
+        </view>
+
+        <view wx:if="{{lists.length < 1}}" class="text_center color_999 line_height_100">
+            <text>暂无数据</text>
+        </view>
+    </view>
+
+</view>

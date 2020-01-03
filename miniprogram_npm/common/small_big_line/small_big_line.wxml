@@ -1,0 +1,4 @@
+<!--miniprogram_npm/common/small_big_line/small_big_line.wxml-->
+<view class="line_wrap">
+    <view class="line"></view>
+</view>

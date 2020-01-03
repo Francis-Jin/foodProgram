@@ -1,0 +1,26 @@
+<!--pages/take_order_details/take_order_details.wxml-->
+<view class="container box_sizing padding_left_right_20">
+    <view class="lists">
+        <view wx:for="{{lists}}" wx:key="index" class="item flex height_fixed_50 padding_bottom_20 padding_top_20 border_bottom">
+            <view class="width_20">
+                <image class="width_height_100" src="{{urlBefore + item.cover}}"></image>
+            </view>
+            <view class="width_50 box_sizing padding_left_10 padding_top_5">
+                <view class="">
+                    <text>{{item.name}}</text>
+                </view>
+            </view>
+            <view class="width_30 text_center font_size_16 line_height_50 color_FF8 bg_f9">
+                <text>{{item.quantity}}个</text>
+            </view>
+        </view>
+    </view>
+
+    <view class="padding_top_10 padding_bottom_10" style="position:fixed;left:0;bottom:0;width:100%;">
+        <view class="width_60 font_size_14 margin_auto line_height_40 background_yellow_liner text_center border_radius_20 color_fff">
+            <text wx:if="{{info.status == 0}}">待处理</text>
+            <text wx:else >已备完，送达中</text>
+        </view>
+    </view>
+    <view class="height_fixed_60"></view>
+</view>

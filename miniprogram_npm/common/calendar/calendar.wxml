@@ -1,0 +1,52 @@
+<!--miniprogram_npm/common/calendar/calendar.wxml-->
+<!-- 预约时间选择. -->
+<view wx:if="{{isShowDate}}" class="seletedDateAndTime">
+    <view class="content_wrap">
+        <view class="title_btn">
+            <view class="init" bindtap="hideSelectedDateFn">
+                <text>取消</text>
+            </view>
+            <view class="init" bindtap="confirmToPageAppointment">
+                <text>确定</text>
+            </view>
+        </view>
+        <!-- 日历组件start -->
+        <view class="block2_dateBox">
+            <view class="mouthhead_box">
+                <view class="mouthhead">
+                    <image bindtap="goPre" src='/pages/icon/right_down.png '></image>
+                </view>
+                <view class='toYearMonth' bindtap="goToday">
+                    <text>{{showDate[0]}} 年 {{showDate[1]}} 月</text>
+                </view>
+                <view class="mouthhead">
+                    <image bindtap="goNext" src='/pages/icon/right_down.png '></image>
+                </view>
+            </view>
+            <view class="headbox">
+                <view class="headdate">日</view>
+                <view class="headdate">一</view>
+                <view class="headdate">二</view>
+                <view class="headdate">三</view>
+                <view class="headdate">四</view>
+                <view class="headdate">五</view>
+                <view class="headdate">六</view>
+            </view>
+            <view class="mouth">
+                <view class="daybox">
+                    <view class="day {{selectedDayIndex == index ? 'selectedActive' : ''}}" wx:for="{{date}}" data-date="{{showDate}}" data-day="{{item}}" data-thisday="{{thisDate[2]}}" data-index="{{index}}" data-status="{{index < getPLn || lastLen < index+1}}" wx:key="index" bindtap='linkSuccessSituation'>
+                        <text class='{{index < getPLn || lastLen < index+1 || item <= thisDate[2] ? "prevNext" : "" }}'>{{item}}</text>
+                        <view style="line-height:1" wx:if="{{showDate[0]==thisDate[0] && showDate[1]==thisDate[1] && item == (thisDate[2]+1)}}" class="isToday">
+                            <text>明日</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <!-- 日历组件end -->
+        <!-- 时间选择. -->
+        <!-- <view class="selectedTimeWrap">
+            <van-picker columns="{{ columns }}" bind:change="timeChangeFn"/>
+        </view> -->
+    </view>
+</view>

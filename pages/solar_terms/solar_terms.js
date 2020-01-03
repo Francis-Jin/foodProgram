@@ -101,12 +101,9 @@ Page({
             method: 'get',
             success(res) {
                 let lists = res.data
-                res.data.forEach(item => {
-                    item.checked = false
-                })
+                let selectedCode = []
                 if (wx.getStorageSync("userInfo").userDietOrientation) {
                     let value = []
-                    let selectedCode = []
                     wx.getStorageSync("userInfo").userDietOrientation.forEach(item => {
                         value.push(item.dietOrientationName)
                         selectedCode.push(item.dietOrientationId)
@@ -118,6 +115,11 @@ Page({
                     })
                     wx.setStorageSync('selectedCode', selectedCode.join())
                 }
+                res.data.forEach(item => {
+                    selectedCode.forEach(subItem=>{
+                        item.code == subItem ? item.checked = true : item.checked = false
+                    })
+                })
                 that.setData({
                     columns: lists
                 })

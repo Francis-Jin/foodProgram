@@ -197,11 +197,11 @@ Page({
                 tmplIds: tmplIds,
                 success: (res) => {
                     console.log(res)
-                    if (res.errMsg == 'requestSubscribeMessage:ok'){
-                        wx.showToast({
-                            title: '订阅成功',
-                        })
-                    }
+                    // if (res.errMsg == 'requestSubscribeMessage:ok'){
+                    //     wx.showToast({
+                    //         title: '订阅成功',
+                    //     })
+                    // }
                 },
                 fail(err) {
                     //失败
@@ -215,7 +215,7 @@ Page({
     /** 点击登录按钮去登录. */
     toLoginFn(){
         wx.redirectTo({
-            url: '/pages/start/start?isLogin=true',
+            url: '/pages/login/login?isLogin=true',
         })
     },
 
@@ -290,15 +290,21 @@ Page({
         let userInfo = wx.getStorageSync("userInfo")
         if (!userInfo) {
             wx.redirectTo({
-                url: '/pages/start/start?isLogin=true',
+                url: '/pages/login/login?isLogin=true',
             })
             return false
         }
+        if(_type == 0){
+            // 客服中心
+            wx.navigateTo({
+                url: '/pages/customer_service_center/customer_service_center',
+            })
+        }
         if (_type == 1) {
             // 历史记录
-            // wx.navigateTo({
-            //     url: '/pages/history/history',
-            // })
+            wx.navigateTo({
+                url: '/pages/history/history',
+            })
             
         } else if (_type == 2) {
             // 身份认证
@@ -308,7 +314,7 @@ Page({
         } else if (_type == 3) {
             // 我的地址
             wx.navigateTo({
-                url: '/pages/my_address/my_address',
+                url: '/pages/my_address/my_address?myAdd=true',
             })
         } else if (_type == 4) {
             // 会员充值
@@ -324,6 +330,26 @@ Page({
             // 预约入口
             wx.redirectTo({
                 url: '/pages/start/start?paySuccessType=true',
+            })
+        }else if (_type == 7) {
+            // 美食达人
+            wx.navigateTo({
+                url: '/pages/daren/daren'
+            })
+        } else if (_type == 8) {
+            // 分销商入口
+            wx.navigateTo({
+                url: '/pages/daren/daren'
+            })
+        } else if (_type == 9) {
+            // 取餐点入口
+            wx.navigateTo({
+                url: '/pages/take_meals/take_meals'
+            })
+        } else if (_type == 10) {
+            // 中央厨房入口
+            wx.navigateTo({
+                url: '/pages/central_kitchen/central_kitchen'
             })
         }
     },
@@ -379,7 +405,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow: function() {
-        this.getUserFn()
+        // this.getUserFn() // 获取微量元素函数
         if (wx.getStorageSync('userInfo')) this.getUserInfoFn()
         let roleId = wx.getStorageSync('userInfo').roleId
         let groupLeaderType = wx.getStorageSync('userInfo').headMan

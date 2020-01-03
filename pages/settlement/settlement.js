@@ -18,27 +18,35 @@ Page({
         deliveryMode: '', //配送方式选择 配送方式(1自取 2配送)
         show: false, //是否显示地址列表弹窗
         addressLists: [],
-        addressText: '',
+        addressText: '选择配送地址', //显示选择的地址
         messageText: '', // 商家留言
         userPhone: '', // 用户电话
         payShow: false, // 是否显示支付方式选择弹框
         selectedId: '', //支付方式选择的id （1：微信支付，2：余额支付）
+        wxActualPaymentAmount: '', // 微信支付实际金额
+        reductionTotalAll: '', // 代金池减免额度总计
+        vipDiscountTotalAll: '', // vip优惠总计金额
+        expressVipDiscountTotalAll: '', // vip快递配送总计金额
+        expressWxDiscountTotalAll: '', // 微信快递配送总计金额
+        expressPageDiscountTotalAll: '', // 页面快递配送总计金额
 
         makeAppointmentShow: false, //是否显示预约点餐
+        isVipShow: false, // 是否是vip,不是时弹出提示框
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
+        console.log(options)
         let that = this
-        let totalPrice = options.totalPrice
-        let totalVIPPriceAll = options.totalVIPPriceAll
+        let totalPrice = options.totalPrice * 1
+        let totalVIPPriceAll = options.totalVIPPriceAll * 1
         this.getSysConfFn()
         this.setData({
             userInfo: wx.getStorageSync('userInfo'),
-            totalPrice: totalPrice,
-            totalVIPPriceAll: totalVIPPriceAll
+            totalPrice: totalPrice.toFixed(2),
+            totalVIPPriceAll: totalVIPPriceAll.toFixed(2)
         })
     },
 
@@ -52,6 +60,11 @@ Page({
                 makeAppointmentShow: true
             })
         }
+        let userInfo = wx.getStorageSync('userInfo')
+        this.setData({
+            isVipShow:false,
+            userInfo: userInfo
+        })
         this.getUserAddressFn()
     },
 
@@ -68,16 +81,48 @@ Page({
         let that = this
         let selectedId = that.data.selectedId
         let orderId = that.data.orderId
+        let userInfo = that.data.userInfo
+        if (!selectedId) {
+            wx.showToast({
+                title: '选择支付方式',
+                icon: 'none'
+            })
+            return false
+        }
         if (selectedId == 1) {
+            that.setData({
+                payShow: false
+            })
             that.wxPayFn()
         }
         if (selectedId == 2) {
-            wx.navigateTo({
-                url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
-            })
+            if(userInfo.vip == 0){
+                console.log("不是VIP")
+                that.setData({
+                    isVipShow: true
+                })
+            }else{
+                that.setData({
+                    payShow: false
+                })
+                wx.navigateTo({
+                    url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
+                })
+            }
         }
-        that.setData({
-            payShow: false
+    },
+
+    /** 点击去充值按钮. */
+    confirmCancelFn() {
+        wx.navigateTo({
+            url: '/pages/recharge/recharge?vipPay=true',
+        })
+    },
+
+    /** 取消充值. */
+    cancelRechargeFn(){
+        this.setData({
+            isVipShow: false
         })
     },
 
@@ -166,7 +211,7 @@ Page({
         this.setData({
             payShow: false
         })
-        wx.switchTab({
+        wx.redirectTo({
             url: '/pages/order/order',
         })
     },
@@ -181,20 +226,33 @@ Page({
 
     /** 获取配置信息. */
     getSysConfFn() {
-        let that = this
-        let cartLists = wx.getStorageSync('cartLists')
-        let quantityAll = 0
-        let deliveryCost = 0
+        
         app.appRequest({
             url: '/app/sysConf/getSysConf.action',
             method: 'get',
             success(res) {
                 cartLists.forEach(item => {
+                    // 商品总额
+                    totalPrice += (item.price * item.quantity)
+                    // 计算每个商品小计金额
+                    item.subtotal = (item.price * item.quantity).toFixed(2)
+                    //减免额度总计
+                    reductionTotalAll += (item.deductAmount * item.quantity)
+                    //vip优惠额度总计
+                    vipDiscountTotalAll += ((item.price - item.vipPrice) * item.quantity)
+                    //购买总数量
                     quantityAll += item.quantity
                 })
                 quantityAll > 10 ? deliveryCost = res.data.maxDeliveryFee : deliveryCost = ((quantityAll - 1) * res.data.increaseFee + res.data.deliveryFee)
                 that.setData({
                     cartLists: cartLists,
+                    totalPrice: totalPrice.toFixed(2),
+                    expressWxDiscountTotalAll: (totalPrice + deliveryCost - reductionTotalAll).toFixed(2),
+                    expressVipDiscountTotalAll: (totalPrice + deliveryCost - vipDiscountTotalAll).toFixed(2),
+                    expressPageDiscountTotalAll: (totalPrice + deliveryCost).toFixed(2),
+                    wxActualPaymentAmount: (totalPrice - reductionTotalAll).toFixed(2),
+                    reductionTotalAll: reductionTotalAll.toFixed(2),
+                    vipDiscountTotalAll: vipDiscountTotalAll.toFixed(2),
                     deliveryCost: deliveryCost,
                     systemInfo: res.data,
                     deliveryFee: res.data.deliveryFee,
@@ -214,11 +272,18 @@ Page({
         let cartLists = that.data.cartLists
         let thisItem = cartLists.filter(item => item.id == itemId)[0]
         let arr = cartLists.filter(item => item.checked == true)
+        let expressVipDiscountTotalAll = 0,
+            expressWxDiscountTotalAll = 0,
+            expressPageDiscountTotalAll = 0
+        // expressVipDiscountTotalAll: '', // vip快递配送总计金额
+        // expressWxDiscountTotalAll: '', // 微信快递配送总计金额
         let totalPrice = 0
         let totalVIPPriceAll = 0
         let productId
         let quantityAll = 0
         let deliveryCost = 0
+        let reductionTotalAll = 0
+        let vipDiscountTotalAll = 0
         if (_type == 1) {
             // 减
             if (thisItem.quantity == 1) {
@@ -236,14 +301,21 @@ Page({
                     })
                 // 计算配送费
                 cartLists.forEach(item => {
+                    // 计算每个商品小计金额
+                    item.subtotal = (item.price * item.quantity).toFixed(2)
+                    //减免额度总计
+                    reductionTotalAll += (item.deductAmount * item.quantity)
+                    //vip优惠额度总计
+                    vipDiscountTotalAll += ((item.price * 1 - item.vipPrice * 1) * item.quantity)
+                    //购买总数量
                     quantityAll += item.quantity
                 })
-                quantityAll > 10 ? deliveryCost = that.data.maxDeliveryFee : deliveryCost = ((quantityAll - 1) * that.data.increaseFee + that.data.deliveryFee)
+                quantityAll > 9 ? deliveryCost = that.data.maxDeliveryFee : deliveryCost = ((quantityAll - 1) * that.data.increaseFee + that.data.deliveryFee)
                 // 调用函数更新数量
                 that.updateQuantityFn(productId, thisItem.quantity)
                 // 计算总价
                 arr.forEach(item => {
-                    totalPrice += item.price * item.quantity
+                    totalPrice += (item.price * item.quantity)
                     if (item.vipPrice > 0) {
                         totalVIPPriceAll += item.vipPrice * item.quantity
                     } else {
@@ -251,9 +323,15 @@ Page({
                     }
                 })
                 this.setData({
-                    totalVIPPriceAll: totalVIPPriceAll,
+                    expressWxDiscountTotalAll: (totalPrice + deliveryCost - reductionTotalAll).toFixed(2),
+                    expressVipDiscountTotalAll: (totalPrice + deliveryCost - vipDiscountTotalAll).toFixed(2),
+                    expressPageDiscountTotalAll: (totalPrice + deliveryCost).toFixed(2),
+                    wxActualPaymentAmount: (totalPrice - reductionTotalAll).toFixed(2),
+                    reductionTotalAll: reductionTotalAll.toFixed(2),
+                    vipDiscountTotalAll: vipDiscountTotalAll.toFixed(2),
+                    totalVIPPriceAll: totalVIPPriceAll.toFixed(2),
                     deliveryCost: deliveryCost,
-                    totalPrice: totalPrice,
+                    totalPrice: totalPrice.toFixed(2),
                     cartLists: cartLists
                 })
             }
@@ -268,15 +346,22 @@ Page({
                 })
             // 计算配送费
             cartLists.forEach(item => {
+                // 计算每个商品小计金额
+                item.subtotal = (item.price * item.quantity).toFixed(2)
+                //减免额度总计
+                reductionTotalAll += (item.deductAmount * item.quantity)
+                //vip优惠额度总计
+                vipDiscountTotalAll += ((item.price - item.vipPrice) * item.quantity)
+                //购买总数量
                 quantityAll += item.quantity
             })
 
-            quantityAll > 10 ? deliveryCost = that.data.maxDeliveryFee : deliveryCost = ((quantityAll - 1) * that.data.increaseFee + that.data.deliveryFee)
+            quantityAll > 9 ? deliveryCost = that.data.maxDeliveryFee : deliveryCost = ((quantityAll - 1) * that.data.increaseFee + that.data.deliveryFee)
             // 调用函数更新数量
             that.updateQuantityFn(productId, thisItem.quantity)
             // 计算总价
             arr.forEach(item => {
-                totalPrice += item.price * item.quantity
+                totalPrice += (item.price * item.quantity)
                 if (item.vipPrice > 0) {
                     totalVIPPriceAll += item.vipPrice * item.quantity
                 } else {
@@ -284,9 +369,15 @@ Page({
                 }
             })
             this.setData({
-                totalVIPPriceAll: totalVIPPriceAll,
+                expressWxDiscountTotalAll: (totalPrice + deliveryCost - reductionTotalAll).toFixed(2),
+                expressVipDiscountTotalAll: (totalPrice + deliveryCost - vipDiscountTotalAll).toFixed(2),
+                expressPageDiscountTotalAll: (totalPrice + deliveryCost).toFixed(2),
+                wxActualPaymentAmount: (totalPrice - reductionTotalAll).toFixed(2),
+                reductionTotalAll: reductionTotalAll.toFixed(2),
+                vipDiscountTotalAll: vipDiscountTotalAll.toFixed(2),
+                totalVIPPriceAll: totalVIPPriceAll.toFixed(2),
                 deliveryCost: deliveryCost,
-                totalPrice: totalPrice,
+                totalPrice: totalPrice.toFixed(2),
                 cartLists: cartLists
             })
         }
@@ -312,9 +403,12 @@ Page({
         let that = this
         let addressItem = that.data.addressItem
         let deliveryMode = that.data.deliveryMode
-        console.log(addressItem)
         let cartLists = that.data.cartLists
         let dishInfo = []
+        // that.setData({
+        //     payShow: true
+        // })
+        // return false;
         cartLists.forEach(item => {
             dishInfo.push({
                 dishId: item.productId,
@@ -419,7 +513,7 @@ Page({
                             showCancel: false,
                             confirmColor: "#5bcbc8",
                             success(res) {
-                                wx.switchTab({
+                                wx.redirectTo({
                                     url: '/pages/order/order',
                                 })
                             }
@@ -443,7 +537,7 @@ Page({
     /** 点击返回首页按钮. */
     toBackIndexFn(){
         wx.setStorageSync('balancePaySuccess', false)
-        wx.switchTab({
+        wx.redirectTo({
             url: '/pages/index/index',
         })
     },

@@ -20,7 +20,7 @@
                     </view>
                 </view>
                 <view class="width_60 padding_top_30 flex font_weight_300 color_fff">
-                    <view class="font_size_14 margin_right_10">
+                    <view class="font_size_12 margin_right_10">
                         <text>{{detailInfo.motto}}</text>
                     </view>
                 </view>

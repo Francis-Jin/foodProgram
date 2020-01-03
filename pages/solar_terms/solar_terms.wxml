@@ -26,7 +26,7 @@
             </view>
         </view>
         <view class="width_40 padding_top_5 text_center" bindtap="showDirectionFn">
-            <text class="padding_top_5 padding_bottom_5 padding_left_right_20 background_yellow_liner border_radius_10 color_fff">方向选择</text>
+            <text class="padding_top_5 padding_bottom_5 padding_left_right_20 background_yellow_liner border_radius_10 color_fff">选择方向</text>
         </view>
     </view>
 
@@ -40,7 +40,7 @@
 <!-- 膳食方向选择 -->
 <!-- 地址选择弹出层 -->
 <van-popup show="{{ show }}" position="bottom" custom-style="height: 600rpx" bind:close="onClose">
-    <view class="flex flex_space_between height_fixed_50 line_height_50 text_center border_bottom">
+    <view class="flex flex_space_between bg_fff height_fixed_50 line_height_50 text_center border_bottom">
         <view class="width_fixed_50 text_center color_5bc" bindtap="onClose">
             <text>取消</text>
         </view>
@@ -67,7 +67,7 @@
 <van-popup show="{{ otherShow }}" bind:close="onClose" duration="{{0}}">
     <view>
         <view class="">
-            <view class="border_radius_10 overflow_hidden" style="width:500rpx;">
+            <view class="border_radius_10 bg_fff overflow_hidden" style="width:500rpx;">
                 <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
                     <text>输入关键字</text>
                 </view>

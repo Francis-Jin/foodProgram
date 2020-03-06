@@ -1,6 +1,8 @@
 {
     "pages": [
         "pages/index/index",
+        "pages/expressDelivery/expressDelivery",
+        "pages/oneYuanOrder/oneYuanOrder",
         "pages/advertisement_details/advertisement_details",
         "pages/my_address/my_address",
         "pages/cart/cart",
@@ -41,7 +43,8 @@
         "pages/play_video/play_video",
         "pages/single_appoint_details/single_appoint_details",
         "pages/budget_dt_ detail/budget_dt_ detail",
-        "pages/take_order_details/take_order_details"
+        "pages/take_order_details/take_order_details",
+        "pages/orderDeliveryDetails/orderDeliveryDetails"
     ],
     "window": {
         "backgroundTextStyle": "dark",

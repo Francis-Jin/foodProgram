@@ -11,7 +11,7 @@ Page({
         userInfo: null,
         urlBefore: app.globalData.urlBefore,
         detailsInfo: '',
-        isIpx: false ,
+        isIpx: false,
         cancelOrderShow: false, // 是否显示取消订单弹窗
         selectedId: '', //支付方式选择的id （1：微信支付，2：余额支付）
         payShow: false, // 是否显示支付方式选择弹框
@@ -23,6 +23,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
+        console.log(options)
         let that = this
         let orderId = options.orderId
         let userInfo = wx.getStorageSync('userInfo')
@@ -55,6 +56,17 @@ Page({
         })
     },
 
+    // 查看图片
+    lookImageFn(e){
+        let url = e.currentTarget.dataset.url
+        let urls = []
+        urls.push(url)
+        wx.previewImage({
+            current: 0,
+            urls: urls
+        })
+    },
+
     /** 跳转支付成功后的广告详情. */
     toAdvertisementDetailsFn() {
         wx.navigateTo({
@@ -62,10 +74,17 @@ Page({
         })
     },
     /** 拨打配送员电话. */
-    callTelFn(e){
+    callTelFn(e) {
         let tel = e.currentTarget.dataset.tel
         wx.makePhoneCall({
             phoneNumber: tel,
+        })
+    },
+
+    /** 点击去充值按钮. */
+    confirmCancelFn() {
+        wx.navigateTo({
+            url: '/pages/recharge/recharge?vipPay=true',
         })
     },
 
@@ -79,7 +98,7 @@ Page({
             url: '/app/sysConf/getSysConf.action',
             method: 'get',
             success(res) {
-               that.setData({
+                that.setData({
                     systemInfo: res.data
                 })
             }
@@ -89,41 +108,7 @@ Page({
     /** 显示支付方式选择. */
     payOrderFn(e) {
         let that = this
-        let Item = that.data.detailsInfo
-        if (Item.status != 1) {
-            return false
-        }
-        let wxActualPaymentAmount = 0
-        let totalVIPPriceAll = 0
-        let orderId = Item.id
-        let category = Item.category
-        let couponDeduct = Item.couponDeduct
-        let reductionTotalAll = 0
-        let deliveryMode = Item.deliveryMode
-        if (category == 2) {
-            reductionTotalAll = Item.groupDeduct.toFixed(2)
-            wxActualPaymentAmount = (Item.orderAmount - Item.groupDeduct).toFixed(2)
-            that.setData({
-                selectedId: 1
-            })
-        } else {
-            if (deliveryMode == 1) {
-                totalVIPPriceAll = (Item.productAmount - Item.vipDeduct).toFixed(2)
-                wxActualPaymentAmount = (Item.productAmount - Item.deductAmount).toFixed(2)
-            } else {
-                totalVIPPriceAll = ((Item.productAmount + Item.expressFee) - Item.vipDeduct).toFixed(2)
-                wxActualPaymentAmount = ((Item.productAmount + Item.expressFee) - Item.deductAmount).toFixed(2)
-            }
-            reductionTotalAll = Item.deductAmount.toFixed(2)
-        }
-        let vipDiscountTotalAll = Item.vipDeduct.toFixed(2)
         that.setData({
-            wxActualPaymentAmount: wxActualPaymentAmount,
-            reductionTotalAll: reductionTotalAll,
-            totalVIPPriceAll: totalVIPPriceAll,
-            vipDiscountTotalAll: vipDiscountTotalAll,
-            categoryPay: category,
-            orderId: orderId,
             payShow: true
         })
     },
@@ -175,7 +160,7 @@ Page({
     /** 点击去充值按钮. */
     confirmVipPayFn() {
         wx.navigateTo({
-            url: '/pages/recharge/recharge?vipPay=true',
+            url: '/pages/recharge/recharge?vipPay=true'
         })
     },
 
@@ -197,7 +182,7 @@ Page({
     wxPayFn() {
         let that = this
         app.appRequest({
-            url: "/app/orderInfo/payFee.action",
+            url: "/app/orderInfo/savePayFeeExpress.action",
             method: "post",
             postData: {
                 orderId: that.data.orderId,
@@ -225,7 +210,7 @@ Page({
                             content: '支付失败',
                             showCancel: false,
                             confirmColor: "#5bcbc8",
-                            success(){
+                            success() {
                                 that.getOrderDetailsFn()
                             }
                         })
@@ -251,27 +236,19 @@ Page({
         })
     },
 
-
     /** 获取订单详情. */
-    getOrderDetailsFn(){
+    getOrderDetailsFn() {
         let that = this
         app.appRequest({
-            url: "/app/orderInfo/orderInfoDetail.action",
+            url: "/app/takeExpressDelivery/expressOrderDetail.action",
             method: "get",
             getParams: {
-                orderId: that.data.orderId
+                id: that.data.orderId
             },
-            success(res){
-                let systemParamInfo = wx.getStorageSync('systemParamInfo')
-                let groupTimeLimit = systemParamInfo.groupTimeLimit
-                console.log(groupTimeLimit)
-                console.log('========')
-                res.data.countTime = res.data.createTime.replace(/\-/g, "/")
-                let Target = new Date(res.data.countTime).getTime() + (groupTimeLimit * 60 * 1000)
-                res.data.countTime = util.formatTime(new Date(Target))
-                console.log(res.data.countTime)
+            success(res) {
+                // res.data.photo = that.data.urlBefore + res.data.photo
+                // console.log(res.data.photo)
                 that.setData({
-                    categoryPay: res.data.category,
                     detailsInfo: res.data
                 })
             }
@@ -279,7 +256,7 @@ Page({
     },
 
     /** 显示取消订单弹窗. */
-    cancleOrderFn(){
+    cancleOrderFn() {
         let that = this
         that.setData({
             cancelOrderShow: true
@@ -294,39 +271,10 @@ Page({
         })
     },
 
-    /** 确认取消订单. */
-    confirmCancelFn(){
-        let that = this
-        let orderId = that.data.orderId
-        wx.showLoading({
-            title: '取消中',
-        })
-        app.appRequest({
-            url: '/app/orderInfo/cancelOrderInfo.action',
-            method: 'post',
-            postData: {
-                orderId: orderId
-            },
-            success(res) {
-                wx.hideLoading()
-                if (res.code == 200) {
-                    wx.showToast({
-                        title: res.message,
-                        icon: 'none'
-                    })
-                    that.setData({
-                        cancelOrderShow: false
-                    })
-                    that.getOrderDetailsFn(orderId)
-                }
-            }
-        })
-    },
-
     /** 点击头部返回订单列表. */
-    backOrderListsFn(){
+    backOrderListsFn() {
         wx.redirectTo({
-            url: '/pages/order/order',
+            url: '/pages/oneYuanOrder/oneYuanOrder',
         })
     },
     /**

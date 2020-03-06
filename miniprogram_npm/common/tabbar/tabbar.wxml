@@ -9,7 +9,7 @@
         <view wx:if="{{i == 2}}" class="yuyue">
             <!-- <image src="../../../images/icon/about.png"></image> -->
             <view class="dz">
-                <text>预订</text>
+                <text>约餐</text>
             </view>
         </view>
     </view>

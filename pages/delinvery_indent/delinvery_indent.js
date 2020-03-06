@@ -95,9 +95,17 @@ Page({
     toDeailsFn(e) {
         console.log(e)
         let orderId = e.currentTarget.dataset.id
-        wx.navigateTo({
-            url: '/pages/order_details/order_details?orderId=' + orderId,
-        })
+        let category = e.currentTarget.dataset.category
+        if (category == 1){
+            wx.navigateTo({
+                url: '/pages/order_details/order_details?orderId=' + orderId,
+            })
+        }else{
+            wx.navigateTo({
+                url: '/pages/orderDeliveryDetails/orderDeliveryDetails?orderId=' + orderId,
+            })
+        }
+        
     },
 
     /** 获取今日日期 */
@@ -265,6 +273,7 @@ Page({
         let deliveryUserId = e.currentTarget.dataset.item.deliveryUserId
         let name = e.currentTarget.dataset.item.deliveryUserName
         let orderid = e.currentTarget.dataset.orderid
+        let category = e.currentTarget.dataset.category
         this.setData({
             page: 1,
             groupOrderList: []
@@ -283,17 +292,17 @@ Page({
             })
             return false
         }
-
-        this.updateOrderInfoDeliveryUser(orderid, deliveryUserId, name)
+        this.updateOrderInfoDeliveryUser(orderid, deliveryUserId, name, category)
     },
 
     /** 指派送餐员请求接口. */
-    updateOrderInfoDeliveryUser(orderId, deliveryUser, name) {
+    updateOrderInfoDeliveryUser(orderId, deliveryUser, name, category) {
         let that = this
         app.appRequest({
             url: "/app/deliveryGroupOrder/updateOrderInfoDeliveryUser.action",
             method: 'post',
             postData: {
+                category: category,
                 orderId: orderId,
                 deliveryUser: deliveryUser
             },
@@ -339,7 +348,9 @@ Page({
     personAppointFn(e) {
         let name = e.currentTarget.dataset.item
         let orderid = e.currentTarget.dataset.orderid
+        let category = e.currentTarget.dataset.category
         this.setData({
+            category: category,
             orderId: orderid,
             appointName: name,
             appointShow: true
@@ -358,40 +369,83 @@ Page({
     confirmAppointFn() {
         let that = this
         let orderId = this.data.orderId
+        let category = this.data.category
         let appointName = this.data.appointName
         let reportErrorText = this.data.reportErrorText
-        if (appointName == '取餐') {
-            app.appRequest({
-                url: '/app/deliveryGroupOrder/updateOrderInfoTakeTime.action',
-                method: 'post',
-                postData: {
-                    orderId: orderId
-                },
-                success(res) {
-                    that.setData({
-                        lists: [],
-                        page: 1,
-                        appointShow: false
-                    })
-                    that.listDeliveryGroupOrderByPersonFn()
-                }
-            })
+        console.log(category)
+        if (appointName == '取餐' || appointName == '取件' ) {
+            // /app/deliveryGroupOrder/updateExpressOrderPickup.action
+            if (category != 2) {
+                app.appRequest({
+                    url: '/app/deliveryGroupOrder/updateOrderInfoTakeTime.action',
+                    method: 'post',
+                    postData: {
+                        orderId: orderId
+                    },
+                    success(res) {
+                        that.setData({
+                            lists: [],
+                            page: 1,
+                            appointShow: false
+                        })
+                        that.listDeliveryGroupOrderByPersonFn()
+                    }
+                })
+            }else{
+                app.appRequest({
+                    url: '/app/deliveryGroupOrder/updateExpressOrderPickup.action',
+                    method: 'post',
+                    postData: {
+                        orderId: orderId
+                    },
+                    success(res) {
+                        that.setData({
+                            lists: [],
+                            page: 1,
+                            appointShow: false
+                        })
+                        that.listDeliveryGroupOrderByPersonFn()
+                    }
+                })
+            }
+            
         } else if (appointName == '送达') {
-            app.appRequest({
-                url: '/app/deliveryGroupOrder/updateOrderInfoDeliveryTime.action',
-                method: 'post',
-                postData: {
-                    orderId: orderId
-                },
-                success(res) {
-                    that.setData({
-                        lists: [],
-                        page: 1,
-                        appointShow: false
-                    })
-                    that.listDeliveryGroupOrderByPersonFn()
-                }
-            })
+            // /app/deliveryGroupOrder/updateExpressOrderFinish.action
+            if(category != 2){
+                app.appRequest({
+                    url: '/app/deliveryGroupOrder/updateOrderInfoDeliveryTime.action',
+                    method: 'post',
+                    postData: {
+                        category: category,
+                        orderId: orderId
+                    },
+                    success(res) {
+                        that.setData({
+                            lists: [],
+                            page: 1,
+                            appointShow: false
+                        })
+                        that.listDeliveryGroupOrderByPersonFn()
+                    }
+                })
+            } else {
+                app.appRequest({
+                    url: '/app/deliveryGroupOrder/updateExpressOrderFinish.action',
+                    method: 'post',
+                    postData: {
+                        orderId: orderId
+                    },
+                    success(res) {
+                        that.setData({
+                            lists: [],
+                            page: 1,
+                            appointShow: false
+                        })
+                        that.listDeliveryGroupOrderByPersonFn()
+                    }
+                })
+            }
+           
         } else if (appointName == '出错') {
             app.appRequest({
                 url: '/app/deliveryGroupOrder/updateOrderInfoProblem.action',

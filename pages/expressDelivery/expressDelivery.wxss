@@ -1,0 +1,92 @@
+/* pages/expressDelivery/expressDelivery.wxss */
+
+page {
+    background-color: #f0f0f0;
+}
+
+.container {
+    box-sizing: border-box;
+    padding-top: 20rpx;
+}
+
+.deliveryWrap {
+    width: 500rpx;
+    height: 300rpx;
+    background: #d0d0d0;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 4rpx;
+}
+
+.tips {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-height: 300rpx;
+    color: #666;
+}
+
+.inputText {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.textarea{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    color: #666;
+    padding: 40rpx;
+    font-size: 28rpx;
+}
+
+.uploadImage image{
+    width: 500rpx;
+    height: 300rpx;
+}
+
+.tipsMessage{
+    width: 80%;
+    margin: 30rpx auto 0;
+    font-size: 28rpx;
+    color: #333;
+}
+
+.uploadImageBtn{
+    padding: 0 20rpx;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 400rpx;
+}
+.uploadImageBtn .uploadImage{
+    display: flex;
+    width: 50%;
+    height: 400rpx;
+    justify-content: center;
+    align-items: center;
+}
+
+.uploadImageBtn .image1{
+    width: 100%;
+    height: 100%;
+}
+.uploadImageBtn .image2{
+    width: 100rpx;
+    height: 100rpx;
+}
+
+
+.confirmBtn {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+}

@@ -1,0 +1,45 @@
+<!--pages/oneYuanOrder/oneYuanOrder.wxml-->
+<view class="container">
+    <view wx:if="{{orderLists.length != 0}}">
+        <view wx:for="{{orderLists}}" wx:key="index"  class="relative padding_top_5">
+            <view class="flex flex_space_between box_sizing padding_left_right_20">
+                <view class="color_4dc width_100 font_size_14 font_weight flex flex_space_between">
+                    <view>
+                        <text class="margin_right_10">订单号:</text>
+                        <text class="font_weight">{{item.id}}</text>
+                    </view>
+                    <view>
+                        <text>{{item.statusName}}</text>
+                    </view>
+                </view>
+            </view>
+            <view class="line_height_30 relative font_size_14 box_sizing padding_left_right_20">
+                <!-- 点击跳转详情. -->
+                <view data-id="{{item.id}}" bindtap="toDeailsFn" class="z_index_3" style="position:absolute; width:90%;height:100%;"></view>
+                <view class="color_8484">
+                    <text>取件码：</text>
+                    <text>{{item.code}}</text>
+                </view>
+                <view class="color_8484">
+                    <text>下单时间：</text>
+                    <text>{{item.createTime}}</text>
+                </view>
+                <view class="color_8484">
+                    <text>配送方式：</text>
+                    <text>{{item.deliveryMode == 1 ? '到店自取' : '快递配送'}}</text>
+                </view>
+                <view class="color_8484 z_index_2" style="position:absolute;right:40rpx;bottom:0rpx;">
+                    <text>总计：</text>
+                    <text class="color_ff6 font_size_20">￥{{item.amount}}</text>
+                </view>
+                <!-- <view class="color_666 font_size_12 z_index_4" style="position:absolute;right:40rpx;top:2rpx;">
+                    <text>文字文字</text>
+                </view> -->
+            </view>
+            <line/>
+        </view>
+    </view>
+    <view wx:else class="text_center line_height_100 color_999">
+        <text>暂无订单</text>
+    </view>
+</view>

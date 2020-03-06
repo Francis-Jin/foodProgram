@@ -461,7 +461,7 @@
         <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
             <text>提示</text>
         </view>
-        <view class="font_size_14 color_8484 text_center padding_bottom_20">
+        <view class="font_size_14 box_sizing padding_left_right_20 color_8484 text_center padding_bottom_20">
             <text>真抱歉，只有充值用户才能享受VIP优惠！</text>
         </view>
         <view class="flex flex_space_between">

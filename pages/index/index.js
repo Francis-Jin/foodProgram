@@ -38,6 +38,7 @@ Page({
         bus_y: 0,
         // 今日时蔬图片
         toDaySSInfo: '',
+        isShowDate: false,
     },
 
     /**
@@ -95,6 +96,13 @@ Page({
         this.getDishCategoryFn()
         this.getToDaySSData()
         this.getListIndexRecommendFn()
+    },
+
+    /** 跳转到取快递. */
+    toDeliveryFn(){
+        this.setData({
+            isShowDate: true
+        })
     },
 
     /** 获取首页菜品推荐. */
@@ -710,6 +718,7 @@ Page({
             listsRight: [],
             page: 1
         })
+        this.getDishCategoryFn()
         this.getToDaySSData()
         this.getDataLists()
     },

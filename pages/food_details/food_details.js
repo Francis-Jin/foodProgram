@@ -15,6 +15,7 @@ Page({
         foodId: '',//菜品ID
         vipSavePrice: '',
 
+        isDaiJinChiShow: false,
         // =============
         haveMealAddresInfo: null, // 用餐地址选择返回
         takeMealsAddressId: null, //选择回来的取餐地址ID
@@ -177,7 +178,6 @@ Page({
         let that = this;
         let Item = e.currentTarget.dataset.item;
         let garnishInfo = that.data.garnishInfo;
-
         
         let newGarnishInfo = garnishInfo.filter(item => item.checked)
         if (!Item.checked && newGarnishInfo.length > 1){
@@ -203,6 +203,7 @@ Page({
 
     /** 各种价格计算总价 */
     allPrcieCalculationFn(){
+        // listDishInfoByRecommendArr
         let that = this
         // 主菜品
         let VipActualAmountPaid = 0
@@ -211,27 +212,40 @@ Page({
         let VipDiscount = 0 // vip优惠
         let DaiJinChiDiscount = 0 // 代金池优惠
         let info = that.data.info
+        let userInfo = wx.getStorageSync('userInfo')
         // 配菜
         let garnishInfo = that.data.garnishInfo
         // 推荐小食
         let listDishInfoByRecommendArr = that.data.listDishInfoByRecommendArr
-        if (garnishInfo && listDishInfoByRecommendArr){
+        console.log(listDishInfoByRecommendArr)
+        /**
+         * if (garnishInfo && listDishInfoByRecommendArr){
             let newGarnishInfo = garnishInfo.filter(item => item.checked)
             let newListDishInfo = listDishInfoByRecommendArr.filter(item => item.quantity > 0)
             newGarnishInfo.forEach(item => {
                 ActualAmountPaid += item.price
             })
             newListDishInfo.forEach(item => {
-                ActualAmountPaid += item.bookPrice
+                ActualAmountPaid += item.bookPrice * item.quantity
             })
         }
-        ActualAmountPaid += info.price
-        ActualAmountPaid = ActualAmountPaid - info.price + info.vipPrice
-        VipActualAmountPaid = ActualAmountPaid
+        */
+        let newListDishInfo = listDishInfoByRecommendArr.filter(item => item.quantity > 0)
+        // console
+        newListDishInfo.forEach(item => {
+            ActualAmountPaid += item.bookPrice * item.quantity
+        })
         VipDiscount = info.price - info.vipPrice
         DaiJinChiDiscount = info.deductAmount
-        TotalSavings = DaiJinChiDiscount + VipDiscount
-        ActualAmountPaid = ActualAmountPaid - DaiJinChiDiscount
+        ActualAmountPaid += info.price
+        VipActualAmountPaid = ActualAmountPaid - info.price + info.vipPrice
+        if(userInfo.vip == 1){
+            ActualAmountPaid = ActualAmountPaid - info.price + info.vipPrice
+            TotalSavings = VipDiscount
+        }else{
+            ActualAmountPaid = ActualAmountPaid - DaiJinChiDiscount
+            TotalSavings = DaiJinChiDiscount
+        }
         that.setData({
             VipActualAmountPaid: VipActualAmountPaid.toFixed(2),
             ActualAmountPaid: ActualAmountPaid.toFixed(2),
@@ -300,6 +314,7 @@ Page({
     ImmediatePaymentFn(){
         let that = this
         let Info = that.data.info
+        if(Info.stock < 1) return false
         let userInfo = wx.getStorageSync("userInfo")
         if (!userInfo) {
             wx.redirectTo({
@@ -307,8 +322,33 @@ Page({
             })
             return false
         }
-        if(Info.stock < 1) return false
-        that.setData({
+        // let GarnishInfo = that.data.garnishInfo
+        // let newGarnishInfo = GarnishInfo.filter(item => item.checked)
+        // if (newGarnishInfo.length < 1 && Info.openVegetable == 1) {
+        //     wx.showToast({
+        //         title: '请选择配菜',
+        //         icon: 'none'
+        //     })
+        //     return false
+        // }
+        // 提示代金池余额不足
+        if (userInfo.voucherBalance < Info.deductAmount){
+            this.setData({
+                isDaiJinChiShow: true
+            })
+        } else{
+            that.setData({
+                showSpellList: true,
+                isVipBuyStatus: true
+            })
+        }
+        
+    },
+
+    /** 点击直接购买. */
+    directBuyFn(){
+        this.setData({
+            isDaiJinChiShow: false,
             showSpellList: true,
             isVipBuyStatus: true
         })
@@ -317,10 +357,18 @@ Page({
     /** 点击vip直购. */
     vipBuyFn() {
         let that = this
-        let userInfo = that.data.userInfo
+        let userInfo = wx.getStorageSync("userInfo")
         let info = that.data.info
+        let Info = that.data.info
+        if (Info.stock < 1) return false
         let voucherBalance = userInfo.balance
         let price = info.price
+        if (!userInfo) {
+            wx.redirectTo({
+                url: '/pages/login/login?isLogin=true',
+            })
+            return false
+        }
         if (voucherBalance > price) {
             that.setData({
                 showSpellList: true,
@@ -341,7 +389,8 @@ Page({
         let Info = that.data.info
         Info.dishId = Info.id
         let GarnishInfo = that.data.garnishInfo
-        let newGarnishInfo = GarnishInfo.filter(item => item.checked)
+        let newGarnishInfo = []
+        // newGarnishInfo = GarnishInfo.filter(item => item.checked)
         let ListDishInfoByRecommendArr = that.data.listDishInfoByRecommendArr
         let newListDishInfo = ListDishInfoByRecommendArr.filter(item => item.quantity > 0)
         let addressItem = that.data.haveMealAddresInfo
@@ -355,9 +404,9 @@ Page({
         //     ingredientId: item.isRecommend == 0 ? arr3.join() : ''
         // })
         let GarnishId = []
-        newGarnishInfo.forEach(item=>{
-            GarnishId.push(item.ingredientId)
-        })
+        // newGarnishInfo.forEach(item=>{
+        //     GarnishId.push(item.ingredientId)
+        // })
         let dishInfoArr = []
         dishInfoArr.push({
             dishId: Info.dishId,
@@ -432,6 +481,8 @@ Page({
 
     /** 点击去拼单. */
     waysOfPurchasingFn(e) {
+        let info = this.data.info
+        if(info.stock < 1) return false
         let type = e.currentTarget.dataset.type
         let userInfo = wx.getStorageSync("userInfo")
         if (!userInfo) {
@@ -682,17 +733,21 @@ Page({
                     },
                     fail(err) {
                         console.log(err)
-                        wx.showModal({
-                            title: '提示',
-                            content: '支付失败',
-                            showCancel: false,
-                            confirmColor: "#5bcbc8",
-                            success(res) {
-                                wx.navigateTo({
-                                    url: '/pages/order/order',
-                                })
-                            }
+                        wx.showToast({
+                            title: '支付取消',
+                            icon: 'none'
                         })
+                        // wx.showModal({
+                        //     title: '提示',
+                        //     content: '支付失败',
+                        //     showCancel: false,
+                        //     confirmColor: "#5bcbc8",
+                        //     success(res) {
+                        //         wx.navigateTo({
+                        //             url: '/pages/order/order',
+                        //         })
+                        //     }
+                        // })
                     }
                 })
             }
@@ -916,7 +971,7 @@ Page({
         let _type = e.currentTarget.dataset.type
         let userInfo = wx.getStorageSync("userInfo")
         let info = that.data.info
-
+        console.log(info)
         if (!userInfo) {
             wx.redirectTo({
                 url: '/pages/login/login?isLogin=true',
@@ -933,13 +988,13 @@ Page({
             //     url: '/pages/account/account',
             // })
         } else if (_type == 2) {
-            if (info.stock == 0) return false
+            if (info.stock < 1) return false
             // 去拼单
             wx.navigateTo({
                 url: '/pages/make_up_list/make_up_list?foodId=' + this.data.foodId,
             })
         } else if (_type == 3) {
-            if (info.stock == 0) return false
+            if (info.stock < 1) return false
             // 去充值
             wx.navigateTo({
                 url: '/pages/recharge/recharge',
@@ -958,6 +1013,7 @@ Page({
 
     /** 数量加减. */
     addReduceFn(e) {
+        console.log("增加数量")
         let that = this
         let status = e.currentTarget.dataset.status
         let type = e.currentTarget.dataset.type

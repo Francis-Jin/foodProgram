@@ -108,3 +108,7 @@
 .sectionMessage .item:nth-child(4n){
     margin-right: 0;
 }
+
+.dandianName{
+    width: 280rpx !important;
+}

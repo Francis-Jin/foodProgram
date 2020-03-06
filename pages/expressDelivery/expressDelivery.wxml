@@ -1,59 +1,41 @@
-<!--pages/appointment_today/appointment_today.wxml-->
-<view class="container box_sizing padding_left_right_20">
-    <view class="flex padding_top_10 padding_bottom_10 border_bottom">
-        <view class="width_fixed_15 height_fixed_15 margin_right_10">
-            <image class="width_height_100 vertical_middle" src="/images/icon/lunch.png"></image>
+<!--pages/expressDelivery/expressDelivery.wxml-->
+<view class="container">
+    <view class="deliveryWrap">
+        <view wx:if="{{tapStauts == 0}}" class="tips" bindtap="clickTapStatus">
+            <text>点击输入</text>
         </view>
-        <view class="font_size_14 color_333">
-            <text wx:if="{{isToDay}}">预定今日菜品</text>
-            <text wx:if="{{!isToDay}}">预定早餐</text>
+        <!-- 输入文本 -->
+        <view wx:if="{{tapStauts == 2}}" class="inputText">
+            <textarea class="textarea" bindblur="textareaInputFn" placeholder="粘贴或输入您的快递信息..."></textarea>
         </view>
-    </view>
-    <view>
-        <view wx:if="{{lists.length > 0}}" class="data_lists">
-            <view wx:for="{{lists}}" wx:key="index" class="item relative box_sizing {{index != cartLists.length - 1 ? 'border_bottom' : ''}} flex padding_top_10 padding_bottom_10 relative">
-                <view class="flex">
-                    <view class="width_fixed_60 height_fixed_60">
-                        <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
-                    </view>
-                    <view class="margin_left_10">
-                        <view class="margin_top_10 font_size_14 color_5151">
-                            <text>{{item.dishName}}</text>
-                        </view>
-                        <view class="margin_top_10">
-                            <!-- <text class="margin_right_5 color_a9"><text class="font_size_12">￥</text>14</text> -->
-                            <text class="color_ff6"><text class="font_size_12">￥</text>{{item.bookPrice}}</text>
-                        </view>
-                    </view>
-                    <view style="position:absolute;right:20rpx;bottom:40rpx;">
-                        <view class="flex margin_top_20">
-                            <view data-item="{{item}}" data-type="1" bindtap="addReduceFn" class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="1" bindtap="addReduceFn">
-                                <image class="width_fixed_20 height_fixed_20" src="/images/icon/reduce.png"></image>
-                            </view>
-                            <view class="width_fixed_20 height_fixed_30 line_height_30 text_center">
-                                <text>{{item.quantity}}</text>
-                            </view>
-                            <view data-item="{{item}}" data-type="2" bindtap="addReduceFn" class="width_fixed_30 height_fixed_30 line_height_30 text_center font_size_24 color_e3" data-itemId="{{item.id}}" data-type="2" bindtap="addReduceFn">
-                                <image class="width_fixed_20 height_fixed_20" src="/images/icon/add.png "></image>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-            </view>
-        </view>
-        <view wx:else class="text_center margin_top_50 color_999 font_size_14">
-            <text>暂无数据</text>
-        </view>
+        
     </view>
 
-    <view wx:if="{{totalPriceAll>0}}" class="selectedWrap border_radius_20 margin_top_20 padding_bottom_10">
+    <!-- 提示信息 -->
+    <view class="tipsMessage">
+        <text>请将您的快递信息完整复制到此处或上传您的快递取件信息截图</text>
+        <text class="color_999">（仅限一张）</text>
+    </view>
 
+    <!-- 上传按钮 -->
+    <view class="uploadImageBtn">
+        <!-- 上传图片 -->
+        <view wx:if="{{tapStauts == 2 && photoFile != ''}}" class="uploadImage">
+            <image class="image1" src="{{photoFile}}" mode="aspectFit"></image>
+        </view>
+        <view class="uploadImage" bindtap="uploadImageBtnFn">
+            <image class="image2" src="../../images/icon/upimg.png" mode="aspectfit"></image>
+        </view>
+
+    </view>
+    <!-- 时间。配送方式选择 -->
+    <view class="timeAndDelivery padding_left_right_10">
         <!-- 选择用餐时间. -->
         <view class="section">
             <view class="flex padding_top_10 padding_bottom_10 border_bottom">
                 <view class="line_height_20 width_40">
                     <image class="width_fixed_20 line_height_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/time.png"></image>
-                    <text class="color_5151 font_size_14">选择用餐时间</text>
+                    <text class="color_5151 font_size_14">选择配送时间</text>
                 </view>
             </view>
             <view class="margin_top_10 flex flex_space_between box_sizing padding_left_30">
@@ -63,14 +45,14 @@
                 </view>
                 <view class="flex flex_end text_right" style="margin-top:6rpx;">
                     <view class="padding_left_10 line_height_20 border_radius_5 padding_right_10 font_size_12 background_yellow_liner color_fff" data-type="1" bindtap="selectedAssembleFn">
-                        <text>修改用餐时间</text>
+                        <text>修改配送时间</text>
                     </view>
                 </view>
             </view>
         </view>
 
         <!-- 配送方式选择 -->
-        <view>
+        <view class="border_radius_20 margin_top_20 padding_bottom_10">
             <view class="padding_top_10 padding_bottom_10 border_bottom">
                 <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/tianchongxing-@2x.png"></image>
                 <text class="color_5151 font_size_14">选择配送方式</text>
@@ -107,26 +89,27 @@
                 </view>
             </view>
         </view>
+
     </view>
 
-    <!-- 站位高度 -->
-    <view class="height_fixed_50"></view>
-    <!-- 底部固定部分 -->
-    <view class="flex footer_btn line_height_50 text_center" bindtap="goPayIndentFn">
-        <view class="width_60 font_size_12 bg_666">
-            <text class="color_f7c">实付金额</text>
-            <text class="font_size_16 color_f7c margin_left_10 margin_right_10">￥{{totalPriceAll}}</text>
-            <!-- <text class="color_999">省0.56</text> -->
+    <view style="height:110rpx;"></view>
+</view>
+<!-- 提交订单按钮 -->
+<view class="confirmBtn box_sizing" bindtap="goPayIndentFn">
+    <view class="flex flex_space_between  text_center">
+        <view class="width_60 box_sizing height_fixed_50 line_height_50 bg_666 color_f7c">
+            <text class="font_size_12">实付金额</text>
+            <text class="font_size_16 font_weight margin_left_10 margin_right_10">￥{{systemInfo.expressServiceAmount}}</text>
+            <!-- <text class="color_999 font_size_12">省 ￥0.54</text> -->
         </view>
-        <view class="background_yello2_liner color_fff width_40 color_fff font_size_16">
+        <view class="width_40 height_fixed_50 line_height_50 background_yellow_liner font_size_16 font_weight color_fff">
             <text>立即预定</text>
         </view>
     </view>
 </view>
-
 <!-- 弹出时间选择器 -->
 <van-popup show="{{ showTime }}" position="bottom" bind:close="onCloseAddressFn">
-    <van-picker show-toolbar columns="{{ columns }}" bind:change="onChangeSelectedTimeFn" bind:cancel="onCloseAddressFn" bind:confirm="confirmSelectedTimeFn" />
+    <van-picker show-toolbar columns="{{ columns }}" range-key="1" bind:change="onChangeSelectedTimeFn" bind:cancel="onCloseAddressFn" bind:confirm="confirmSelectedTimeFn" />
 </van-popup>
 
 <!-- 弹出支付方式选择. -->
@@ -176,7 +159,7 @@
         <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
             <text>提示</text>
         </view>
-        <view class="font_size_14 box_sizing padding_left_right_20 color_8484 text_center padding_bottom_20">
+        <view class="font_size_14 color_8484 text_center padding_bottom_20 box_sizing padding_left_right_20">
             <text>真抱歉，只有充值用户才能享受VIP优惠！</text>
         </view>
         <view class="flex flex_space_between">
@@ -191,41 +174,6 @@
                     <text>去充值</text>
                 </view>
             </view>
-        </view>
-    </view>
-</van-popup>
-
-<!-- 弹出预约点餐弹框. -->
-<van-popup show="{{ makeAppointmentShow }}" duration="{{0}}">
-    <view class="relative">
-        <view class="border_radius_10 bg_fff overflow_hidden" style="width:520rpx;">
-            <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
-                <text>支付成功</text>
-            </view>
-            <view class="font_size_0 text_center padding_top_10 padding_bottom_10">
-                <image class="width_fixed_60 height_fixed_60" src="/images/icon/success.png"></image>
-            </view>
-            <view class="flex flex_space_between">
-                <view class="width_100 height_fixed_50 font_size_14 line_height_50 text_center color_5bc" bindtap="toBackIndexFn">
-                    <text>返回首页</text>
-                </view>
-            </view>
-        </view>
-    </view>
-    <view bindtap="toAdvertisementDetailsFn" class="flex border_radius_20 overflow_hidden margin_top_20" style="width:520rpx;">
-        <view class="width_40 bg_black box_sizing padding_right_10">
-            <image class="width_height_100" src="{{urlBefore + advertisingInfo.cover}}"></image>
-        </view>
-        <view class="width_40 line_height_20 bg_black">
-            <view class="color_fff margin_top_5 font_size_14 overflow1">{{advertisingInfo.name}}</view>
-            <view class="color_fff font_size_12">限量{{advertisingInfo.stock}}份</view>
-            <view>
-                <text class="font_size_16 margin_right_10 color_FF8">￥{{advertisingInfo.price}}</text>
-                <text class="del_w_line color_fff font_size_12">￥{{advertisingInfo.marketPrice}}</text>
-            </view>
-        </view>
-        <view class="width_30 line_height_70 background_yello2_liner color_fff text_center">
-            <text class="font_size_14">秒抢</text>
         </view>
     </view>
 </van-popup>

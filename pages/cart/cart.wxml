@@ -20,7 +20,7 @@
                             <view style="position:absolute;left:0;top:0;width:100%;height:100%;z-index:2;"></view>
                         </view>
                         <view class="flex">
-                            <view class="width_fixed_80 height_fixed_80" data-itemId="{{item.id}}" bindtap="toDetailsFn">
+                            <view class="width_fixed_80 height_fixed_80" data-itemId="{{item.productId}}" bindtap="toDetailsFn">
                                 <image class="width_height_100 border_radius_5" src="{{urlBefore + item.cover}}" mode="aspectFill"></image>
                             </view>
                             <view class="margin_left_10">
@@ -28,7 +28,7 @@
                                     <text>{{item.productName}}</text>
                                 </view>
                                 <view class="margin_top_30">
-                                    <text class="margin_right_5 color_a9"><text class="font_size_12">原价￥</text>{{item.marketPrice}}</text>
+                                    <text class="margin_right_10 color_a9 del_line"><text class="font_size_12">原价￥</text>{{item.marketPrice}}</text>
                                     <text class="color_ff6"><text class="font_size_12">￥</text>{{item.price}}</text>
                                 </view>
                             </view>
@@ -111,7 +111,7 @@
                             <text class="color_5151">配送费</text>
                         </view>
                         <view class="margin_top_10">
-                            <view class="">
+                            <view class="box_sizing padding_left_30">
                                 <block wx:for="{{cartLists}}" wx:key="index">
                                     <view wx:if="{{index == 0}}" class="flex flex_space_between color_666 margin_bottom_10">
                                         <view class="">
@@ -135,7 +135,7 @@
 
                             </view>
                             <view class="margin_top_10 border_top">
-                                <view class="flex line_height_40 flex_space_between color_333">
+                                <view class="flex line_height_40 flex_space_between color_333 box_sizing padding_left_30">
                                     <view class="">
                                         <text>合计</text>
                                     </view>
@@ -184,29 +184,46 @@
 
     <!-- 底部 -->
     <view class="footer_buy_del bg_fff box_shadow padding_left_20" style="bottom:{{isIpx?'150':'110'}}rpx">
-        <view class="slelected line_height_50 color_5353">
+        <view class="slelected color_5353 width_70 flex flex_space_between">
             <!-- <checkbox-group bindtap="checkboxChange">
                 <label class="checkbox">
                     <checkbox checked="{{checkedAll}}" />
                     <text class="margin_left_5">全选</text>
                 </label>
             </checkbox-group> -->
-            <view class="color_ff6">
-                <text class="font_size_14 margin_right_10">实付金额</text>
-                <text wx:if="{{deliveryMode == 1 || deliveryMode == ''}}" class="font_size_18">￥{{totalPrice}}</text>
-                <text wx:if="{{deliveryMode == 2}}" class="font_size_18">￥{{expressPageDiscountTotalAll}}</text>
+            <view class="flex flex_align_items_center">
+                <view wx:if="{{userInfo.vip == 1}}" class="font_size_12">
+                    <text>vip优惠</text>
+                    <text>￥{{vipDiscountTotalAll}}</text>
+                </view>
+                <view wx:if="{{userInfo.vip != 1}}" class="font_size_12">
+                    <text>代金池优惠</text>
+                    <text>￥{{reductionTotalAll}}</text>
+                </view>
             </view>
-        </view>
-        <view class="operation">
-            <view class="flex flex_space_between">
-                <view class="margin_right_10">
-                    <view class="line_height_50 color_9393">
-                        <text hidden="true" class="font_size_14">省 ￥0</text>
+            <view class="color_ff6 flex flex_end box_sizing padding_right_10 padding_top_5">
+                <view class="font_size_12 relative" style="top:14rpx">
+                    <text>实付金额</text>
+                </view>
+                <view>
+                    <view wx:if="{{userInfo.vip != 1}}" class="font_size_18">
+                        <text wx:if="{{deliveryMode == 1 || deliveryMode == ''}}" class="">￥{{wxActualPaymentAmount}}</text>
+                        <text wx:if="{{deliveryMode == 2}}" class="">￥{{expressWxDiscountTotalAll}}</text>
+                    </view>
+                    <view wx:if="{{userInfo.vip == 1}}" class="font_size_18">
+                        <text wx:if="{{deliveryMode == 1 || deliveryMode == ''}}" class="">￥{{totalVIPPriceAll}}</text>
+                        <text wx:if="{{deliveryMode == 2}}" class="">￥{{expressVipDiscountTotalAll}}</text>
+                    </view>
+                    <view class="font_size_12 color_5151"  style="text-indent:4rpx;">
+                        <text wx:if="{{userInfo.vip == 1}}" class="font_size_10">总省￥{{vipDiscountTotalAll}}</text>
+                        <text wx:else class="font_size_10">总省￥{{reductionTotalAll}}</text>
                     </view>
                 </view>
-                <view bindtap="submitOrderFn" class="line_height_50 width_fixed_120 background_yellow_liner text_center color_fff">
-                    <text>立即支付</text>
-                </view>
+            </view>
+        </view>
+        <view class="operation width_30">
+            <view bindtap="submitOrderFn" class="line_height_50  background_yellow_liner text_center color_fff">
+                <text>立即支付</text>
             </view>
         </view>
     </view>

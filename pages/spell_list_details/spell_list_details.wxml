@@ -3,34 +3,36 @@
     <view wx:if="{{lists.length > 0}}" class="lists padding_top_10">
 
         <block wx:for="{{lists}}" wx:key="index">
-            <view data-item="{{item}}" bindtap="waysOfPurchasingFn" class="item flex flex_space_between overflow_hidden border_radius_10 box_shadow margin_bottom_20">
-                <view class="font_size_12 padding_top_10 padding_bottom_10 padding_left_10 box_sizing" style="width:24%">
-                    <view class="color_5151 margin_top_10">
+            <view data-item="{{item}}" bindtap="waysOfPurchasingFn" class="item flex flex_space_between box_sizing padding_bottom_10 border_bottom margin_top_10">
+                <view class="font_size_12" style="width:24%">
+                    <view class="color_5151">
                         <text>剩余时间</text>
                     </view>
                     <view class="color_8484">
-                        <count_down countTime="{{item.createTime}}" color="#666" size="30"></count_down>
+                        <count_down countTime="{{item.createTime}}" color="#FFA835" size="24"></count_down>
                     </view>
                 </view>
-                <view style="width:50%" class="line_height_70">
+                <view style="width:50%">
                     <scroll-view scroll-x="true" class="tab-h" scroll-left="{{navScrollLeft}}" scroll-with-animation="true">
                         <block wx:for="{{item.details}}" wx:for-item="subItem" wx:for-index="index2" wx:key="index2">
-                            <view class="scroll_init width_fixed_50 height_fixed_50 margin_right_15 border_radius__100">
+                            <view class="scroll_init width_fixed_30 height_fixed_30 margin_right_10 border_radius__100">
                                 <image class="width_height_100 border_radius__100" src="{{subItem.photoUrl}}"></image>
                             </view>
                         </block>
                     </scroll-view>
                 </view>
-                <view class="{{ (item.userId == userInfo.id || item.status == 3) ? 'bg_999' : 'background_liner'}} font_size_14 color_fff text_center" style="width:24%">
-                    <view wx:if="{{item.status == 1}}" class="margin_top_15 margin_bottom_5">
-                        <text>差</text>
-                        <text>{{item.requireNumber - item.joinNumber}}</text>
-                        <text>人</text>
-                    </view>
-                    <view class="{{item.status == 1 ? '' : 'line_height_70'}}">
-                        <text wx:if="{{item.status == 2}}">拼单成功</text>
-                        <text wx:if="{{item.status == 3}}">拼单失败</text>
-                        <text wx:else>加入拼单</text>
+                <view class="{{ (item.userId == userInfo.id || item.status == 3) ? 'bg_999' : 'background_yello2_liner'}} border_radius_5 flex flex_center flex_align_items_center font_size_12 color_fff text_center" style="width:24%">
+                    <view>
+                        <view wx:if="{{item.status == 1}}">
+                            <text>差</text>
+                            <text>{{item.requireNumber - item.joinNumber}}</text>
+                            <text>人</text>
+                        </view>
+                        <view>
+                            <text wx:if="{{item.status == 2}}">拼团成功</text>
+                            <text wx:if="{{item.status == 3}}">拼团失败</text>
+                            <text wx:else>加入拼团</text>
+                        </view>
                     </view>
                 </view>
             </view>
@@ -50,7 +52,7 @@
     <view class="box_sizing bg_fff padding_left_right_20 padding_top_10 padding_bottom_10 relative overflow_auto" style="height:760rpx;">
 
         <!-- 用餐方式选择. -->
-         <!-- 配送方式选择 -->
+        <!-- 配送方式选择 -->
         <view class="">
             <view class="padding_top_10 padding_bottom_10 border_bottom">
                 <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/tianchongxing-@2x.png"></image>

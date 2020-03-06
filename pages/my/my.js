@@ -351,6 +351,11 @@ Page({
             wx.navigateTo({
                 url: '/pages/central_kitchen/central_kitchen'
             })
+        } else if (_type == 11) {
+            // 1元快递订单列表入口
+            wx.navigateTo({
+                url: '/pages/oneYuanOrder/oneYuanOrder'
+            })
         }
     },
 

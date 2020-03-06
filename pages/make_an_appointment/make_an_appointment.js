@@ -39,25 +39,10 @@ Page({
         selectedMessageArr: [],
         collocation: [],
         foodIngredient: [],
+        garnishInfo: [],
         takeMealsAddressId: null,
         takeMealsAddress: '选择取餐地址', //选择回来的取餐地址
-        columns: [{
-                values: h,
-                className: 'column1',
-                defaultIndex: 0
-            },
-            {
-                values: m,
-                className: 'column2',
-                defaultIndex: 3
-            },
-            {
-                values: ['可预约'],
-                className: 'column3',
-                defaultIndex: 0
-            }
-        ],
-
+        columns: [],
     },
 
     /**
@@ -69,7 +54,9 @@ Page({
         that.setData({
             selectedDateValue: options.selectedDateValue,
             selectedWordId: options.selectedWordId,
-            symptomId: options.symptomId
+            symptomId: options.symptomId,
+            isThisDay: options.isThisDay,
+            thisTime: options.thisTime
         })
         let addressItem = wx.getStorageSync('addressItem')
         let takeMealsAddressItem = wx.getStorageSync('takeMealsAddressItem')
@@ -78,6 +65,8 @@ Page({
             takeMealsAddressId: takeMealsAddressItem.id, //选择回来的取餐地址ID
             takeMealsAddress: takeMealsAddressItem.address, //选择回来的取餐地址
         })
+        /** 今日日期时间处理. */
+        that.toDayTimeFn()
         // 食材+搭配商品
         that.getListFoodIngredientByBookTimeFn()
         // 推荐单点
@@ -88,7 +77,47 @@ Page({
         that.getGarnishDataFn()
         // 获取基础米饭、服务费
         that.getJichuMiFanFn()
-        
+
+
+    },
+
+    /** 今日日期时间处理. */
+    toDayTimeFn() {
+        let that = this
+        let isThisDay = that.data.isThisDay
+        let thisTime = that.data.thisTime
+        let thisTimeArr = thisTime.split(":")
+        let hours = thisTimeArr[0] * 1 + 1
+        // 时索引
+        let hoursIndex = 0
+        // 分索引
+        let miu = Math.floor((thisTimeArr[1] * 1 + 10) / 10);
+        if (miu > 5) {
+            miu = 0
+            hours = hours + 1
+        }
+        let minValue = miu * 10
+        h.forEach((item, _index) => {
+            if (item == hours) hoursIndex = _index
+        })
+        that.setData({
+            columns: [{
+                    values: h,
+                    className: 'column1',
+                    defaultIndex: isThisDay == 'true' ? hoursIndex : 0
+                },
+                {
+                    values: m,
+                    className: 'column2',
+                    defaultIndex: isThisDay == 'true' ? miu : 0
+                },
+                {
+                    values: ['可预约'],
+                    className: 'column3',
+                    defaultIndex: 0
+                }
+            ],
+        })
     },
 
     /** 获取随机广告. */
@@ -117,23 +146,42 @@ Page({
             url: '/pages/advertisement_details/advertisement_details?itemId=' + advertisingInfo.id,
         })
     },
-    
+
     /** 跳转预约早餐. */
     toAppointmentTodayFn(e) {
+        let that = this
+        let selectedDateValue = that.data.selectedDateValue
+        let ThisDateValue = new Date()
+        let y = ThisDateValue.getFullYear()
+        let m = ThisDateValue.getMonth() + 1
+        let d = ThisDateValue.getDate()
+        let h = ThisDateValue.getHours()
+        let mm = ThisDateValue.getMinutes()
+        let s = ThisDateValue.getSeconds()
+        let ThisDateValueStr = y + '-' + that.isZeroFn(m) + '-' + that.isZeroFn(d)
+        let ThisTimeValueStr = that.isZeroFn(h) + ':' + that.isZeroFn(mm) + ':' + that.isZeroFn(s)
+        let isThisDay = new Date(selectedDateValue).getTime() - new Date(ThisDateValueStr).getTime()
+        isThisDay = isThisDay == 0 ? true : false
         wx.navigateTo({
-            url: '/pages/appointment_today/appointment_today?isToDay=false&selectedDate=' + this.data.selectedDateValue + '&category=1',
+            url: '/pages/appointment_today/appointment_today?isToDay=false&selectedDate=' + this.data.selectedDateValue + '&category=1' + '&isThisDay=' + isThisDay + '&thisTime=' + ThisTimeValueStr,
         })
     },
 
+    /** 判断数值是否小于10 */
+    isZeroFn(str) {
+        if (str < 10) str = '0' + str
+        return str
+    },
+
     /** 获取基础米饭、服务费 */
-    getJichuMiFanFn(){
+    getJichuMiFanFn() {
         let that = this
         app.appRequest({
             url: '/app/dishInfo/getJichuMiFan.action',
             method: 'get',
-            success(res){
-                if(res.code == 200){
-                    if(res.data){
+            success(res) {
+                if (res.code == 200) {
+                    if (res.data) {
                         res.data.name = res.data.name.split(',')
                         that.setData({
                             jiChuMiFanInfo: res.data
@@ -152,15 +200,17 @@ Page({
             url: '/app/recommend/listBookVegetables.action',
             method: 'get',
             getParams: {
-                bookTime: that.data.selectedDateValue
+                bookTime: that.data.selectedDateValue,
+                organsId: that.data.selectedWordId
             },
             success(res) {
                 if (res.code == 200) {
                     if (res.data) {
-                        res.data.forEach(item => item.checked = false)
+                        res.data.forEach(item => item.checked = item.selected == 1 ? true : false)
                         that.setData({
                             garnishInfo: res.data
                         })
+                        that.allPrcieCalculationFn()
                     }
                 } else {
                     wx.showToast({
@@ -197,7 +247,7 @@ Page({
     },
 
     /** 获取留言数据. */
-    getMessageDataFn(){
+    getMessageDataFn() {
         let that = this
         app.appRequest({
             url: '/app/dishInfo/listBookLabel.action',
@@ -208,8 +258,10 @@ Page({
             success(res) {
                 wx.hideLoading()
                 if (res.code == 200) {
-                    if(res.data){
-                        res.data.forEach(item => { item.checked = false })
+                    if (res.data) {
+                        res.data.forEach(item => {
+                            item.checked = false
+                        })
                         that.setData({
                             messageArr: res.data
                         })
@@ -221,26 +273,28 @@ Page({
                     })
                 }
             }
-        }) 
+        })
     },
 
     /** 点击选择留言信息. */
-    selectedMessageFn(e){
+    selectedMessageFn(e) {
         let that = this
         let Item = e.currentTarget.dataset.item
         let messageArr = that.data.messageArr
-        messageArr.forEach(item=>{
-            if(item.id == Item.id) item.checked = !item.checked
+        messageArr.forEach(item => {
+            if (item.id == Item.id) item.checked = !item.checked
         })
-        let newArr = messageArr.filter(item=>item.checked)
+        let newArr = messageArr.filter(item => item.checked)
         let strArr = []
-        newArr.forEach(item=>{strArr.push(item.name)})
+        newArr.forEach(item => {
+            strArr.push(item.name)
+        })
         console.log(strArr)
         that.setData({
             messageArr: messageArr,
             selectedMessageArr: strArr
         })
-        
+
     },
 
     /** 换一组. */
@@ -434,27 +488,27 @@ Page({
 
         that.allPrcieCalculationFn()
     },
-    
+
     /** 价格计算. */
-    allPrcieCalculationFn(){
+    allPrcieCalculationFn() {
         // 计算总价
         let that = this
         let garnishInfo = that.data.garnishInfo
         let collocation = that.data.collocation
         let jiChuMiFanInfo = that.data.jiChuMiFanInfo // 基础米饭、服务费
         let listDishInfoByRecommendArr = that.data.listDishInfoByRecommendArr
-        let arrColl = collocation.filter(item => item.quantity > 0)
-        let arrRecom = listDishInfoByRecommendArr.filter(item => item.quantity > 0)
-        let newGarnishArr = garnishInfo.filter(item=>item.checked)
+        let arrColl = collocation.length > 0 ? collocation.filter(item => item.quantity > 0) : []
+        let arrRecom = listDishInfoByRecommendArr.length > 0 ? listDishInfoByRecommendArr.filter(item => item.quantity > 0) : []
+        let newGarnishArr = garnishInfo.length > 0 ? garnishInfo.filter(item => item.checked) : []
         let totalPriceAll = 0
-        if (newGarnishArr.length > 0) totalPriceAll = jiChuMiFanInfo.price
+        if (newGarnishArr.length > 0 && jiChuMiFanInfo != null) totalPriceAll = jiChuMiFanInfo.price
         arrColl.forEach(item => {
             totalPriceAll += item.quantity * item.bookPrice
         })
         listDishInfoByRecommendArr.forEach(item => {
             totalPriceAll += item.quantity * item.bookPrice
         })
-        newGarnishArr.forEach(item=>{
+        newGarnishArr.forEach(item => {
             totalPriceAll += item.price
         })
         that.setData({
@@ -483,7 +537,6 @@ Page({
 
     /** 选择时间改变时. */
     onChangeSelectedTimeFn(e) {
-        console.log(e)
         let that = this
         let {
             picker,
@@ -492,6 +545,28 @@ Page({
         } = e.detail
         let selectedDateValue = that.data.selectedDateValue
         let newDate = selectedDateValue + ' ' + value[0] + ':' + value[1] + ':' + '00'
+        let isThisDay = that.data.isThisDay
+        let thisTime = that.data.thisTime
+        let thisTimeArr = thisTime.split(":")
+        let hours = thisTimeArr[0] * 1 + 1
+        // 时索引
+        let hoursIndex = 0
+        // 分索引
+        let miu = Math.floor((thisTimeArr[1] * 1 + 10) / 10);
+        if (miu > 5) {
+            miu = 0
+            hours = hours + 1
+        }
+        let minValue = miu * 10
+        h.forEach((item, _index) => {
+            if (item == hours) hoursIndex = _index
+        })
+        if (isThisDay == 'true') {
+            if (hours > value[0] || (hours == value[0] && minValue > value[1])) {
+                picker.setColumnIndex(0, hoursIndex);
+                picker.setColumnIndex(1, miu);
+            }
+        }
         app.appRequest({
             url: '/app/sysConf/getDeliveryTimeStatus.action',
             method: 'get',
@@ -499,14 +574,14 @@ Page({
                 deliveryTime: newDate
             },
             success(res) {
-                let columnVal=[]
+                let columnVal = []
                 if (res.message == '该时段可选') {
                     columnVal = ['可预约']
                     that.setData({
                         selectedTime: value[0] + ':' + value[1]
                     })
                 } else {
-                    columnVal = ['该时段已约满']
+                    columnVal = ['未开放']
                     wx.showToast({
                         title: res.message,
                         icon: 'none'
@@ -731,12 +806,12 @@ Page({
             payShow: true
         })
 
-        
+
 
     },
 
     /** 确认生成订单. */
-    saveOrderFn(){
+    saveOrderFn() {
         let that = this
         let selectedId = that.data.selectedId
         let totalPriceAll = that.data.totalPriceAll
@@ -756,23 +831,23 @@ Page({
                     that.setData({
                         orderId: orderId
                     })
-                    if (selectedId == 1){
+                    if (selectedId == 1) {
                         that.wxPayFn()
                         that.setData({
                             payShow: false
                         })
-                    }else{
+                    } else {
                         if (userInfo.vip == 0) {
                             that.setData({
                                 isVipShow: true
                             })
                         } else {
-                            
-                            if (vipBalance > totalPriceAll){
+
+                            if (vipBalance > totalPriceAll) {
                                 wx.navigateTo({
                                     url: '/pages/inputPassword/inputPassword?orderId=' + orderId,
                                 })
-                            }else{
+                            } else {
                                 // 会员充值
                                 wx.navigateTo({
                                     url: '/pages/recharge/recharge',
@@ -782,7 +857,7 @@ Page({
                             that.setData({
                                 payShow: false
                             })
-                            
+
                         }
                     }
                 } else {

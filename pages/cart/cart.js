@@ -138,6 +138,9 @@ Page({
             })
             this.GetAdvertisingFn()
         }
+        that.setData({
+            userInfo: wx.getStorageSync('userInfo')
+        })
         this.getCartBuyNumberFn()
     },
 

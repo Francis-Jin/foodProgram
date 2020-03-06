@@ -14,13 +14,14 @@
     <view wx:if="{{selectedActive == 1}}" class="content_wrap box_sizing padding_left_right_20">
         <view wx:if="{{groupOrderList.length > 0}}">
             <block wx:for="{{groupOrderList}}" wx:key="index">
-                <view class="margin_bottom_20">
-                    <view class="flex flex_space_between" data-id="{{item.orderId}}" bindtap="toDeailsFn">
+                <view class="">
+                    <view class="flex flex_space_between" data-id="{{item.orderId}}" data-category="{{item.category}}" bindtap="toDeailsFn">
                         <view class="color_4dc font_size_14">
                             <text class="margin_right_5">订单号：</text>
                             <text>{{item.orderId}}</text>
                         </view>
-                        <view class="color_666">
+                        <view class="color_666" style="display:flex;align-items:center;">
+                            <text wx:if="{{item.category == 2}}" class="background_yellow_liner relative" style="top:-6rpx;padding: 2rpx 12rpx;border-radius:12rpx;color:#fff;font-size:24rpx;">取件</text>
                             <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle relative" style="top:-6rpx;" src="/images/icon/more.png"></image>
                         </view>
                     </view>
@@ -32,7 +33,7 @@
                                 <text class="margin_left_10 color_5353 font_size_12">{{item.phone}}</text>
                             </view>
                             <view class="flex">
-                                <view class="width_40">
+                                <view class="width_40" style="width:42%">
                                     <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle" src="/images/icon/dizhi@2x.png"></image>
                                     <text class="margin_left_10 color_5353 font_size_12">地 址：</text>
                                 </view>
@@ -53,7 +54,7 @@
                         </view>
                     </view>
                     <view class="margin_top_20 color_5151 padding_bottom_20 border_bottom flex flex_wrap">
-                        <view wx:for="{{item.deliveryUserList}}" wx:key="index" wx:for-item="nameItem" data-deliveryuser="{{item.deliveryUser}}" data-orderid="{{item.orderId}}" data-item="{{nameItem}}" bindtap="appointFn" class="{{item.deliveryUser == nameItem.deliveryUserId ? 'active' : ''}} appoint_item  width_fixed_60 line_height_20 font_size_12 bg_f5 text_center margin_right_10 margin_bottom_10 border_radius_10">
+                        <view wx:for="{{item.deliveryUserList}}" wx:key="index" wx:for-item="nameItem" data-deliveryuser="{{item.deliveryUser}}" data-category="{{item.category}}" data-orderid="{{item.orderId}}" data-item="{{nameItem}}" bindtap="appointFn" class="{{item.deliveryUser == nameItem.deliveryUserId ? 'active' : ''}} appoint_item  width_fixed_60 line_height_20 font_size_12 bg_f5 text_center margin_right_10 margin_bottom_10 border_radius_10">
                             <text>{{nameItem.deliveryUserName}}</text>
                         </view>
                     </view>
@@ -72,12 +73,13 @@
         <view wx:if="{{lists.length > 0}}">
             <block wx:for="{{lists}}" wx:key="index">
                 <view class="margin_bottom_20">
-                    <view class="flex flex_space_between" data-id="{{item.orderId}}" bindtap="toDeailsFn">
+                    <view class="flex flex_space_between" data-id="{{item.orderId}}" data-category="{{item.category}}" bindtap="toDeailsFn">
                         <view class="color_4dc font_size_14">
                             <text class="margin_right_5">订单号：</text>
                             <text>{{item.orderId}}</text>
                         </view>
-                        <view class="color_666">
+                        <view class="color_666" style="display:flex;align-items:center;">
+                            <text wx:if="{{item.category == 2}}" class="background_yellow_liner relative" style="top:-6rpx;padding: 2rpx 12rpx;border-radius:12rpx;color:#fff;font-size:24rpx;">取件</text>
                             <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle relative" style="top:-6rpx;" src="/images/icon/more.png"></image>
                         </view>
                     </view>
@@ -89,7 +91,7 @@
                                 <text class="margin_left_10 color_5353 font_size_12">{{item.phone}}</text>
                             </view>
                             <view class="flex">
-                                <view class="width_40">
+                                <view class="width_40" style="width:42%">
                                     <image class="width_fixed_20 height_fixed_20 bg_5fc border_radius__100 vertical_middle" src="/images/icon/dizhi@2x.png"></image>
                                     <text class="margin_left_10 color_5353 font_size_12">地 址：</text>
                                 </view>
@@ -123,14 +125,15 @@
                         </view> -->
                         <view wx:if="{{item.status == 3 || item.status == 4}}" class="color_5151  flex flex_space_between font_size_14 line_height_20 border_radius_5">
                             <view class="width_50 flex flex_space_between">
-                                <view wx:if="{{item.status == 3}}" data-orderid="{{item.orderId}}" data-item="取餐" bindtap="personAppointFn" class="jd_item active width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
-                                    <text>取餐</text>
+                                <view wx:if="{{item.status == 3}}" data-category="{{item.category}}" data-orderid="{{item.orderId}}" data-item="{{item.category == 2 ? '取件' : '取餐'}}" bindtap="personAppointFn" class="jd_item active width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
+                                    <text wx:if="{{item.category != 2}}">取餐</text>
+                                    <text wx:else>取件</text>
                                 </view>
-                                <view wx:if="{{item.status == 4}}" data-orderid="{{item.orderId}}" data-item="送达" bindtap="personAppointFn" class="jd_item active width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
+                                <view wx:if="{{item.status == 4}}" data-category="{{item.category}}" data-orderid="{{item.orderId}}" data-item="送达" bindtap="personAppointFn" class="jd_item active width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
                                     <text>送达</text>
                                 </view>
                             </view>
-                            <view data-orderid="{{item.orderId}}" data-item="出错" bindtap="personAppointFn" class="jd_item width_40 flex flex_space_between">
+                            <view wx:if="{{item.category != 2}}" data-category="{{item.category}}" data-orderid="{{item.orderId}}" data-item="出错" bindtap="personAppointFn" class="jd_item width_40 flex flex_space_between">
                                 <view></view>
                                 <view class="width_fixed_60 color_5151 border_radius_20 bg_f5 font_size_12 text_center">
                                     <text>出错</text>

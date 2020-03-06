@@ -3,7 +3,7 @@
 <view class="container box_sizing padding_10">
 
     <view wx:if="{{orderLists.length != 0}}" class="content_wrap">
-        <view wx:for="{{orderLists}}" wx:key="index" class=" relative">
+        <view wx:for="{{orderLists}}" wx:key="index" class="padding_top_5 relative">
             <view class="flex flex_space_between box_sizing padding_left_right_20">
                 <view class="color_4dc font_size_14 font_weight">
                     <view wx:if="{{item.status == 2 || item.status == 3 || item.status == 4 || item.status == 5}}">
@@ -193,7 +193,7 @@
         <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
             <text>提示</text>
         </view>
-        <view class="font_size_14 color_8484 text_center padding_bottom_20">
+        <view class="font_size_14 box_sizing padding_left_right_20 color_8484 text_center padding_bottom_20">
             <text>真抱歉，只有充值用户才能享受VIP优惠！</text>
         </view>
         <view class="flex flex_space_between">

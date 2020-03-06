@@ -67,6 +67,18 @@ App({
         })
     },
 
+    /** 获取信息 */
+    getMessageFn() {
+        let that = this
+        that.appRequest({
+            url: '/app/sysConf/getSysConf.action',
+            method: 'get',
+            success(res) {
+                wx.setStorageSync('systemParamInfo', res.data)
+            }
+        })
+    },
+
     /**
      * 文件上传公用函数
      */
@@ -185,6 +197,7 @@ App({
                 that.globalData.HH = HH
             },
         })
+        that.getMessageFn()
         that.getTakeMealsListsFn()
         that.updateLineParamsFn()
     },

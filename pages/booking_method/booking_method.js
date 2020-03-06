@@ -26,8 +26,21 @@ Page({
 
     /** 跳转预约早餐. */
     toAppointmentTodayFn(e) {
+        let that = this
+        let selectedDateValue = that.data.selectedDateValue
+        let ThisDateValue = new Date()
+        let y = ThisDateValue.getFullYear()
+        let m = ThisDateValue.getMonth() + 1
+        let d = ThisDateValue.getDate()
+        let h = ThisDateValue.getHours()
+        let mm = ThisDateValue.getMinutes()
+        let s = ThisDateValue.getSeconds()
+        let ThisDateValueStr = y + '-' + that.isZeroFn(m) + '-' + that.isZeroFn(d)
+        let ThisTimeValueStr = that.isZeroFn(h) + ':' + that.isZeroFn(mm) + ':' + that.isZeroFn(s)
+        let isThisDay = new Date(selectedDateValue).getTime() - new Date(ThisDateValueStr).getTime()
+        isThisDay = isThisDay == 0 ? true : false
         wx.navigateTo({
-            url: '/pages/appointment_today/appointment_today?isToDay=false&selectedDate=' + this.data.selectedDateValue + '&category=1',
+            url: '/pages/appointment_today/appointment_today?isToDay=false&selectedDate=' + this.data.selectedDateValue + '&category=1' + '&isThisDay=' + isThisDay + '&thisTime=' + ThisTimeValueStr,
         })
     },
 
@@ -41,6 +54,17 @@ Page({
         let arr1 = firstBookWordLists.filter(item => item.active)
         let selectedArrId = []
         let symptomId = []
+        let ThisDateValue = new Date()
+        let y = ThisDateValue.getFullYear()
+        let m = ThisDateValue.getMonth() + 1
+        let d = ThisDateValue.getDate()
+        let h = ThisDateValue.getHours()
+        let mm = ThisDateValue.getMinutes()
+        let s = ThisDateValue.getSeconds()
+        let ThisDateValueStr = y + '-' + that.isZeroFn(m) + '-' + that.isZeroFn(d)
+        let ThisTimeValueStr = that.isZeroFn(h) + ':' + that.isZeroFn(mm) + ':' + that.isZeroFn(s)
+        let isThisDay = new Date(selectedDateValue).getTime() - new Date(ThisDateValueStr).getTime()
+        isThisDay = isThisDay == 0 ? true : false
         arr1.forEach(item=>{
             selectedArrId.push(item.fiveInternalOrgansId)
             symptomId.push(item.id)
@@ -61,8 +85,13 @@ Page({
             return false
         }
         wx.navigateTo({
-            url: '/pages/make_an_appointment/make_an_appointment?selectedDateValue=' + selectedDateValue + '&selectedWordId=' + selectedArrId.join() + '&symptomId=' + symptomId.join(),
+            url: '/pages/make_an_appointment/make_an_appointment?selectedDateValue=' + selectedDateValue + '&selectedWordId=' + selectedArrId.join() + '&symptomId=' + symptomId.join() + '&isThisDay=' + isThisDay + '&thisTime=' + ThisTimeValueStr,
         })
+    },
+
+    isZeroFn(str){
+        if(str < 10) str = '0' + str
+        return str
     },
 
 

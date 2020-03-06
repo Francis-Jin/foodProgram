@@ -349,6 +349,13 @@
       "unicode_decimal": 59504
     },
     {
+      "icon_id": "2506222",
+      "name": "转发",
+      "font_class": "zhuanfa",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
       "icon_id": "2510073",
       "name": "add",
       "font_class": "add1",
@@ -487,6 +494,13 @@
       "font_class": "shenfenxuanze",
       "unicode": "e6db",
       "unicode_decimal": 59099
+    },
+    {
+      "icon_id": "6742309",
+      "name": "微信",
+      "font_class": "weixin",
+      "unicode": "e686",
+      "unicode_decimal": 59014
     },
     {
       "icon_id": "6802215",

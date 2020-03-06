@@ -30,22 +30,7 @@ Page({
         takeMealsAddressId: null,
         takeMealsAddress: '选择取餐地址', //选择回来的取餐地址
         selectedTime: '', // 用餐时间
-        columns: [{
-                values: h,
-                className: 'column1',
-                defaultIndex: 0
-            },
-            {
-                values: m,
-                className: 'column2',
-                defaultIndex: 3
-            },
-            {
-                values: ['可预约'],
-                className: 'column3',
-                defaultIndex: 0
-            }
-        ],
+        columns: [],
     },
 
     /**
@@ -61,6 +46,8 @@ Page({
             haveMealAddresInfo: addressItem,
             takeMealsAddressId: takeMealsAddressItem.id, //选择回来的取餐地址ID
             takeMealsAddress: takeMealsAddressItem.address, //选择回来的取餐地址
+            isThisDay: options.isThisDay,
+            thisTime: options.thisTime
         })
         that.setData({
             selectedDateValue: options.selectedDate,
@@ -76,7 +63,47 @@ Page({
                 title: '预约早餐',
             })
         }
+        that.toDayTimeFn()
         that.getDataFn()
+    },
+
+    /** 今日日期时间处理. */
+    toDayTimeFn() {
+        let that = this
+        let isThisDay = that.data.isThisDay
+        let thisTime = that.data.thisTime
+        let thisTimeArr = thisTime.split(":")
+        let hours = thisTimeArr[0] * 1 + 1
+        // 时索引
+        let hoursIndex = 0
+        // 分索引
+        let miu = Math.floor((thisTimeArr[1] * 1 + 10) / 10);
+        if (miu > 5) {
+            miu = 0
+            hours = hours + 1
+        }
+        let minValue = miu * 10
+        h.forEach((item, _index) => {
+            if (item == hours) hoursIndex = _index
+        })
+        that.setData({
+            columns: [{
+                values: h,
+                className: 'column1',
+                defaultIndex: isThisDay == 'true' ? hoursIndex : 0
+            },
+            {
+                values: m,
+                className: 'column2',
+                defaultIndex: isThisDay == 'true' ? miu : 0
+            },
+            {
+                values: ['可预约'],
+                className: 'column3',
+                defaultIndex: 0
+            }
+            ],
+        })
     },
 
     /** 跳转支付成功后的广告详情. */
@@ -357,6 +384,28 @@ Page({
         } = e.detail
         let selectedDateValue = that.data.selectedDateValue
         let newDate = selectedDateValue + ' ' + value[0] + ':' + value[1] + ':' + '00'
+        let isThisDay = that.data.isThisDay
+        let thisTime = that.data.thisTime
+        let thisTimeArr = thisTime.split(":")
+        let hours = thisTimeArr[0] * 1 + 1
+        // 时索引
+        let hoursIndex = 0
+        // 分索引
+        let miu = Math.floor((thisTimeArr[1] * 1 + 10) / 10);
+        if (miu > 5) {
+            miu = 0
+            hours = hours + 1
+        }
+        let minValue = miu * 10
+        h.forEach((item, _index) => {
+            if (item == hours) hoursIndex = _index
+        })
+        if (isThisDay == 'true') {
+            if (hours > value[0] || (hours == value[0] && minValue > value[1])) {
+                picker.setColumnIndex(0, hoursIndex);
+                picker.setColumnIndex(1, miu);
+            }
+        }
         app.appRequest({
             url: '/app/sysConf/getDeliveryTimeStatus.action',
             method: 'get',
@@ -371,7 +420,7 @@ Page({
                         selectedTime: value[0] + ':' + value[1]
                     })
                 } else {
-                    columnVal = ['该时段已约满']
+                    columnVal = ['未开放']
                     wx.showToast({
                         title: res.message,
                         icon: 'none'

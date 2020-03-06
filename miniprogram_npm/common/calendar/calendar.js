@@ -4,7 +4,8 @@ Component({
      * 组件的属性列表
      */
     properties: {
-        isShowDate: Boolean
+        isShowDate: Boolean,
+        isDelivery: Boolean
     },
 
     /**
@@ -36,6 +37,7 @@ Component({
             let that = this
             let date = that.data.selectedDate
             let time = that.data.selectedTime
+            let isDelivery = that.data.isDelivery
             let userInfo = wx.getStorageSync("userInfo")
             if (!userInfo) {
                 wx.redirectTo({
@@ -50,16 +52,17 @@ Component({
                 })
                 return false
             }
-            console.log(date)
-            // if(!time){
-            //     wx.showToast({
-            //         title: '请选择时间',
-            //         icon: 'none'
-            //     })  
-            //     return false 
-            // }
-            wx.navigateTo({
-                url: '/pages/booking_method/booking_method?date=' + date,
+            if (isDelivery){
+                wx.navigateTo({
+                    url: '/pages/expressDelivery/expressDelivery?date=' + date,
+                })
+            }else{
+                wx.navigateTo({
+                    url: '/pages/booking_method/booking_method?date=' + date,
+                })
+            }
+            that.setData({
+                isShowDate: false
             })
         },
 
@@ -74,9 +77,13 @@ Component({
             if (clickDay < 10) {
                 clickDay = '0' + clickDay
             }
+
             let date = e.currentTarget.dataset.date.join('-') + "-" + clickDay
             let reduce = that.datedifference(date)
-            if (reduce < 1) {
+            let ads = e.currentTarget.dataset.date
+            if(ads[1] < 10) ads[1] = '0' + ads[1]
+            date = ads.join('-') + "-" + clickDay
+            if (reduce < 0) {
                 // if (!status) {
                 //     wx.showToast({
                 //         title: '不可选择今日之前',
@@ -101,6 +108,7 @@ Component({
                 iDays;
             let toDay = new Date()
             let y = toDay.getFullYear(), m = toDay.getMonth() + 1, d = toDay.getDate()
+            // if (m < 10) m = '0' + m
             if (d < 10) d = '0' + d
             let str = y + '-' + m + '-' + d
             str = Date.parse(str);

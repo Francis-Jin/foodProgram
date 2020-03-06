@@ -156,7 +156,7 @@
         <!-- 客服中心 -->
         <view data-type="0" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
             <view class="">
-                <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="iconfont icon-huiyuan color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
                 <text class="margin_left_20 color_5353 font_size_14">客服中心</text>
             </view>
             <view class="color_fff font_weight">
@@ -169,6 +169,17 @@
             <view class="">
                 <text class="iconfont icon-icon color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
                 <text class="margin_left_20 color_5353 font_size_14">收支明细</text>
+            </view>
+            <view class="color_fff font_weight">
+                <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>
+            </view>
+        </view>
+
+        <!-- 1元快递订单 -->
+        <view data-type="11" bindtap="toPageFn" class="flex flex_space_between margin_top_20 box_shadow line_height_60 border_radius_10 box_sizing padding_left_right_20 margin_bottom_20">
+            <view class="">
+                <text class="iconfont icon-swticonkuaidi1 color_5bc relative" style="font-size:40rpx;top:6rpx;"></text>
+                <text class="margin_left_20 color_5353 font_size_14">快递订单</text>
             </view>
             <view class="color_fff font_weight">
                 <image class="width_fixed_20 height_fixed_20 padding_5 bg_fff border_radius__100 vertical_middle" src="/images/icon/more.png"></image>

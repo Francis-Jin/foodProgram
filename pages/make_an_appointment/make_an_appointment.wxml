@@ -52,7 +52,7 @@
                                 <text class="font_size_14 color_5151">请选择以下主时蔬</text>
                             </view>
                         </view>
-                        <view class="flex flex_space_between">
+                        <view wx:if="{{jiChuMiFanInfo != null}}" class="flex flex_space_between">
                             <view class="">
                                 <text style="display:inline-block; margin-top:8rpx;padding:4rpx 0;" class="width_fixed_40 height_fixed_20 text_center border_radius_5 bg_red color_fff">{{jiChuMiFanInfo.price}}<text class="font_size_10">元</text></text>
                             </view>
@@ -177,7 +177,7 @@
                             <view class="width_fixed_40 height_fixed_40 margin_right_10">
                                 <image class="width_fixed_40 height_fixed_40" mode="aspectFit" src="{{urlBefore + item.cover}}"></image>
                             </view>
-                            <view>
+                            <view class="dandianName">
                                 <text>{{item.name}}</text>
                             </view>
                         </view>
@@ -479,7 +479,7 @@
             <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
                 <text>选择支付方式</text>
             </view>
-            <view class="padding_top_20 padding_bottom_20">
+            <view class="padding_bottom_20">
                 <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50 border_bottom" data-type="1" bindtap="selectedPayFn">
                     <view>
                         <text class="iconfont icon-logo-wechat font_weight_600 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
@@ -523,9 +523,6 @@
             <text>真抱歉，只有充值用户才能享受VIP优惠！</text>
         </view>
         <view class="flex flex_space_between">
-            <!-- <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="onCancelOrderFn">
-                <text>暂不充值</text>
-            </view> -->
             <view class="width_100 flex font_weight border_top height_fixed_50 font_size_14 line_height_50 text_center">
                 <view class="width_50 color_999" bindtap="cancelRechargeFn">
                     <text>取消</text>

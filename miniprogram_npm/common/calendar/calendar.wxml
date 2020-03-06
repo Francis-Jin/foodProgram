@@ -35,7 +35,10 @@
             <view class="mouth">
                 <view class="daybox">
                     <view class="day {{selectedDayIndex == index ? 'selectedActive' : ''}}" wx:for="{{date}}" data-date="{{showDate}}" data-day="{{item}}" data-thisday="{{thisDate[2]}}" data-index="{{index}}" data-status="{{index < getPLn || lastLen < index+1}}" wx:key="index" bindtap='linkSuccessSituation'>
-                        <text class='{{index < getPLn || lastLen < index+1 || item <= thisDate[2] ? "prevNext" : "" }}'>{{item}}</text>
+                        <text class='{{index < getPLn || lastLen < index || item < thisDate[2] ? "prevNext" : "" }}'>{{item}}</text>
+                        <view style="line-height:1" wx:if="{{showDate[0]==thisDate[0] && showDate[1]==thisDate[1] && item == (thisDate[2])}}" class="isToday">
+                            <text>今日</text>
+                        </view>
                         <view style="line-height:1" wx:if="{{showDate[0]==thisDate[0] && showDate[1]==thisDate[1] && item == (thisDate[2]+1)}}" class="isToday">
                             <text>明日</text>
                         </view>

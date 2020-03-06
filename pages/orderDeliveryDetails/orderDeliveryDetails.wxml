@@ -1,0 +1,291 @@
+<!--pages/orderDeliveryDetails/orderDeliveryDetails.wxml-->
+<!--pages/order_details/order_details.wxml-->
+<view class="container">
+    <view hidden="true" class="flex flex_space_between line_height_40 topBack bg_fff" style="{{ isIpx ? 'padding-top:90rpx' : 'padding-top:40rpx'}}">
+        <view class="width_30 box_sizing padding_left_10 color_333" bindtap="backOrderListsFn">
+            <text class="iconfont icon-left2"></text>
+        </view>
+        <view class="width_30 text_center font_size_16 font_weight">
+            <text>订单详情</text>
+        </view>
+        <view class="width_30"></view>
+    </view>
+    <view hidden="true" class="height_fixed_70"></view>
+    <view class="padding_left_right_10 padding_bottom_30">
+        <view class="background_bottom_liner padding_top_20 padding_bottom_20 margin_top_20 color_fff border_radius_right_left">
+            <view class="text_center">
+                <text class="margin_right_10">订单状态：</text>
+                <text>{{detailsInfo.statusName}}</text>
+            </view>
+            <view wx:if="{{detailsInfo.status == 8}}" class="text_center">
+                <count_down countTime="{{detailsInfo.countTime}}" color="#fff" align="center" size="60"></count_down>
+            </view>
+        </view>
+        <view wx:if="{{detailsInfo.deliveryMode == 2 && detailsInfo.deliveryUserName != ''}}" class="margin_top_20 box_shadow border_radius_10">
+            <view class="box_sizing border_radius_10 box_shadow padding_left_right_20 line_height_40 color_ff6">
+                <text class="iconfont icon-shenfenxuanze font_weight relative" style="font-size:40rpx;top:6rpx"></text>
+                <text class="font_size_16 margin_left_10">配送员</text>
+            </view>
+            <view class="box_sizing padding_left_right_20" data-tel="{{detailsInfo.deliveryUserPhone}}" bindtap="callTelFn">
+                <view class="init flex flex_space_between line_height_50" data-type="1" bindtap="selectedFn">
+                    <view>
+                        <text class="iconfont icon-huabankaobei- font_weight_100 relative color_ff6" style="font-size:40rpx;top:6rpx"></text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">{{detailsInfo.deliveryUserName}}</text>
+                    </view>
+                    <view class="color_8484">
+                        <text>{{detailsInfo.deliveryUserPhone}}</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+
+        <view class="box_shadow border_radius_10 overflow_hidden margin_top_20 box_sizing padding_left_right_20 relative">
+            <view class="flex flex_space_between line_height_50 border_bottom">
+                <view class="font_size_16 font_weight_600 color_4dc">
+                    <text>快递信息</text>
+                </view>
+            </view>
+            <view class="margin_top_10 padding_bottom_20">
+                <!-- 文字 -->
+                <view wx:if="{{detailsInfo.expressInfo != ''}}" class="font_size_14 margin_bottom_10 color_666 text_indent_28">
+                    <text>{{detailsInfo.expressInfo}}</text>
+                </view>
+                <view wx:if="{{detailsInfo.photo != ''}}" class="deliveryImage" data-url="{{urlBefore + detailsInfo.photo}}" bindtap="lookImageFn">
+                    <image src="{{urlBefore + detailsInfo.photo}}" mode="aspectFit"></image>
+                </view>
+            </view>
+        </view>
+
+        <view class="box_shadow border_radius_10 margin_top_20 box_sizing padding_left_right_20 relative">
+            <view class="margin_top_10 padding_top_5 padding_bottom_10">
+                <!-- 订单信息 -->
+                <view class="margin_top_10 line_height_30 font_size_12">
+
+                    <view class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>订单号</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>{{detailsInfo.id}}</text>
+                        </view>
+                    </view>
+                     <view class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>取件码</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>{{detailsInfo.code}}</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>下单时间</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>{{detailsInfo.createTime}}</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>支付方式</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text wx:if="{{detailsInfo.payMethod==1}}">微信支付</text>
+                            <text wx:if="{{detailsInfo.payMethod==2}}">VIP支付</text>
+                            <text wx:else>{{detailsInfo.statusName}}</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>支付时间</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>{{detailsInfo.payTime == null ? '' : detailsInfo.payTime}}</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>支付金额</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>￥{{detailsInfo.amount}}</text>
+                        </view>
+                    </view>
+                    <view wx:if="{{detailsInfo.name != ''}}" class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>收货人</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>{{detailsInfo.name}}</text>
+                        </view>
+                    </view>
+                    <view wx:if="{{detailsInfo.phone != ''}}" class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>联系电话</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>{{detailsInfo.phone}}</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>配送方式</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>{{detailsInfo.deliveryMode == 1 ? '到店自取' : '快递配送'}}</text>
+                        </view>
+                    </view>
+                    <view wx:if="{{detailsInfo.deliveryMode ==1}}" class="flex flex_space_between">
+                        <view class="color_333 get_address">
+                            <text>自取地址</text>
+                        </view>
+                        <view class="color_666 box_sizing padding_left_20 line_height_20">
+                            <text>{{detailsInfo.locationName}}</text>
+                        </view>
+                    </view>
+                    <view wx:if="{{detailsInfo.deliveryMode == 2}}" class="flex flex_space_between">
+                        <view class="color_333 get_address">
+                            <text>配送地址</text>
+                        </view>
+                        <view class="color_666 box_sizing padding_left_20 line_height_20">
+                            <text>{{detailsInfo.address}}</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+
+    </view>
+
+    <view class="height_fixed_60"></view>
+    <!-- 取消订单按钮 -->
+    <!-- 1,2,3,4,8,12 -->
+    <view wx:if="{{detailsInfo.status == 0 && userInfo.id == detailsInfo.createUser}}" class="width_100 {{isIpx?'padding_bottom_20':''}} flex flex_space_between footerBtn bg_fff padding_top_10 padding_bottom_10 box_sizing padding_left_right_20">
+        <view bindtap="payOrderFn" class="width_100 margin_left_10 text_center line_height_50 relative z_index_5 background_yellow_liner color_fff border_radius_5">
+            <text>去支付</text>
+        </view>
+    </view>
+</view>
+
+
+<!-- 弹出确认删除弹框. -->
+<van-popup show="{{ cancelOrderShow }}" duration="{{0}}">
+    <view class="border_radius_10 bg_fff overflow_hidden" style="width:460rpx;">
+        <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+            <text>提示</text>
+        </view>
+        <view class="font_size_14 color_8484 text_center padding_bottom_20">
+            <text>真的要狠心取消订单吗？</text>
+        </view>
+        <view class="flex flex_space_between">
+            <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_5bc" bindtap="onCancelOrderFn">
+                <text>取消</text>
+            </view>
+            <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="confirmCancelFn">
+                <text>确定</text>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出支付方式选择. -->
+<van-popup show="{{ payShow }}" bind:close="onPayClose" duration="{{0}}">
+    <view class="z_index_3">
+        <view class="border_radius_10 bg_fff overflow_hidden" style="width:500rpx;">
+            <view class="text_indent_24 line_height_50 font_size_16 color_5fc font_weight border_bottom">
+                <text>选择支付方式</text>
+            </view>
+            <view class="padding_bottom_20">
+                <view class="init flex flex_space_between box_sizing padding_left_right_20 line_height_50 border_bottom" data-type="1" bindtap="selectedPayFn">
+                    <view>
+                        <text class="iconfont icon-logo-wechat font_weight_600 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                        <text class="font_size_16 margin_left_10 color_5353 font_size_14">微信支付</text>
+                    </view>
+                    <view>
+                        <text wx:if="{{selectedId != 1}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                        <text wx:if="{{selectedId == 1}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                    </view>
+                </view>
+                <view class="init flex flex_space_between box_sizing padding_left_right_20" data-type="2" bindtap="selectedPayFn">
+                    <view class="box_sizing padding_top_10">
+                        <view class="">
+                            <text class="iconfont icon-icon font_weight_100 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                            <text class="font_size_16 margin_left_10 color_5353 font_size_14">VIP 支付</text>
+                        </view>
+                        <view class="box_sizing padding_left_30">
+                            <text class="font_size_10 color_5bc">VIP余额：￥{{userInfo.balance ? userInfo.balance : 0}}</text>
+                        </view>
+                    </view>
+                    <view class="flex flex_align_items_center">
+                        <text wx:if="{{selectedId != 2}}" class="iconfont icon-yuanhuan relative color_bab9" style="font-size:44rpx;top:10rpx"></text>
+                        <text wx:if="{{selectedId == 2}}" class="iconfont icon-zhengque3 relative color_5bc" style="font-size:40rpx;top:6rpx"></text>
+                    </view>
+                </view>
+            </view>
+            <view class="background_liner text_center line_height_50 color_fff font_size_16" bindtap="confirmAppointFn">
+                <text>确定</text>
+            </view>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 弹出预约点餐弹框. -->
+<van-popup show="{{ makeAppointmentShow }}" duration="{{0}}">
+    <view class="relative">
+        <view class="border_radius_10 bg_fff overflow_hidden" style="width:520rpx;">
+            <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+                <text>支付成功</text>
+            </view>
+            <view class="font_size_0 text_center padding_bottom_20">
+                <image class="width_fixed_60 height_fixed_60" src="/images/icon/success.png"></image>
+            </view>
+            <view class="flex flex_space_between">
+                <view class="width_100 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="toBackIndexFn">
+                    <text>返回首页</text>
+                </view>
+            </view>
+        </view>
+    </view>
+    <view wx:if="{{advertisingInfo}}" bindtap="toAdvertisementDetailsFn" class="flex border_radius_20 overflow_hidden" style="position:absolute;left:0;bottom:-160rpx;width:100%;">
+        <view class="width_40 bg_black box_sizing padding_10">
+            <image class="width_height_100" src="{{advertisingInfo.cover}}"></image>
+        </view>
+        <view class="width_40 line_height_20 bg_black">
+            <view class="color_fff font_size_14 overflow1">{{advertisingInfo.name}}</view>
+            <view class="color_fff font_size_12">限量{{advertisingInfo.stock}}份</view>
+            <view>
+                <text class="font_size_16 margin_right_10 color_FF8">￥{{advertisingInfo.price}}</text>
+                <text class="del_w_line color_fff font_size_12">￥{{advertisingInfo.marketPrice}}</text>
+            </view>
+        </view>
+        <view class="width_20 line_height_60 background_yello2_liner color_fff text_center">
+            <text class="font_size_14">秒抢</text>
+        </view>
+    </view>
+</van-popup>
+
+<!-- 不是VIP时弹出弹框. -->
+<van-popup show="{{ isVipShow }}" duration="{{0}}">
+    <view class="border_radius_10 bg_fff overflow_hidden" style="width:460rpx;">
+        <view class="height_fixed_50 line_height_50 text_center font_size_16 color_5353">
+            <text>提示</text>
+        </view>
+        <view class="font_size_14 box_sizing padding_left_right_20 color_8484 text_center padding_bottom_20">
+            <text>余额不足，请充值！</text>
+        </view>
+        <view class="flex flex_space_between">
+            <!-- <view class="width_50 height_fixed_50 font_size_14 line_height_50 text_center color_7a7a" bindtap="onCancelOrderFn">
+                <text>暂不充值</text>
+            </view> -->
+            <view class="width_100 flex font_weight border_top height_fixed_50 font_size_14 line_height_50 text_center">
+                <view class="width_50 color_999" bindtap="cancelRechargeFn">
+                    <text>取消</text>
+                </view>
+                <view class="width_50 color_5bc" bindtap="confirmCancelFn">
+                    <text>去充值</text>
+                </view>
+            </view>
+        </view>
+    </view>
+</van-popup>

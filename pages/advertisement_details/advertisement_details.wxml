@@ -8,10 +8,10 @@
         <view class="border_radius_right_left relative bg_fff">
             <view class="width_100 height_fixed_160 relative">
                 <swiper indicator-dots="{{true}}" class="height_fixed_160" indicator-active-color="#fff" autoplay="{{false}}" circular="{{true}}">
-                    <block>
+                    <block wx:for="{{info.photos}}" wx:key="index">
                         <swiper-item>
                             <view class="swiper-item height_fixed_160 relative">
-                                <image class="width_height_100 border_radius_right_left" src="{{urlBefore + info.cover}}"></image>
+                                <image class="width_height_100 border_radius_right_left" src="{{urlBefore + item.photo}}"></image>
                             </view>
                         </swiper-item>
                     </block>

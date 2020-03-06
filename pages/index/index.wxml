@@ -1,6 +1,9 @@
 <!--index.wxml-->
 <!-- <count_down countTime="{{countTime}}" color="red" size="60" align="left"></count_down> -->
 <tabBar current='0' buyNumber="{{buyNumber}}" />
+<!-- 日期组件 -->
+<Calendar isShowDate="{{isShowDate}}" isDelivery="true"/>
+
 <view class="container">
 
     <view class="width_100 height_fixed_160 relative">
@@ -17,6 +20,10 @@
                 </view>
             </view>
         </view>
+        <!-- 一元代取快递入口 -->
+        <view bindtap="toDeliveryFn" style="position:absolute;right:0;height:90rpx;width:476rpx;bottom:0;z-index:2">
+            <!-- <image style="height:90rpx;width:476rpx" src="../../images/icon/qkd.png" mode="aspectFit"></image> -->
+        </view>
         <!-- 点击层 -->
         <view hidden="true" bindtap="showDirectionFn" style="position:absolute;left:0;bottom:0;height:120rpx;width:100%;z-index:5;"></view>
         <!-- 展示层 -->
@@ -25,9 +32,6 @@
                 <text style="font-size:18rpx">{{item}}</text>
             </view>
         </view>
-        <!-- <view class="menu_btn" bindtap="showMenuFn">
-            <text class="iconfont icon-menu1"></text>
-        </view> -->
     </view>
     <!-- 改版，新增部分 -->
     <view class="newModel box_sizing padding_left_right_20">
@@ -62,9 +66,9 @@
         </view>
          <!-- 首页主推菜品 -->
         <view class="margin_top_10">
-            <view wx:for="{{ListIndexRecommendArr}}" wx:key="index" class="item margin_bottom_10 height_fixed_130 relative">
+            <view wx:for="{{ListIndexRecommendArr}}" wx:key="index" class="item margin_bottom_10 height_fixed_160 relative">
                 <image data-itemId="{{item.id}}" data-dishcategory='{{item.dishCategory}}' data-type="2" bindtap="topPageDetails"
-                class="width_height_100 bg_f5 border_radius_10" mode="aspectFit" src="{{urlBefore + item.cover}}"></image>
+                class="width_height_100 bg_f5 border_radius_10" mode="aspectFill" src="{{urlBefore + item.cover}}"></image>
                 <view data-itemId="{{item.id}}" data-stock="{{item.stock}}" data-pic="{{urlBefore + item.cover}}" bindtap="addCart" class="text_right width_fixed_150 box_sizing padding_left_right_20 padding_bottom_10" style="position:absolute;right:0;bottom:0;">
                     <text class="margin_right_10 font_size_24 color_fff font_weight relative" style="top:6rpx;">￥{{item.price}}</text>
                     <text style="display:inline-block; font-weight:100; padding:6rpx 8rpx;font-size:30rpx;" class="iconfont icon-add3 color_fff background_liner border_radius__100"></text>
@@ -72,10 +76,16 @@
             </view>
         </view>
         <!-- 菜单栏 -->
-        <view class="flex flex_end margin_top_10">
-            <view class="flex box_sizing padding_top_5">
-                <view wx:if="{{index < 3}}" wx:for="{{menuLists}}" wx:key="index" data-itemid="{{item.id}}" bindtap="clickMenuListsElementFn"
-                 class="padding_left_right_10 margin_left_10 border_radius_5 line_height_20 height_fixed_20 menu_item font_size_12 {{item.checked ? 'background_yello2_liner color_fff' : 'color_666'}}">
+        <view class="flex flex_space_between margin_top_10">
+            <view>
+                <view class="flex flex_align_items_center box_sizing" style="padding-top:30rpx;">
+                    <view style="width:00rpx;height:4rpx;" class="background_yello2_liner border_radius_5"></view>
+                </view>
+            </view>
+            <view class="flex flex_end">
+                <view class="flex box_sizing padding_top_5">
+                <view style="font-size:22rpx;" wx:if="{{index < 4}}" wx:for="{{menuLists}}" wx:key="index" data-itemid="{{item.id}}" bindtap="clickMenuListsElementFn"
+                 class="padding_left_right_10 margin_left_10 border_radius_5 line_height_20 height_fixed_20 menu_item  {{item.checked ? 'background_yello2_liner color_fff' : 'color_666'}}">
                     <text>{{item.name}}</text>
                 </view>
             </view>
@@ -92,6 +102,7 @@
                         </view>
                     </view>
                 </view>
+            </view>
             </view>
         </view>
        
@@ -266,10 +277,10 @@
                             </view>
                         </view>
                         <view class="width_100 box_sizing padding_left_right_10">
-                            <view class="font_size_14 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                            <view class="font_size_14 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-dishcategory='{{item.dishCategory}}' data-type="2" bindtap="topPageDetails">
                                 <text>{{item.name}}</text>
                             </view>
-                            <view class="font_size_12 color_999 overflow1 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                            <view class="font_size_12 color_999 overflow1 line_height_30" data-itemId="{{item.id}}" data-dishcategory='{{item.dishCategory}}' data-type="2" bindtap="topPageDetails">
                                 <text class="del_line">
                                     <text class="color_999 font_size_10">￥</text>
                                 <text class="color_999 margin_right_5 font_size_14">{{item.marketPrice}}</text>
@@ -337,10 +348,10 @@
                             </view>
                         </view>
                         <view class="width_100 box_sizing padding_left_right_10">
-                            <view class="font_size_14 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                            <view class="font_size_14 font_weight_600 line_height_30" data-itemId="{{item.id}}" data-dishcategory='{{item.dishCategory}}' data-type="2" bindtap="topPageDetails">
                                 <text>{{item.name}}</text>
                             </view>
-                            <view class="font_size_12 color_999 overflow1 line_height_30" data-itemId="{{item.id}}" data-type="2" bindtap="topPageDetails">
+                            <view class="font_size_12 color_999 overflow1 line_height_30" data-itemId="{{item.id}}" data-dishcategory='{{item.dishCategory}}' data-type="2" bindtap="topPageDetails">
                                 <text class="del_line">
                                     <text class="color_999 font_size_10">￥</text>
                                 <text class="color_999 margin_right_5 font_size_14">{{item.marketPrice}}</text>

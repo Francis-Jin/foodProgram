@@ -14,7 +14,11 @@
                 </view>
             </view>
         </view>
-        <view class="appointment_today" bindtap="toAppointmentTodayFn">
+         <!-- 一元代取快递入口 -->
+        <view bindtap="toDeliveryFn" style="position:absolute;right:0;height:90rpx;width:476rpx;bottom:0;z-index:2">
+            <!-- <image style="height:90rpx;width:476rpx" src="../../images/icon/qkd.png" mode="aspectFit"></image> -->
+        </view>
+        <view hidden="true" class="appointment_today" bindtap="toAppointmentTodayFn">
             <text>今日菜品 >></text>
         </view>
     </view>

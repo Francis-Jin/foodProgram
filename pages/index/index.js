@@ -90,6 +90,7 @@ Page({
         setInterval(function() {
             that.clockFn()
         }, 100);
+        this.getDeliveryModeFn()
         this.getTwelveHourByNow()
         this.getDataLists()
         this.getDietOrientationFn()
@@ -118,6 +119,23 @@ Page({
                             ListIndexRecommendArr: res.data 
                         })
                     }
+                }
+            }
+        })
+    },
+
+    /** 获取配送按钮是否开启. */
+    getDeliveryModeFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/sysConf/listDimDeliveryMode.action',
+            method: 'get',
+            success(res) {
+                if (res.code == 200) {
+                    let obj = {}
+                    obj.self = res.data[0].status
+                    obj.delivery = res.data[1].status
+                    wx.setStorageSync('deliveryMode', obj)
                 }
             }
         })

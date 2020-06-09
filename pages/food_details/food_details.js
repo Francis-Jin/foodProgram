@@ -8,6 +8,7 @@ Page({
      */
     data: {
         userInfo: '',
+        deliveryObj: {},
         urlBefore: app.globalData.urlBefore,
         discountNumber: 1,
         isPopping: false,
@@ -78,12 +79,12 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function (options) {
-
         var _windowHeight = wx.getSystemInfoSync().windowHeight;
 
         let addressItem = wx.getStorageSync('addressItem')
         let takeMealsAddressItem = wx.getStorageSync('takeMealsAddressItem')
         this.setData({
+            deliveryObj: wx.getStorageSync('deliveryMode'),
             haveMealAddresInfo: addressItem,
             takeMealsAddressId: takeMealsAddressItem.id, //选择回来的取餐地址ID
             takeMealsAddress: takeMealsAddressItem.address, //选择回来的取餐地址
@@ -230,10 +231,13 @@ Page({
             })
         }
         */
-        let newListDishInfo = listDishInfoByRecommendArr.filter(item => item.quantity > 0)
+        let newListDishInfo = []
+        if (listDishInfoByRecommendArr){
+            newListDishInfo = listDishInfoByRecommendArr.filter(item => item.quantity > 0)
+        }
         // console
         newListDishInfo.forEach(item => {
-            ActualAmountPaid += item.bookPrice * item.quantity
+            ActualAmountPaid += item.price * item.quantity
         })
         VipDiscount = info.price - info.vipPrice
         DaiJinChiDiscount = info.deductAmount
@@ -418,7 +422,7 @@ Page({
             dishInfoArr.push({
                 dishId: item.id,
                 quantity: item.quantity,
-                isRecommend: 1,
+                isRecommend: 0,
                 ingredientId: ''
             })
         })
@@ -813,7 +817,7 @@ Page({
     getListDishInfoByRecommendFn() {
         let that = this
         app.appRequest({
-            url: '/app/dishInfo/listDishInfoByRecommend.action',
+            url: '/app/dishInfo/listDishInfoBySnacks.action',
             method: 'get',
             success(res) {
                 console.log(res)
@@ -822,7 +826,7 @@ Page({
                     arr.forEach(item => {
                         item.quantity = 0
                         item.dishId = item.id
-                        item.isRecommend = 1
+                        item.isRecommend = 0
                     })
                     that.setData({
                         listDishInfoByRecommendArr: arr

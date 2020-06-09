@@ -6,6 +6,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        isShowDate: false,
         firstBookWordLists: [],
         moreBookWordLists: [],
         isShowMore: false, //是否显示更多数据
@@ -22,6 +23,13 @@ Page({
             selectedDateValue: options.date
         })
         that.getBookWordfn()
+    },
+
+    /** 跳转到取快递. */
+    toDeliveryFn() {
+        this.setData({
+            isShowDate: true
+        })
     },
 
     /** 跳转预约早餐. */

@@ -1,6 +1,7 @@
 {
     "pages": [
         "pages/index/index",
+        "pages/delinvery_indent/delinvery_indent",
         "pages/expressDelivery/expressDelivery",
         "pages/oneYuanOrder/oneYuanOrder",
         "pages/advertisement_details/advertisement_details",
@@ -29,7 +30,6 @@
         "pages/make_up_list/make_up_list",
         "pages/author/author",
         "pages/inputPassword/inputPassword",
-        "pages/delinvery_indent/delinvery_indent",
         "pages/personal_information/personal_information",
         "pages/authentication/authentication",
         "pages/identity_authentication/identity_authentication",

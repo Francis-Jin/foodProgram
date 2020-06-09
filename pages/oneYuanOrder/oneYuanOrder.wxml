@@ -25,6 +25,10 @@
                     <text>{{item.createTime}}</text>
                 </view>
                 <view class="color_8484">
+                    <text>送达时间：</text>
+                    <text>{{item.expectDeliveryTime}}</text>
+                </view>
+                <view class="color_8484">
                     <text>配送方式：</text>
                     <text>{{item.deliveryMode == 1 ? '到店自取' : '快递配送'}}</text>
                 </view>

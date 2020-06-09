@@ -17,6 +17,8 @@ Page({
      * 页面的初始数据
      */
     data: {
+        deliveryObj: {},
+        isShowDate: false,
         showPaySuccessStatus: false, // 支付成功回显弹窗
         urlBefore: app.globalData.urlBefore,
         systemInfo: '', //系统配置信息
@@ -52,6 +54,7 @@ Page({
         let that = this
         let type = options.type
         that.setData({
+            deliveryObj: wx.getStorageSync('deliveryMode'),
             selectedDateValue: options.selectedDateValue,
             selectedWordId: options.selectedWordId,
             symptomId: options.symptomId,
@@ -79,6 +82,13 @@ Page({
         that.getJichuMiFanFn()
 
 
+    },
+
+    /** 跳转到取快递. */
+    toDeliveryFn() {
+        this.setData({
+            isShowDate: true
+        })
     },
 
     /** 今日日期时间处理. */

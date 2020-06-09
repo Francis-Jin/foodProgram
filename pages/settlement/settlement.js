@@ -15,7 +15,7 @@ Page({
         deliveryFee: " ", //第一份配送价格，
         increaseFee: " ", //增加一份，增加配送费
         maxDeliveryFee: " ", //配送费上限
-        deliveryMode: '', //配送方式选择 配送方式(1自取 2配送)
+        deliveryMode: 2, //配送方式选择 配送方式(1自取 2配送)
         show: false, //是否显示地址列表弹窗
         addressLists: [],
         addressText: '选择配送地址', //显示选择的地址

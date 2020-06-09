@@ -86,6 +86,14 @@
                             <text>{{detailsInfo.createTime}}</text>
                         </view>
                     </view>
+                     <view class="flex flex_space_between">
+                        <view class="color_333">
+                            <text>送达时间</text>
+                        </view>
+                        <view class="text_right color_666">
+                            <text>{{detailsInfo.expectDeliveryTime}}</text>
+                        </view>
+                    </view>
                     <view class="flex flex_space_between">
                         <view class="color_333">
                             <text>支付方式</text>
@@ -93,7 +101,6 @@
                         <view class="text_right color_666">
                             <text wx:if="{{detailsInfo.payMethod==1}}">微信支付</text>
                             <text wx:if="{{detailsInfo.payMethod==2}}">VIP支付</text>
-                            <text wx:else>{{detailsInfo.statusName}}</text>
                         </view>
                     </view>
                     <view class="flex flex_space_between">

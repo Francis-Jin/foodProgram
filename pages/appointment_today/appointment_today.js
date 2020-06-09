@@ -20,6 +20,7 @@ Page({
     data: {
         isToDay: null,
         lists: [],
+        deliveryObj: {},
         urlBefore: app.globalData.urlBefore,
         messageText: '', // 留言信息
         totalPriceAll: 0, // 购买总价
@@ -43,6 +44,7 @@ Page({
         let addressItem = wx.getStorageSync('addressItem')
         let takeMealsAddressItem = wx.getStorageSync('takeMealsAddressItem')
         this.setData({
+            deliveryObj: wx.getStorageSync('deliveryMode'),
             haveMealAddresInfo: addressItem,
             takeMealsAddressId: takeMealsAddressItem.id, //选择回来的取餐地址ID
             takeMealsAddress: takeMealsAddressItem.address, //选择回来的取餐地址

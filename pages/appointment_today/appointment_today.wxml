@@ -75,7 +75,7 @@
                 <image class="width_fixed_20 height_fixed_20 vertical_middle margin_right_10 relative" style="top:-2rpx;" src="/images/icon/tianchongxing-@2x.png"></image>
                 <text class="color_5151 font_size_14">选择配送方式</text>
             </view>
-            <view class="margin_top_10 flex flex_space_between box_sizing padding_left_30">
+            <view wx:if="{{deliveryObj.self == 1}}" class="margin_top_10 flex flex_space_between box_sizing padding_left_30">
                 <view class="width_80" data-type="1" bindtap="selectedAddressFn">
                     <view class="color_5fc">
                         <text>到店自取</text>
@@ -90,7 +90,7 @@
                     <text wx:if="{{deliveryMode != 1}}" class="iconfont icon-yuanxing color_e3 relative" style="font-size:40rpx; top:6rpx;"></text>
                 </view>
             </view>
-            <view class="flex margin_top_10 flex_space_between box_sizing padding_left_30">
+            <view wx:if="{{deliveryObj.delivery == 1}}" class="flex margin_top_10 flex_space_between box_sizing padding_left_30">
                 <view class="width_80" data-type="2" bindtap="selectedAddressFn">
                     <view class="color_5fc">
                         <text>快递配送</text>

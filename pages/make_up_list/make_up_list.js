@@ -15,7 +15,7 @@ Page({
         showSpellList: false, //弹起拼单或单独购买弹框
         waysOfPurchasing: '', // 选择购买方式 1：单独购买 2：拼单购买
         assembleMode: '', //选择拼团方式 1：2人拼团 2：多人拼团
-        deliveryMode: '', //选择用餐方式 1：自取 2：配送
+        deliveryMode: 2, //选择用餐方式 1：自取 2：配送
         showAddress: false, // 是否选择地址弹窗
         addressText: '选择配送地址', //显示选择的地址
         addressItem: '', //选择的地址Item元素

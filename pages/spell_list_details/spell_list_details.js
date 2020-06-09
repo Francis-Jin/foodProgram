@@ -7,6 +7,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        deliveryObj: {},
         userInfo:null,
         imgLists: [1,2],
         urlBefore: app.globalData.urlBefore,
@@ -41,6 +42,7 @@ Page({
         let that = this
         let userInfo = wx.getStorageSync('userInfo')
         that.setData({
+            deliveryObj: wx.getStorageSync('deliveryMode'),
             foodName: options.foodName,
             foodId: options.foodId,
             userInfo: userInfo

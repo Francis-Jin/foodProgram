@@ -6,6 +6,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        deliveryObj:{},
         userInfo: '',
         urlBefore: app.globalData.urlBefore,
         administrationType: 1, //点击管理type,
@@ -72,9 +73,30 @@ Page({
             takeMealsAddressId: takeMealsAddressItem.id, //选择回来的取餐地址ID
             takeMealsAddress: takeMealsAddressItem.address, //选择回来的取餐地址
         })
+        this.getDeliveryModeFn()
         this.getCartListsFn()
         this.getSysConfFn()
         this.isIpxFn()
+    },
+
+    /** 获取配送按钮是否开启. */
+    getDeliveryModeFn() {
+        let that = this
+        app.appRequest({
+            url: '/app/sysConf/listDimDeliveryMode.action',
+            method: 'get',
+            success(res) {
+                if (res.code == 200) {
+                    let obj = {}
+                    obj.self = res.data[0].status
+                    obj.delivery = res.data[1].status
+                    that.setData({
+                        deliveryObj: obj
+                    })
+                    wx.setStorageSync('deliveryMode', obj)
+                }
+            }
+        })
     },
 
     /** 获取随机广告. */

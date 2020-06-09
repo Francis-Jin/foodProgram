@@ -25,13 +25,14 @@ Page({
      * 页面的初始数据
      */
     data: {
+        deliveryObj: {},
         tapStauts: 0, // 0:默认，1：输入文本，2：图片信息
         selectedDateValue: '2020-03-05',
         selectedTime: '', // 配送时间
         showTime: false, //是否显示时间选择器
         haveMealAddresInfo: null,
         takeMealsAddressId: null,
-        deliveryMode: '', // 配送方式
+        deliveryMode: 2, // 配送方式
         takeMealsAddress: '选择取餐地址', //选择回来的取餐地址
         columns: [],
         payShow: false,
@@ -51,6 +52,7 @@ Page({
         let addressItem = wx.getStorageSync('addressItem')
         let takeMealsAddressItem = wx.getStorageSync('takeMealsAddressItem')
         this.setData({
+            deliveryObj: wx.getStorageSync('deliveryMode'),
             selectedDateValue: options.date,
             haveMealAddresInfo: addressItem,
             takeMealsAddressId: takeMealsAddressItem.id, //选择回来的取餐地址ID

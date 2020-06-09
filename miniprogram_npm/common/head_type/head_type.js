@@ -38,6 +38,11 @@ Component({
             })
         },
 
+        /** 跳转到取快递. */
+        toDeliveryFn() {
+            this.triggerEvent('toDeliveryFn') //myevent自定义名称事件，父组件中使用
+        },
+
         /** 获取当前时辰 */
         getTwelveHourByNow() {
             let that = this

@@ -1,6 +1,8 @@
 <!--pages/booking_method/booking_method.wxml-->
 <!-- 页面主要内容 -->
-<headType/>
+<headType bind:toDeliveryFn="toDeliveryFn" />
+<!-- 日期组件 -->
+<Calendar isShowDate="{{isShowDate}}" isDelivery="true"/>
 <!-- 主要内容 -->
 <view class="container">
     <!-- <view class="height_fixed_60 relative">
